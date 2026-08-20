@@ -111,6 +111,22 @@
   .t-sub{font-size:12.5px;color:var(--muted);}
   .group-label{font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin:4px 2px 2px;}
 
+  /* routine editor rows */
+  .rt-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);}
+  .rt-ord{display:flex;flex-direction:column;gap:3px;flex:none;}
+  .rt-ord button{width:26px;height:17px;border-radius:6px;background:var(--chip);color:var(--muted);font-size:9px;display:grid;place-items:center;line-height:1;}
+  .rt-ord button:disabled{opacity:.35;cursor:default;}
+  .rt-ord button:not(:disabled):active{background:var(--accent);color:#fff;}
+  .rt-text{flex:1;min-width:0;padding:8px 10px;font-size:14px;}
+  .rt-minwrap{display:flex;align-items:center;gap:4px;flex:none;}
+  .rt-min{width:50px;padding:8px 4px;text-align:center;font-size:14px;}
+  .rt-minwrap span{font-size:12px;color:var(--muted);}
+  .rt-x{color:var(--danger);font-weight:800;font-size:14px;padding:4px 6px;flex:none;}
+  .rt-add{display:flex;align-items:center;gap:8px;margin-top:11px;}
+  .rt-add > input[data-add-text]{flex:1;min-width:0;}
+  input[type=number]{-moz-appearance:textfield;}
+  input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+
   .chat-log{display:flex;flex-direction:column;gap:10px;max-height:46vh;overflow-y:auto;padding:4px 2px 6px;}
   .msg{max-width:85%;padding:10px 13px;border-radius:15px;font-size:14.5px;line-height:1.4;}
   .msg.ai{background:var(--bg2);border-bottom-left-radius:5px;align-self:flex-start;}
@@ -158,10 +174,16 @@
   .empty{text-align:center;color:var(--muted);padding:26px 10px;font-size:14px;}
   .toast{
     position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(20px);
-    background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;
+    background:var(--text);color:var(--bg);padding:9px 10px 9px 16px;border-radius:12px;font-size:14px;font-weight:600;
     opacity:0;pointer-events:none;transition:.25s;z-index:50;box-shadow:var(--shadow);max-width:90%;
+    display:flex;align-items:center;gap:8px;
   }
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
+  .toast .undo{
+    background:var(--accent);color:#fff;border-radius:8px;padding:6px 12px;font-size:13.5px;font-weight:800;
+    letter-spacing:.2px;line-height:1;
+  }
+  .toast .undo:active{transform:scale(.96);}
   .hr{height:1px;background:var(--line);margin:14px 0;}
   .banner{background:var(--accent-soft);color:var(--accent);border-radius:12px;padding:11px 13px;font-size:13.5px;font-weight:600;margin-bottom:14px;}
   .note{background:var(--amber);color:#1b2030;border-radius:11px;padding:9px 13px;font-size:13px;font-weight:600;margin:0 0 14px;display:none;}
@@ -331,6 +353,9 @@ try { const k="__t"; localStorage.setItem(k,"1"); localStorage.removeItem(k); } 
 const todayStr = () => new Date().toLocaleDateString("en-CA");
 const dateAdd = (base, n) => { const d = new Date(base+"T00:00:00"); d.setDate(d.getDate()+n); return d.toLocaleDateString("en-CA"); };
 
+let _rid=0;
+function rid(){ return "r_"+Date.now().toString(36)+"_"+(_rid++); }
+
 function seed(){
   const start = todayStr();
   return {
@@ -340,24 +365,43 @@ function seed(){
       {id:"g_guitar",emoji:"🎸", title:"Practice guitar",type:"daily",    task:"Practice guitar", minutes:30, start},
     ],
     routines:{
-      morning:["Make the bed","Glass of water","Glance at today's plan"],
-      night:["Reflect on the day","Set out tomorrow's first task"],
+      morning:[
+        {id:rid(), text:"Make the bed", minutes:2},
+        {id:rid(), text:"Glass of water", minutes:1},
+        {id:rid(), text:"Glance at today's plan", minutes:3},
+      ],
+      night:[
+        {id:rid(), text:"Reflect on the day", minutes:5},
+        {id:rid(), text:"Set out tomorrow's first task", minutes:3},
+      ],
     },
     logs:{},
     chat:[],
     createdAt:start,
   };
 }
+// Upgrade older saves: routine items used to be plain strings with no id/time.
+function normalize(s){
+  if(!s.routines) s.routines={morning:[],night:[]};
+  ["morning","night"].forEach(k=>{
+    s.routines[k]=(s.routines[k]||[]).map(it=>
+      (typeof it==="string")
+        ? {id:rid(), text:it, minutes:5}
+        : {id:it.id||rid(), text:it.text||"", minutes:(it.minutes==null?5:it.minutes)}
+    );
+  });
+  return s;
+}
 let state = load();
-function load(){ try{ const raw=localStorage.getItem(KEY); if(raw) return JSON.parse(raw); }catch(e){} const s=seed(); persist(s); return s; }
+function load(){ try{ const raw=localStorage.getItem(KEY); if(raw) return normalize(JSON.parse(raw)); }catch(e){} const s=seed(); persist(s); return s; }
 function persist(s){ try{ localStorage.setItem(KEY, JSON.stringify(s||state)); }catch(e){} }
 function save(){ persist(state); }
 
 function tasksForDate(date){
   const out=[];
   state.goals.forEach(g=>{ out.push({key:g.id, label:g.task, emoji:g.emoji, group:"Goals", minutes:g.minutes, goalId:g.id}); });
-  state.routines.morning.forEach((r,i)=> out.push({key:"rm"+i, label:r, emoji:"🌅", group:"Morning"}));
-  state.routines.night.forEach((r,i)=> out.push({key:"rn"+i, label:r, emoji:"🌙", group:"Night"}));
+  state.routines.morning.forEach(r=> out.push({key:r.id, label:r.text, emoji:"🌅", group:"Morning", minutes:r.minutes}));
+  state.routines.night.forEach(r=> out.push({key:r.id, label:r.text, emoji:"🌙", group:"Night", minutes:r.minutes}));
   return out;
 }
 function dayLog(date){ if(!state.logs[date]) state.logs[date]={done:{},minutes:{}}; return state.logs[date]; }
@@ -409,21 +453,43 @@ function goalProgress(g){
 function lastNCompletion(key,n){ let done=0; for(let i=0;i<n;i++){ const d=dateAdd(todayStr(),-i); if(d<(state.createdAt))break; if(isDone(d,key))done++; } const total=Math.min(n,daysBetween(state.createdAt,todayStr())+1); return {done,total,pct:total?Math.round(done/total*100):0}; }
 function daysBetween(a,b){ return Math.round((new Date(b+"T00:00:00")-new Date(a+"T00:00:00"))/86400000); }
 
+function routineTotal(kind){ return state.routines[kind].reduce((a,r)=>a+(+r.minutes||0),0); }
 function renderRoutines(){
   const m=document.getElementById("routineMorning"), n=document.getElementById("routineNight");
-  m.innerHTML=`<div class="group-label">🌅 Morning</div>`+routineRows("morning");
-  n.innerHTML=`<div class="group-label">🌙 Night</div>`+routineRows("night");
+  m.innerHTML=`<div class="group-label">🌅 Morning · ~${routineTotal("morning")} min</div>`+routineRows("morning");
+  n.innerHTML=`<div class="group-label">🌙 Night · ~${routineTotal("night")} min</div>`+routineRows("night");
   [["morning",m],["night",n]].forEach(([kind,box])=>{
-    box.querySelectorAll("[data-rmv]").forEach(b=>b.onclick=()=>{ state.routines[kind].splice(+b.dataset.rmv,1); save(); renderRoutines(); renderToday(); });
-    const inp=box.querySelector("input"), add=box.querySelector("[data-add]");
-    if(add) add.onclick=()=>{ const v=inp.value.trim(); if(v){ state.routines[kind].push(v); save(); renderRoutines(); renderToday(); } };
-    if(inp) inp.onkeydown=e=>{ if(e.key==="Enter") add.click(); };
+    const list=state.routines[kind];
+    box.querySelectorAll("[data-up]").forEach(b=>b.onclick=()=>{ const i=+b.dataset.up; if(i>0){ [list[i-1],list[i]]=[list[i],list[i-1]]; save(); renderRoutines(); renderToday(); } });
+    box.querySelectorAll("[data-down]").forEach(b=>b.onclick=()=>{ const i=+b.dataset.down; if(i<list.length-1){ [list[i+1],list[i]]=[list[i],list[i+1]]; save(); renderRoutines(); renderToday(); } });
+    box.querySelectorAll("[data-rmv]").forEach(b=>b.onclick=()=>{ list.splice(+b.dataset.rmv,1); save(); renderRoutines(); renderToday(); });
+    box.querySelectorAll("[data-text]").forEach(inp=>inp.onchange=()=>{ const v=inp.value.trim(); if(v) list[+inp.dataset.text].text=v; save(); renderToday(); });
+    box.querySelectorAll("[data-min]").forEach(inp=>inp.onchange=()=>{ list[+inp.dataset.min].minutes=Math.max(0,parseInt(inp.value)||0); save(); renderRoutines(); renderToday(); });
+    const addText=box.querySelector("[data-add-text]"), addMin=box.querySelector("[data-add-min]"), add=box.querySelector("[data-add]");
+    const doAdd=()=>{ const v=addText.value.trim(); if(v){ list.push({id:rid(), text:v, minutes:Math.max(0,parseInt(addMin.value)||5)}); save(); renderRoutines(); renderToday(); } };
+    if(add) add.onclick=doAdd;
+    if(addText) addText.onkeydown=e=>{ if(e.key==="Enter") doAdd(); };
   });
 }
 function routineRows(kind){
+  const list=state.routines[kind];
   let h="";
-  state.routines[kind].forEach((r,i)=>{ h+=`<div class="row" style="padding:7px 0;border-bottom:1px solid var(--line);"><span class="grow">${esc(r)}</span><span class="link danger" data-rmv="${i}">remove</span></div>`; });
-  h+=`<div class="chat-input" style="margin-top:10px;"><input placeholder="Add a ${kind} step…" /><button class="btn sm" data-add>Add</button></div>`;
+  list.forEach((r,i)=>{
+    h+=`<div class="rt-row">
+      <div class="rt-ord">
+        <button type="button" data-up="${i}" aria-label="Move up" ${i===0?"disabled":""}>▲</button>
+        <button type="button" data-down="${i}" aria-label="Move down" ${i===list.length-1?"disabled":""}>▼</button>
+      </div>
+      <input class="rt-text" data-text="${i}" value="${esc(r.text)}" aria-label="Routine step" />
+      <div class="rt-minwrap"><input class="rt-min" data-min="${i}" type="number" inputmode="numeric" min="0" value="${r.minutes}" aria-label="Minutes" /><span>min</span></div>
+      <button type="button" class="rt-x" data-rmv="${i}" aria-label="Remove step">✕</button>
+    </div>`;
+  });
+  h+=`<div class="rt-add">
+    <input data-add-text placeholder="Add a ${kind} step…" aria-label="New step" />
+    <div class="rt-minwrap"><input data-add-min type="number" inputmode="numeric" min="0" placeholder="5" aria-label="Minutes" /><span>min</span></div>
+    <button type="button" class="btn sm" data-add>Add</button>
+  </div>`;
   return h;
 }
 
@@ -443,22 +509,30 @@ function renderToday(){
   const groups={};
   tasks.forEach(t=>{ (groups[t.group]=groups[t.group]||[]).push(t); });
   const order=["Goals","Morning","Night"];
-  let doneCount=0;
+  let doneCount=0, shown=0;
   order.forEach(gr=>{ if(!groups[gr])return;
+    groups[gr].forEach(t=>{ if(isDone(todayStr(),t.key)) doneCount++; });
+    const undone=groups[gr].filter(t=>!isDone(todayStr(),t.key));
+    if(!undone.length) return;                    // whole group is done — hide its label too
     const gl=document.createElement("div"); gl.className="group-label"; gl.textContent=gr; wrap.appendChild(gl);
-    groups[gr].forEach(t=>{
-      const done=isDone(todayStr(),t.key); if(done)doneCount++;
-      const mins=(state.logs[todayStr()]&&state.logs[todayStr()].minutes[t.key])||0;
-      const row=document.createElement("div"); row.className="task"+(done?" done":"");
-      row.innerHTML=`<div class="check">${done?"✓":""}</div>
+    undone.forEach(t=>{
+      shown++;
+      const row=document.createElement("div"); row.className="task";
+      row.innerHTML=`<div class="check" role="button" tabindex="0" aria-label="Complete ${esc(t.label)}"></div>
         <div class="grow"><div class="t-label">${t.emoji||""} ${esc(t.label)}</div>
-        ${t.minutes?`<div class="t-sub">${done&&mins?mins+" min logged":"target "+t.minutes+" min"}</div>`:""}</div>`;
-      row.querySelector(".check").onclick=()=>{ setDone(todayStr(),t.key,!done, t.minutes); renderToday(); renderStats(); flash(done?"Unchecked":"Nice — done ✓"); };
+        ${t.minutes?`<div class="t-sub">target ${t.minutes} min</div>`:""}</div>`;
+      const complete=()=>{ setDone(todayStr(),t.key,true, t.minutes); renderToday(); renderStats(); showUndo(t.key, t.label); };
+      const chk=row.querySelector(".check");
+      chk.onclick=complete;
+      chk.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); complete(); } };
       wrap.appendChild(row);
     });
   });
   const total=tasks.length;
-  document.getElementById("todaySub").textContent = total? `${doneCount} of ${total} done today — ${doneCount===total?"all clear 🎉":"one step at a time."}` : "Add a goal to get started.";
+  if(!total) wrap.innerHTML='<div class="empty">Add a goal to get started.</div>';
+  else if(!shown) wrap.innerHTML='<div class="empty">🎉 All clear for today — every task done.<br>Enjoy the rest of your day.</div>';
+  document.getElementById("todaySub").textContent = !total ? "Add a goal to get started."
+    : `${doneCount} of ${total} done today — ${doneCount===total?"all clear 🎉":"one step at a time."}`;
   renderChat();
 }
 
@@ -604,7 +678,16 @@ document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>go(b.datas
 
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
-function flash(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(flash._t); flash._t=setTimeout(()=>t.classList.remove("show"),1400); }
+function flash(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(flash._t); clearTimeout(showUndo._t); flash._t=setTimeout(()=>t.classList.remove("show"),1400); }
+function hideToast(){ document.getElementById("toast").classList.remove("show"); }
+function showUndo(key,label){
+  const t=document.getElementById("toast");
+  t.innerHTML=`<span>Done ✓</span><button class="undo" type="button">Undo</button>`;
+  t.classList.add("show");
+  t.querySelector(".undo").onclick=()=>{ setDone(todayStr(),key,false); renderToday(); renderStats(); hideToast(); };
+  clearTimeout(flash._t); clearTimeout(showUndo._t);
+  showUndo._t=setTimeout(hideToast,4200);
+}
 
 document.getElementById("todayDate").textContent=new Date().toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
 document.getElementById("addGoalBtn").onclick=()=>openGoalForm(null);
