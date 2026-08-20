@@ -96,6 +96,10 @@
   .bar > span{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s ease;}
   .bar.green > span{background:var(--green);}
   .goal-meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:7px;}
+  .catchup{margin-top:11px;font-size:13px;font-weight:600;border-radius:10px;padding:8px 11px;}
+  .catchup.behind{background:rgba(240,160,46,.15);color:var(--amber);}
+  .catchup.ontrack{background:var(--green-soft);color:var(--green);}
+  .t-sub .catch{color:var(--amber);font-weight:700;}
   .link{color:var(--accent);font-weight:600;font-size:13.5px;}
   .link.danger{color:var(--danger);}
 
@@ -399,7 +403,10 @@ function save(){ persist(state); }
 
 function tasksForDate(date){
   const out=[];
-  state.goals.forEach(g=>{ out.push({key:g.id, label:g.task, emoji:g.emoji, group:"Goals", minutes:g.minutes, goalId:g.id}); });
+  state.goals.forEach(g=>{
+    const tt = (date===todayStr()) ? todayTarget(g) : {target:g.minutes, extra:0};
+    out.push({key:g.id, label:g.task, emoji:g.emoji, group:"Goals", minutes:tt.target, catchExtra:tt.extra, goalId:g.id});
+  });
   state.routines.morning.forEach(r=> out.push({key:r.id, label:r.text, emoji:"🌅", group:"Morning", minutes:r.minutes}));
   state.routines.night.forEach(r=> out.push({key:r.id, label:r.text, emoji:"🌙", group:"Night", minutes:r.minutes}));
   return out;
@@ -411,6 +418,37 @@ function setDone(date,key,val,minutes){
   if(val){ l.done[key]=true; if(minutes) l.minutes[key]=minutes; }
   else { delete l.done[key]; delete l.minutes[key]; }
   save();
+}
+
+/* ---------- Catch-up: gradual repayment of missed minutes ---------- */
+const CATCHUP_STEP = 5;            // how many extra minutes/day to add while behind
+function actualMinutes(goal,date){ // minutes logged toward a goal on a given day (0 if not done)
+  const l=state.logs[date];
+  if(!l||!l.done||!l.done[goal.id]) return 0;
+  return (l.minutes && l.minutes[goal.id]!=null) ? l.minutes[goal.id] : (goal.minutes||0);
+}
+function goalDeficit(goal){         // total minutes behind, accrued over PAST days (today excluded)
+  const T=goal.minutes||0; if(T<=0) return 0;
+  const start=goal.start||state.createdAt;
+  let end=todayStr();
+  if(goal.type==="deadline" && goal.days){ const cap=dateAdd(start,goal.days); if(cap<end) end=cap; }
+  let sum=0, d=start, guard=0;
+  while(d<end && guard++<3660){ sum += T - actualMinutes(goal,d); d=dateAdd(d,1); }
+  return Math.max(0, sum);
+}
+function todayTarget(goal){         // today's suggested target = base + capped catch-up
+  const T=goal.minutes||0;
+  const def=goalDeficit(goal);
+  const step=goal.catchUpStep||CATCHUP_STEP;
+  const extra=Math.min(step, def);
+  return {base:T, extra, target:T+extra, deficit:def};
+}
+function catchupLine(g){
+  if((g.minutes||0)<=0) return "";
+  const tt=todayTarget(g);
+  if(tt.deficit>0)
+    return `<div class="catchup behind">⏳ Catch-up: <b>${tt.deficit} min</b> behind${tt.extra?` · +${tt.extra} added to today`:""}</div>`;
+  return `<div class="catchup ontrack">✓ On track — no catch-up needed</div>`;
 }
 
 function renderGoals(){
@@ -427,6 +465,7 @@ function renderGoals(){
       </div>
       <div class="bar ${g.type==='deadline'?'':'green'}"><span style="width:${p.pct}%"></span></div>
       <div class="goal-meta"><span>${p.label}</span><span>${p.pct}%</span></div>
+      ${catchupLine(g)}
       <div class="row" style="margin-top:12px;gap:14px;">
         <span class="link" data-edit="${g.id}">Edit</span>
         <span class="link danger" data-del="${g.id}">Delete</span>
@@ -520,7 +559,7 @@ function renderToday(){
       const row=document.createElement("div"); row.className="task";
       row.innerHTML=`<div class="check" role="button" tabindex="0" aria-label="Complete ${esc(t.label)}"></div>
         <div class="grow"><div class="t-label">${t.emoji||""} ${esc(t.label)}</div>
-        ${t.minutes?`<div class="t-sub">target ${t.minutes} min</div>`:""}</div>`;
+        ${t.minutes?`<div class="t-sub">target ${t.minutes} min${t.catchExtra?` · <span class="catch">+${t.catchExtra} catch-up</span>`:""}</div>`:""}</div>`;
       const complete=()=>{ setDone(todayStr(),t.key,true, t.minutes); renderToday(); renderStats(); showUndo(t.key, t.label); };
       const chk=row.querySelector(".check");
       chk.onclick=complete;
@@ -608,9 +647,11 @@ window.Assistant = (function(){
       return `No worries — I've left <b>${esc(goal.task)}</b> unchecked for today. Tomorrow's a clean slate. What matters is the long run, not one day. 💪`;
     }
     if(goal && (mins || /\b(done|did|finished|complete|completed|practiced|read|played|went)\b/.test(t))){
-      setDone(todayStr(),goal.id,true, mins||goal.minutes);
+      const tgt=todayTarget(goal);
+      setDone(todayStr(),goal.id,true, mins||tgt.target);
       const streak=currentStreak(goal.id);
-      let extra = mins&&goal.minutes&&mins>goal.minutes ? ` That's ${mins-goal.minutes} min past your target — love it.` : "";
+      let extra = mins&&goal.minutes&&mins>goal.minutes ? ` That's ${mins-goal.minutes} min past your target — love it.`
+                : (!mins&&tgt.extra ? ` Logged ${tgt.target} min (+${tgt.extra} to catch up).` : "");
       return `Checked off <b>${esc(goal.task)}</b>${mins?` — logged ${mins} min`:""}.${extra} ${streak>1?`🔥 ${streak}-day streak!`:"Great start."}`;
     }
     if(mins && !goal) return "Got it. Which task was that for — reading or guitar? Try <b>\"I read "+mins+" minutes\"</b>.";
@@ -643,7 +684,7 @@ function renderStats(){
     state.goals.map(g=>{ const p=goalProgress(g); return `<div style="margin-bottom:14px;">
       <div class="row" style="margin-bottom:6px;"><span>${g.emoji} ${esc(g.title)}</span><span class="grow"></span><span class="small muted">${p.pct}%</span></div>
       <div class="bar ${g.type==='deadline'?'':'green'}"><span style="width:${p.pct}%"></span></div>
-      <div class="small muted" style="margin-top:5px;">${p.label}</div></div>`; }).join("");
+      <div class="small muted" style="margin-top:5px;">${p.label}${goalDeficit(g)>0?` · <span style="color:var(--amber);font-weight:700;">⏳ ${goalDeficit(g)} min behind</span>`:""}</div></div>`; }).join("");
 }
 function overallConsistency(n){
   let done=0,total=0;
