@@ -436,6 +436,15 @@ function stripHtml(s){ return String(s).replace(/<[^>]*>/g,""); }
 const SUPABASE_URL = "https://jdwhhbmwhyfmeddffhxw.supabase.co";
 const SUPABASE_KEY = "sb_publishable_dygctj4mpr2E-mVcWrMFJQ_xC3maMOn";
 let sb = null, currentUser = null;
+const BOOT_URL = location.href;   // captured before the SDK cleans auth params off the URL
+function authParamsFromUrl(u){
+  const out={};
+  try{ const url=new URL(u);
+    url.searchParams.forEach((v,k)=>out[k]=v);
+    new URLSearchParams((url.hash||"").replace(/^#/,"")).forEach((v,k)=>{ if(!(k in out)) out[k]=v; });
+  }catch(e){}
+  return out;
+}
 
 const todayStr = () => new Date().toLocaleDateString("en-CA");
 const dateAdd = (base, n) => { const d = new Date(base+"T00:00:00"); d.setDate(d.getDate()+n); return d.toLocaleDateString("en-CA"); };
@@ -499,7 +508,9 @@ function save(){ persist(state); cloudSaveDebounced(); }
 function initSupabase(){
   if(sb) return true;
   if(SUPABASE_URL && SUPABASE_KEY && window.supabase && window.supabase.createClient){
-    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+      auth:{ detectSessionInUrl:true, flowType:"pkce", persistSession:true, autoRefreshToken:true }
+    });
     return true;
   }
   return false;   // not configured, or SDK blocked (e.g. the sandboxed artifact) → local-only
@@ -1148,7 +1159,7 @@ document.getElementById("googleBtn").onclick=async ()=>{
   if(!initSupabase()){ note.textContent="Sign-in isn't available here (it needs the live site)."; return; }
   note.textContent="";
   try{
-    await sb.auth.signInWithOAuth({ provider:"google", options:{ redirectTo: location.href.split("#")[0] } });
+    await sb.auth.signInWithOAuth({ provider:"google", options:{ redirectTo: location.origin+location.pathname } });
   }catch(e){ note.textContent="Couldn't start Google sign-in: "+(e&&e.message||e); }
 };
 document.getElementById("guestBtn").onclick=()=>{ hideAuthGate(); };  // local-only, no sync
@@ -1164,10 +1175,21 @@ go("chat");
 (async function bootAuth(){
   if(!initSupabase()) return;          // local-only (not configured, or SDK blocked in the artifact)
   showAuthGate();
+  const note=document.getElementById("authNote");
+  const p=authParamsFromUrl(BOOT_URL);
+  let dbg="code="+(p.code?"y":"n")+" tok="+(p.access_token?"y":"n")+" err="+(p.error||"-");
+  if(p.error_description) note.textContent="Google error: "+decodeURIComponent(p.error_description).replace(/\+/g," ");
   try{
-    const { data:{ session } } = await sb.auth.getSession();
+    let { data:{ session } } = await sb.auth.getSession();
+    if(!session && p.code){
+      const r=await sb.auth.exchangeCodeForSession(BOOT_URL);
+      if(r.error) dbg+=" exch_err=["+r.error.message+"]";
+      session=r.data && r.data.session;
+    }
+    dbg+=" session="+(session?"y":"n");
+    note.textContent=(note.textContent?note.textContent+" · ":"")+"diag: "+dbg;
     if(session && session.user) await onSignedIn(session.user);
-  }catch(e){ console.warn("session check failed",e); }
+  }catch(e){ note.textContent="diag error: "+(e&&e.message||e); }
   sb.auth.onAuthStateChange(async (_e, session)=>{
     if(session && session.user) await onSignedIn(session.user);
     else { currentUser=null; updateAccountUI(null); }
