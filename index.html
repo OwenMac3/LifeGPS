@@ -233,6 +233,87 @@
   .auth-note{color:var(--danger);font-size:13px;margin-top:14px;min-height:16px;}
   .banner{background:var(--accent-soft);color:var(--accent);border-radius:12px;padding:11px 13px;font-size:13.5px;font-weight:600;margin-bottom:14px;}
   .note{background:var(--amber);color:#1b2030;border-radius:11px;padding:9px 13px;font-size:13px;font-weight:600;margin:0 0 14px;display:none;}
+  .nav-brand{display:none;}   /* shown only in the desktop sidebar */
+
+  /* ===== Desktop "home base": left sidebar + wide content ===== */
+  @media (min-width:920px){
+    body{padding-bottom:0;}
+    header.top{display:none;}                 /* brand moves into the sidebar */
+
+    nav.tabs{
+      top:0; bottom:0; right:auto; width:236px; height:100vh;
+      flex-direction:column; align-items:stretch; justify-content:flex-start;
+      border-top:none; border-right:1px solid var(--line);
+      padding:22px 14px calc(22px + env(safe-area-inset-bottom));
+      gap:4px; background:var(--card); overflow-y:auto;
+    }
+    nav.tabs .nav-brand{
+      display:flex; align-items:center; gap:11px; padding:4px 10px 20px;
+      font-weight:800; font-size:20px; letter-spacing:-.3px; color:var(--text);
+    }
+    nav.tabs .nav-brand .logo{
+      width:32px; height:32px; border-radius:9px; background:var(--accent);
+      display:grid; place-items:center; color:#fff; font-size:18px; box-shadow:var(--shadow);
+    }
+    nav.tabs button{
+      flex-direction:row; justify-content:flex-start; gap:13px;
+      padding:12px 14px; border-radius:12px; font-size:15px; color:var(--muted);
+    }
+    nav.tabs button .ic{font-size:20px;}
+    nav.tabs button:hover{background:var(--bg2);}
+    nav.tabs button.active{background:var(--accent-soft); color:var(--accent);}
+    nav.tabs button.active .ic{transform:none;}
+    nav.tabs button.center{background:none; color:var(--muted); border-radius:12px; margin:0; padding:12px 14px;}
+    nav.tabs button.center .ic{font-size:20px;}
+    nav.tabs button.center.active{background:var(--accent-soft); color:var(--accent);}
+
+    /* width of the docked Guide box (~a quarter of the screen) */
+    :root{ --guide-w:clamp(300px,25vw,360px); }
+
+    /* content column sits between the sidebar and the docked Guide box */
+    .wrap{max-width:none; margin:0 0 0 236px; padding:0 44px; transition:margin-right .18s ease;}
+    main{max-width:760px; margin:0 auto; padding-top:38px;}
+    /* reserve room for the Guide box on every page EXCEPT the Guide page itself */
+    body:not([data-tab="chat"]) .wrap{ margin-right:calc(var(--guide-w) + 40px); }
+
+    /* bigger, easier-to-read on a computer */
+    h2.page-title{font-size:27px;}
+    .goal-title{font-size:18px;}
+    .stat-grid{grid-template-columns:repeat(2,1fr);}
+    .compare{grid-template-columns:1fr 1fr;}
+
+    /* ---- Guide as its own FULL PAGE (when the Guide tab is selected) ---- */
+    #page-chat.active{
+      min-height:calc(100vh - 76px); position:relative;
+      display:flex; flex-direction:column;
+    }
+    #page-chat.active .chat-scroll{padding-bottom:12px;}
+    #page-chat.active .chat-bar{
+      position:sticky; left:auto; transform:none; bottom:24px; width:auto;
+      max-width:840px; margin:20px auto 0; padding:8px 0;
+      border-top:none; background:transparent;
+    }
+    #page-chat.active .msg{max-width:74%;}
+
+    /* ---- Guide as a COMPACT DOCKED BOX on every other page ---- */
+    #page-chat:not(.active){
+      display:flex !important; flex-direction:column;
+      position:fixed; top:22px; right:22px; bottom:22px; width:var(--guide-w); z-index:20;
+      background:var(--card); border:1px solid var(--line);
+      border-radius:18px; box-shadow:var(--shadow); overflow:hidden;
+    }
+    #page-chat:not(.active) .chat-scroll{ flex:1; overflow-y:auto; padding:18px 18px 6px; }
+    #page-chat:not(.active) .chat-intro .page-title{font-size:20px;}
+    #page-chat:not(.active) .chat-intro .sub{font-size:13px;}
+    #page-chat:not(.active) .chat-bar{
+      position:static; transform:none; left:auto; bottom:auto; width:auto;
+      max-width:none; margin:0; gap:8px;
+      padding:12px 14px calc(12px + env(safe-area-inset-bottom));
+      border-top:1px solid var(--line); background:var(--card);
+    }
+    #page-chat:not(.active) .chat-bar input{flex:1;}
+    #page-chat:not(.active) .msg{max-width:90%;}
+  }
 </style>
 
 <div class="wrap">
@@ -405,6 +486,7 @@
 </div>
 
 <nav class="tabs">
+  <div class="nav-brand"><span class="logo">🧭</span><span>LifeGPS</span></div>
   <button data-tab="goals"><span class="ic">🎯</span>Goals</button>
   <button data-tab="today"><span class="ic">✓</span>Today</button>
   <button data-tab="chat" class="center active"><span class="ic">💬</span>Guide</button>
@@ -1100,9 +1182,13 @@ const pages={goals:"page-goals",today:"page-today",chat:"page-chat",stats:"page-
 function go(tab){
   Object.entries(pages).forEach(([k,id])=>document.getElementById(id).classList.toggle("active",k===tab));
   document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+  // Tag the body so CSS knows whether the Guide is the full page or the docked box.
+  document.body.dataset.tab = tab;
   window.scrollTo({top:0});
   if(tab==="goals")renderGoals(); if(tab==="today")renderToday(); if(tab==="stats")renderStats();
-  if(tab==="chat"){ renderChat(); chatScrollBottom(); setTimeout(()=>document.getElementById("chatInput").focus(),50); }
+  // Keep the Guide up to date whether it's the full page or the small docked box.
+  renderChat(); chatScrollBottom();
+  if(tab==="chat"){ setTimeout(()=>document.getElementById("chatInput").focus(),50); }
 }
 document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>go(b.dataset.tab));
 
@@ -1170,7 +1256,8 @@ document.getElementById("signOutBtn").onclick=async ()=>{
 };
 
 renderGoals(); renderToday(); renderStats();
-go("chat");
+/* Desktop re-opens on Today (with the Guide box); phone opens on the full Guide. */
+go(window.matchMedia("(min-width:920px)").matches ? "today" : "chat");
 
 /* ---------- Boot auth: gate first, then restore the session ---------- */
 (async function bootAuth(){
