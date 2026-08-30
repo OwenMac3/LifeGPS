@@ -222,6 +222,7 @@
   .hr{height:1px;background:var(--line);margin:14px 0;}
   /* login screen */
   .auth-gate{position:fixed;inset:0;z-index:60;background:var(--bg);display:grid;place-items:center;padding:24px;}
+  .auth-gate[hidden]{display:none;}   /* the hidden attribute must win over display:grid */
   .auth-card{max-width:360px;width:100%;text-align:center;}
   .auth-title{font-size:30px;margin:14px 0 4px;letter-spacing:-.5px;}
   .auth-sub{color:var(--muted);font-size:15px;margin:0 0 24px;line-height:1.5;}
@@ -1177,19 +1178,12 @@ go("chat");
   showAuthGate();
   const note=document.getElementById("authNote");
   const p=authParamsFromUrl(BOOT_URL);
-  let dbg="code="+(p.code?"y":"n")+" tok="+(p.access_token?"y":"n")+" err="+(p.error||"-");
-  if(p.error_description) note.textContent="Google error: "+decodeURIComponent(p.error_description).replace(/\+/g," ");
+  if(p.error_description) note.textContent="Google sign-in error: "+decodeURIComponent(p.error_description).replace(/\+/g," ");
   try{
     let { data:{ session } } = await sb.auth.getSession();
-    if(!session && p.code){
-      const r=await sb.auth.exchangeCodeForSession(BOOT_URL);
-      if(r.error) dbg+=" exch_err=["+r.error.message+"]";
-      session=r.data && r.data.session;
-    }
-    dbg+=" session="+(session?"y":"n");
-    note.textContent=(note.textContent?note.textContent+" · ":"")+"diag: "+dbg;
+    if(!session && p.code){ const r=await sb.auth.exchangeCodeForSession(BOOT_URL); if(!r.error) session=r.data && r.data.session; }
     if(session && session.user) await onSignedIn(session.user);
-  }catch(e){ note.textContent="diag error: "+(e&&e.message||e); }
+  }catch(e){ console.warn("auth boot failed",e); }
   sb.auth.onAuthStateChange(async (_e, session)=>{
     if(session && session.user) await onSignedIn(session.user);
     else { currentUser=null; updateAccountUI(null); }
