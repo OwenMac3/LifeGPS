@@ -98,6 +98,10 @@
   .goal-meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:7px;}
   .catchup{margin-top:10px;font-size:12.5px;font-weight:600;border-radius:9px;padding:7px 10px;}
   .catchup.behind{background:rgba(240,160,46,.14);color:var(--amber);}
+  .goal-today{margin-top:9px;font-size:12.5px;font-weight:600;}
+  .today-done{color:var(--green);}
+  .today-prog{color:var(--accent);}
+  .today-todo{color:var(--muted);}
   .link{color:var(--accent);font-weight:600;font-size:13.5px;}
   .link.danger{color:var(--danger);}
 
@@ -113,6 +117,8 @@
   .t-emoji{margin-right:9px;}
   .t-min{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;flex:none;}
   .t-min.boost{color:var(--amber);font-weight:700;}
+  .t-min.prog{cursor:pointer;padding:3px 8px;border-radius:8px;background:var(--chip);}
+  .t-min.prog:active{transform:scale(.96);}
   .group-label{font-size:11.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);margin:20px 2px 4px;}
   .group-label:first-child{margin-top:2px;}
 
@@ -142,15 +148,25 @@
   .assist-toggle .chev{margin-left:auto;color:var(--muted);transition:transform .2s;}
   .assist-toggle.open .chev{transform:rotate(180deg);}
 
-  .chat-log{display:flex;flex-direction:column;gap:10px;max-height:46vh;overflow-y:auto;padding:4px 2px 6px;}
-  .msg{max-width:85%;padding:10px 13px;border-radius:15px;font-size:14.5px;line-height:1.4;}
+  /* Guide (chat) page */
+  #page-chat.active{display:flex;flex-direction:column;}
+  .chat-scroll{padding-bottom:70px;}
+  .chat-intro{text-align:center;padding:12px 6px 2px;}
+  .chat-avatar{width:58px;height:58px;border-radius:18px;background:var(--accent-soft);display:inline-grid;place-items:center;font-size:30px;box-shadow:var(--shadow);}
+  .chat-log{display:flex;flex-direction:column;gap:10px;padding:6px 2px;}
+  .msg{max-width:85%;padding:11px 14px;border-radius:17px;font-size:14.5px;line-height:1.42;}
   .msg.ai{background:var(--bg2);border-bottom-left-radius:5px;align-self:flex-start;}
   .msg.me{background:var(--accent);color:#fff;border-bottom-right-radius:5px;align-self:flex-end;}
   .msg.ai b{color:var(--accent);}
-  .chat-input{display:flex;gap:8px;margin-top:12px;}
-  .chat-input input{border-radius:14px;}
-  .chip-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}
-  .chip{background:var(--chip);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;}
+  .typing{letter-spacing:2px;color:var(--muted);animation:pulse 1.1s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:.35;}50%{opacity:1;}}
+  .chat-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(66px + env(safe-area-inset-bottom));
+    width:100%;max-width:560px;padding:8px 16px 10px;display:flex;gap:9px;align-items:center;z-index:16;
+    background:linear-gradient(to top, var(--bg) 74%, transparent);}
+  .chat-bar input{flex:1;border-radius:22px;padding:12px 16px;background:var(--card);border:1px solid var(--line);}
+  .chat-bar .btn{border-radius:50%;width:46px;height:46px;padding:0;font-size:16px;flex:none;}
+  .chip-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;}
+  .chip{background:var(--chip);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:9px 13px;font-size:13px;font-weight:600;text-align:left;}
 
   .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
   .stat{background:var(--card);border-radius:16px;padding:16px 15px;}
@@ -185,6 +201,10 @@
   nav.tabs button .ic{font-size:21px;line-height:1;}
   nav.tabs button.active{color:var(--accent);}
   nav.tabs button.active .ic{transform:translateY(-1px);}
+  nav.tabs button.center{background:var(--accent);color:#fff;border-radius:16px;margin:0 3px;padding:9px 2px;}
+  nav.tabs button.center .ic{font-size:23px;}
+  nav.tabs button.center, nav.tabs button.center.active{color:#fff;}
+  nav.tabs button.center.active .ic{transform:none;}
 
   .empty{text-align:center;color:var(--muted);padding:26px 10px;font-size:14px;}
   .toast{
@@ -200,6 +220,16 @@
   }
   .toast .undo:active{transform:scale(.96);}
   .hr{height:1px;background:var(--line);margin:14px 0;}
+  /* login screen */
+  .auth-gate{position:fixed;inset:0;z-index:60;background:var(--bg);display:grid;place-items:center;padding:24px;}
+  .auth-card{max-width:360px;width:100%;text-align:center;}
+  .auth-title{font-size:30px;margin:14px 0 4px;letter-spacing:-.5px;}
+  .auth-sub{color:var(--muted);font-size:15px;margin:0 0 24px;line-height:1.5;}
+  .auth-google{background:#fff;color:#1b2030;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px;font-size:15px;box-shadow:var(--shadow);}
+  .auth-google .g{font-weight:800;color:#4285F4;font-size:17px;}
+  .auth-google:active{transform:scale(.99);}
+  .auth-guest{display:inline-block;margin-top:16px;color:var(--muted);font-weight:600;}
+  .auth-note{color:var(--danger);font-size:13px;margin-top:14px;min-height:16px;}
   .banner{background:var(--accent-soft);color:var(--accent);border-radius:12px;padding:11px 13px;font-size:13.5px;font-weight:600;margin-bottom:14px;}
   .note{background:var(--amber);color:#1b2030;border-radius:11px;padding:9px 13px;font-size:13px;font-weight:600;margin:0 0 14px;display:none;}
 </style>
@@ -234,7 +264,16 @@
         </div>
         <div class="row" style="gap:10px;">
           <div class="grow field"><label class="fld">Daily task</label><input id="gTask" placeholder="e.g. Read" /></div>
-          <div class="grow field"><label class="fld">Minutes/day</label><input id="gMinutes" type="number" inputmode="numeric" placeholder="30" /></div>
+          <div class="grow field"><label class="fld">Measure</label>
+            <select id="gMetric">
+              <option value="time">Time (minutes)</option>
+              <option value="count">Count (reps, pages…)</option>
+              <option value="binary">Yes / No (just done)</option>
+            </select></div>
+        </div>
+        <div class="row" style="gap:10px;" id="gAmountWrap">
+          <div class="grow field"><label class="fld" id="gTargetLabel">Minutes/day</label><input id="gMinutes" type="number" inputmode="numeric" placeholder="30" /></div>
+          <div class="grow field" id="gUnitWrap" style="display:none;"><label class="fld">Unit</label><input id="gUnit" placeholder="pushups" /></div>
         </div>
         <div class="field" id="gDaysWrap" style="display:none;"><label class="fld">Finish within (days)</label><input id="gDays" type="number" inputmode="numeric" placeholder="20" /></div>
         <div class="row" style="gap:8px;">
@@ -256,17 +295,22 @@
       <p class="sub" id="todaySub">One step at a time. Check things off as you go.</p>
       <div class="note" id="storageNote">Heads up: this browser is blocking saved data, so progress won't stick after you close the tab. Try a normal (non-private) window.</div>
       <div id="todayList"></div>
+    </section>
 
-      <div class="card" style="margin-top:22px;">
-        <button class="assist-toggle" id="assistToggle" type="button">🤖 Assistant<span class="chev">▾</span></button>
-        <div id="assistBody" hidden>
-          <div class="chat-log" id="chatLog"></div>
-          <div class="chip-row" id="chatChips"></div>
+    <!-- ===================== GUIDE (chat) ===================== -->
+    <section class="page" id="page-chat">
+      <div class="chat-scroll" id="chatScroll">
+        <div class="chat-intro" id="chatIntro">
+          <div class="chat-avatar">🧭</div>
+          <h2 class="page-title" style="margin:10px 0 2px;">Your guide</h2>
+          <p class="sub" style="margin-bottom:14px;">Talk to me like a coach in your corner — a rough day, a new goal, feeling stuck. I'll help you turn it into a plan.</p>
         </div>
-        <div class="chat-input" style="margin-top:10px;">
-          <input id="chatInput" placeholder="How did today go?" autocomplete="off" />
-          <button class="btn" id="chatSend">Send</button>
-        </div>
+        <div class="chat-log" id="chatLog"></div>
+        <div class="chip-row" id="chatChips"></div>
+      </div>
+      <div class="chat-bar">
+        <input id="chatInput" placeholder="Talk to your guide…" autocomplete="off" />
+        <button class="btn" id="chatSend" aria-label="Send">➤</button>
       </div>
     </section>
 
@@ -337,18 +381,38 @@
 
         <p class="small muted" style="margin:12px 0 0;">👉 In <b>Model&nbsp;2</b>, you won't need to phrase it carefully — you'll just talk, and it'll understand.</p>
       </div>
+
+      <div class="card" id="accountBox" style="display:none;">
+        <div class="row"><b>Account</b><span class="grow"></span><span class="small muted" id="acctEmail"></span></div>
+        <p class="small muted" style="margin:6px 0 0;">Your goals and progress sync to this account across your devices.</p>
+        <button class="btn ghost block" id="signOutBtn" style="margin-top:12px;">Sign out</button>
+      </div>
     </section>
   </main>
 </div>
 
+<!-- Login screen (only appears when cloud sync is configured & you're signed out) -->
+<div class="auth-gate" id="authGate" hidden>
+  <div class="auth-card">
+    <div class="chat-avatar">🧭</div>
+    <h1 class="auth-title">LifeGPS</h1>
+    <p class="auth-sub">Your AI life guide. Sign in to sync your goals, plans, and conversations across every device.</p>
+    <button class="btn block auth-google" id="googleBtn" type="button"><span class="g">G</span> Continue with Google</button>
+    <button class="link auth-guest" id="guestBtn" type="button">Continue without an account</button>
+    <p class="auth-note" id="authNote"></p>
+  </div>
+</div>
+
 <nav class="tabs">
   <button data-tab="goals"><span class="ic">🎯</span>Goals</button>
-  <button data-tab="today" class="active"><span class="ic">✓</span>Today</button>
+  <button data-tab="today"><span class="ic">✓</span>Today</button>
+  <button data-tab="chat" class="center active"><span class="ic">💬</span>Guide</button>
   <button data-tab="stats"><span class="ic">📊</span>Progress</button>
-  <button data-tab="next"><span class="ic">✨</span>What's next</button>
+  <button data-tab="next"><span class="ic">✨</span>Next</button>
 </nav>
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 "use strict";
 /* ============================================================
@@ -362,6 +426,17 @@ const KEY = "lifegps_v1";
 let STORAGE_OK = true;
 try { const k="__t"; localStorage.setItem(k,"1"); localStorage.removeItem(k); } catch(e){ STORAGE_OK=false; }
 
+/* Real-AI backend (Model 2). Empty string = fall back to the built-in rule-based
+   assistant (Model 1). Paste your Cloudflare Worker URL here to switch on real Claude. */
+const AI_BACKEND_URL = "https://lifegps-ai.owenmaceachern3.workers.dev";
+function stripHtml(s){ return String(s).replace(/<[^>]*>/g,""); }
+
+/* Login + cloud sync (Supabase). Empty = no login, on-device only (also the case
+   inside the sandboxed artifact, where external scripts are blocked). */
+const SUPABASE_URL = "https://jdwhhbmwhyfmeddffhxw.supabase.co";
+const SUPABASE_KEY = "sb_publishable_dygctj4mpr2E-mVcWrMFJQ_xC3maMOn";
+let sb = null, currentUser = null;
+
 const todayStr = () => new Date().toLocaleDateString("en-CA");
 const dateAdd = (base, n) => { const d = new Date(base+"T00:00:00"); d.setDate(d.getDate()+n); return d.toLocaleDateString("en-CA"); };
 
@@ -373,8 +448,8 @@ function seed(){
   return {
     version:1,
     goals:[
-      {id:"g_book",  emoji:"📖", title:"Finish a book", type:"deadline", task:"Read",            minutes:30, days:20, start},
-      {id:"g_guitar",emoji:"🎸", title:"Practice guitar",type:"daily",    task:"Practice guitar", minutes:30, start},
+      {id:"g_book",  emoji:"📖", title:"Finish a book", type:"deadline", task:"Read",            metric:"time", target:30, unit:"min", days:20, start},
+      {id:"g_guitar",emoji:"🎸", title:"Practice guitar",type:"daily",    task:"Practice guitar", metric:"time", target:30, unit:"min", start},
     ],
     routines:{
       morning:[
@@ -389,6 +464,8 @@ function seed(){
     },
     logs:{},
     chat:[],
+    tasks:[],            // one-off to-do steps (goal breakdowns), not recurring
+    overrides:{},        // overrides[date][goalId] = minutes  (one-day eased/raised target)
     createdAt:start,
   };
 }
@@ -402,21 +479,76 @@ function normalize(s){
         : {id:it.id||rid(), text:it.text||"", minutes:(it.minutes==null?5:it.minutes)}
     );
   });
+  if(!Array.isArray(s.tasks)) s.tasks=[];
+  if(!s.overrides || typeof s.overrides!=="object") s.overrides={};
+  // Upgrade goals to the metric model (time / count / binary).
+  s.goals=(s.goals||[]).map(g=>{
+    if(!g.metric) g.metric="time";
+    if(g.target==null) g.target=(g.minutes!=null?g.minutes:0);
+    if(g.unit==null) g.unit=(g.metric==="time"?"min":(g.metric==="count"?"reps":""));
+    return g;
+  });
   return s;
 }
 let state = load();
 function load(){ try{ const raw=localStorage.getItem(KEY); if(raw) return normalize(JSON.parse(raw)); }catch(e){} const s=seed(); persist(s); return s; }
 function persist(s){ try{ localStorage.setItem(KEY, JSON.stringify(s||state)); }catch(e){} }
-function save(){ persist(state); }
+function save(){ persist(state); cloudSaveDebounced(); }
+
+/* ---------- Cloud sync (Supabase) ---------- */
+function initSupabase(){
+  if(sb) return true;
+  if(SUPABASE_URL && SUPABASE_KEY && window.supabase && window.supabase.createClient){
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    return true;
+  }
+  return false;   // not configured, or SDK blocked (e.g. the sandboxed artifact) → local-only
+}
+async function cloudLoad(uid){
+  try{
+    const {data,error}=await sb.from("lifegps_state").select("data").eq("user_id",uid).maybeSingle();
+    if(error){ console.warn("cloud load:",error.message); return null; }
+    return data ? data.data : null;
+  }catch(e){ console.warn("cloud load failed",e); return null; }
+}
+let _cloudTimer=null;
+function cloudSaveDebounced(){
+  if(!sb || !currentUser) return;
+  clearTimeout(_cloudTimer);
+  _cloudTimer=setTimeout(async ()=>{
+    try{ await sb.from("lifegps_state").upsert({ user_id:currentUser.id, data:state, updated_at:new Date().toISOString() }); }
+    catch(e){ console.warn("cloud save failed",e); }
+  }, 800);
+}
+async function onSignedIn(user){
+  currentUser=user;
+  hideAuthGate();
+  const cloud=await cloudLoad(user.id);
+  if(cloud && Array.isArray(cloud.goals)){
+    state=normalize(cloud); persist(state);           // adopt the account's data (cloud wins)
+  }else{
+    try{ await sb.from("lifegps_state").upsert({ user_id:user.id, data:state, updated_at:new Date().toISOString() }); }catch(e){}  // first login → seed the cloud from this device
+  }
+  renderGoals(); renderToday(); renderStats(); renderChat();
+  updateAccountUI(user);
+}
+
+/* ---------- Goal measure model: time / count / binary ---------- */
+function goalMetric(g){ return g.metric || "time"; }
+function goalTarget(g){ return (g.target!=null ? g.target : (g.minutes!=null ? g.minutes : 0)); }
+function goalUnit(g){ return g.unit || (goalMetric(g)==="time" ? "min" : (goalMetric(g)==="count" ? "reps" : "")); }
+function isBinary(g){ return goalMetric(g)==="binary"; }
 
 function tasksForDate(date){
   const out=[];
   state.goals.forEach(g=>{
-    const tt = (date===todayStr()) ? todayTarget(g) : {target:g.minutes, extra:0};
-    out.push({key:g.id, label:g.task, emoji:g.emoji, group:"Goals", minutes:tt.target, catchExtra:tt.extra, goalId:g.id});
+    const tt = (date===todayStr()) ? todayTarget(g) : {target:goalTarget(g), extra:0};
+    const logged = (state.logs[date] && state.logs[date].minutes && state.logs[date].minutes[g.id]) || 0;
+    out.push({key:g.id, label:g.task, emoji:g.emoji, group:"Goals", goalId:g.id,
+      metric:goalMetric(g), unit:goalUnit(g), target:tt.target, logged, catchExtra:tt.extra});
   });
-  state.routines.morning.forEach(r=> out.push({key:r.id, label:r.text, emoji:"🌅", group:"Morning", minutes:r.minutes}));
-  state.routines.night.forEach(r=> out.push({key:r.id, label:r.text, emoji:"🌙", group:"Night", minutes:r.minutes}));
+  state.routines.morning.forEach(r=> out.push({key:r.id, label:r.text, emoji:"🌅", group:"Morning", routineMin:r.minutes}));
+  state.routines.night.forEach(r=> out.push({key:r.id, label:r.text, emoji:"🌙", group:"Night", routineMin:r.minutes}));
   return out;
 }
 function dayLog(date){ if(!state.logs[date]) state.logs[date]={done:{},minutes:{}}; return state.logs[date]; }
@@ -427,36 +559,66 @@ function setDone(date,key,val,minutes){
   else { delete l.done[key]; delete l.minutes[key]; }
   save();
 }
-
-/* ---------- Catch-up: gradual repayment of missed minutes ---------- */
-const CATCHUP_STEP = 5;            // how many extra minutes/day to add while behind
-function actualMinutes(goal,date){ // minutes logged toward a goal on a given day (0 if not done)
-  const l=state.logs[date];
-  if(!l||!l.done||!l.done[goal.id]) return 0;
-  return (l.minutes && l.minutes[goal.id]!=null) ? l.minutes[goal.id] : (goal.minutes||0);
+// Log a partial amount toward a time/count goal; auto-completes when it reaches the target.
+function setAmount(date,key,amount,target){
+  const l=dayLog(date);
+  amount=Math.max(0,amount);
+  l.minutes[key]=amount;
+  if(target>0 && amount>=target) l.done[key]=true; else delete l.done[key];
+  save();
 }
-function goalDeficit(goal){         // total minutes behind, accrued over PAST days (today excluded)
-  const T=goal.minutes||0; if(T<=0) return 0;
+
+/* ---------- Catch-up: gradual repayment of missed amount (time or count) ---------- */
+const CATCHUP_STEP = 5;            // extra units/day added while behind (minutes or reps)
+function actualMinutes(goal,date){ // amount logged toward a goal on a given day (partial counts)
+  const l=state.logs[date];
+  if(!l) return 0;
+  if(l.minutes && l.minutes[goal.id]!=null) return l.minutes[goal.id];
+  if(l.done && l.done[goal.id]) return goalTarget(goal);
+  return 0;
+}
+function dayBaseTarget(goal,date){   // that day's target: a one-day override wins over the goal's base
+  const o=state.overrides&&state.overrides[date];
+  if(o && o[goal.id]!=null) return o[goal.id];
+  return goalTarget(goal);
+}
+function goalDeficit(goal){         // total amount behind, accrued over PAST days (today excluded)
+  if(isBinary(goal) || goalTarget(goal)<=0) return 0;   // yes/no goals have no "amount behind"
   const start=goal.start||state.createdAt;
   let end=todayStr();
   if(goal.type==="deadline" && goal.days){ const cap=dateAdd(start,goal.days); if(cap<end) end=cap; }
   let sum=0, d=start, guard=0;
-  while(d<end && guard++<3660){ sum += T - actualMinutes(goal,d); d=dateAdd(d,1); }
+  while(d<end && guard++<3660){ sum += dayBaseTarget(goal,d) - actualMinutes(goal,d); d=dateAdd(d,1); }
   return Math.max(0, sum);
 }
-function todayTarget(goal){         // today's suggested target = base + capped catch-up
-  const T=goal.minutes||0;
+function todayTarget(goal){         // today's suggested target = today's base (+ catch-up, unless today is eased)
+  const d=todayStr();
+  const base=dayBaseTarget(goal,d);
+  const eased=!!(state.overrides[d] && state.overrides[d][goal.id]!=null);
   const def=goalDeficit(goal);
   const step=goal.catchUpStep||CATCHUP_STEP;
-  const extra=Math.min(step, def);
-  return {base:T, extra, target:T+extra, deficit:def};
+  const extra=eased ? 0 : Math.min(step, def);   // no catch-up pile-on on a deliberately eased day
+  return {base, extra, target:base+extra, deficit:def, eased};
 }
 function catchupLine(g){
-  if((g.minutes||0)<=0) return "";
-  const tt=todayTarget(g);
+  if(isBinary(g) || goalTarget(g)<=0) return "";   // yes/no goals have no catch-up
+  const tt=todayTarget(g), u=goalUnit(g);
   if(tt.deficit>0)
-    return `<div class="catchup behind">⏳ Catch-up: <b>${tt.deficit} min</b> behind${tt.extra?` · +${tt.extra} added to today`:""}</div>`;
+    return `<div class="catchup behind">⏳ Catch-up: <b>${tt.deficit} ${u}</b> behind${tt.extra?` · +${tt.extra} added to today`:""}</div>`;
   return "";   // on track → show nothing (calmer)
+}
+function goalPerDayText(g){
+  if(isBinary(g)) return "each day";
+  return `${goalTarget(g)} ${goalUnit(g)}/day`;
+}
+function goalTodayStatus(g){
+  const d=todayStr(), done=isDone(d,g.id);
+  if(isBinary(g)) return done ? `<div class="goal-today"><span class="today-done">✓ Done today</span></div>`
+                              : `<div class="goal-today"><span class="today-todo">Not done yet today</span></div>`;
+  const logged=actualMinutes(g,d), tgt=todayTarget(g).target, u=goalUnit(g);
+  if(done) return `<div class="goal-today"><span class="today-done">✓ Done today · ${logged} ${u}</span></div>`;
+  if(logged>0) return `<div class="goal-today"><span class="today-prog">${logged}/${tgt} ${u} today</span></div>`;
+  return `<div class="goal-today"><span class="today-todo">0/${tgt} ${u} today</span></div>`;
 }
 
 function renderGoals(){
@@ -469,10 +631,11 @@ function renderGoals(){
       <div class="goal-head">
         <div class="goal-emoji">${g.emoji||"🎯"}</div>
         <div class="grow"><div class="goal-title">${esc(g.title)}</div>
-          <div class="small muted">${g.type==="deadline"?`${p.daysLeft} days left`:"Daily habit"} · ${g.minutes||0} min/day</div></div>
+          <div class="small muted">${g.type==="deadline"?`${p.daysLeft} days left`:"Daily habit"} · ${goalPerDayText(g)}</div></div>
       </div>
       <div class="bar ${g.type==='deadline'?'':'green'}"><span style="width:${p.pct}%"></span></div>
       <div class="goal-meta"><span>${p.label}</span><span>${p.pct}%</span></div>
+      ${goalTodayStatus(g)}
       ${catchupLine(g)}
       <div class="row" style="margin-top:12px;gap:14px;">
         <span class="link" data-edit="${g.id}">Edit</span>
@@ -552,11 +715,21 @@ function openGoalForm(goal){
   const f=document.getElementById("goalForm"); f.style.display="block";
   f.dataset.edit = goal?goal.id:"";
   gTitle.value=goal?goal.title:""; gEmoji.value=goal?goal.emoji:""; gType.value=goal?goal.type:"daily";
-  gTask.value=goal?goal.task:""; gMinutes.value=goal?goal.minutes:30; gDays.value=goal?(goal.days||20):20;
-  toggleDays();
+  gTask.value=goal?goal.task:"";
+  gMetric.value=goal?goalMetric(goal):"time";
+  gMinutes.value=goal?goalTarget(goal):30;
+  const u=goal?goalUnit(goal):""; gUnit.value=(u==="min")?"":u;
+  gDays.value=goal?(goal.days||20):20;
+  toggleDays(); toggleMetric();
   f.scrollIntoView({behavior:"smooth",block:"center"});
 }
 function toggleDays(){ document.getElementById("gDaysWrap").style.display = gType.value==="deadline"?"block":"none"; }
+function toggleMetric(){
+  const m=gMetric.value;
+  document.getElementById("gAmountWrap").style.display = (m==="binary") ? "none" : "flex";
+  document.getElementById("gUnitWrap").style.display = (m==="count") ? "block" : "none";
+  document.getElementById("gTargetLabel").textContent = (m==="time") ? "Minutes/day" : "Target/day";
+}
 
 function renderToday(){
   const wrap=document.getElementById("todayList"); wrap.innerHTML="";
@@ -564,63 +737,105 @@ function renderToday(){
   const groups={};
   tasks.forEach(t=>{ (groups[t.group]=groups[t.group]||[]).push(t); });
   const order=["Goals","Morning","Night"];
-  let doneCount=0, shown=0;
+  let doneCount=0, shown=0, total=0;
   order.forEach(gr=>{ if(!groups[gr])return;
+    total+=groups[gr].length;
     groups[gr].forEach(t=>{ if(isDone(todayStr(),t.key)) doneCount++; });
     const undone=groups[gr].filter(t=>!isDone(todayStr(),t.key));
     if(!undone.length) return;                    // whole group is done — hide its label too
     const gl=document.createElement("div"); gl.className="group-label"; gl.textContent=gr; wrap.appendChild(gl);
     undone.forEach(t=>{
       shown++;
+      const isGoal = t.group==="Goals";
+      const measured = isGoal && t.metric!=="binary";   // time/count → show progress + tappable
       const row=document.createElement("div"); row.className="task";
+      let right="";
+      if(measured) right=`<div class="t-min prog${t.catchExtra?' boost':''}" role="button" tabindex="0" aria-label="Log progress for ${esc(t.label)}">${t.logged}/${t.target}${t.unit?' '+t.unit:''}${t.catchExtra?' ⏳':''}</div>`;
+      else if(!isGoal && t.routineMin) right=`<div class="t-min">${t.routineMin}m</div>`;
       row.innerHTML=`<div class="check" role="button" tabindex="0" aria-label="Complete ${esc(t.label)}"></div>
         <div class="grow"><div class="t-label"><span class="t-emoji">${t.emoji||""}</span>${esc(t.label)}</div></div>
-        ${t.minutes?`<div class="t-min${t.catchExtra?' boost':''}">${t.minutes}m${t.catchExtra?' ⏳':''}</div>`:""}`;
-      const complete=()=>{ setDone(todayStr(),t.key,true, t.minutes); renderToday(); renderStats(); showUndo(t.key, t.label); };
+        ${right}`;
+      const complete=()=>{ setDone(todayStr(),t.key,true, measured?t.target:undefined); renderToday(); renderStats();
+        showUndo(()=>{ setDone(todayStr(),t.key,false); renderToday(); renderStats(); }); };
+      const chk=row.querySelector(".check");
+      chk.onclick=complete;
+      chk.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); complete(); } };
+      if(measured){
+        const adjust=()=>{ const p=prompt(`How much ${t.unit||""} so far? (target ${t.target})`, t.logged||0);
+          if(p!==null){ setAmount(todayStr(),t.key,parseInt(p)||0,t.target); renderToday(); renderStats(); } };
+        const mn=row.querySelector(".t-min");
+        if(mn){ mn.onclick=adjust; mn.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); adjust(); } }; }
+      }
+      wrap.appendChild(row);
+    });
+  });
+
+  // One-off to-do steps the assistant broke a goal into (e.g. buy ingredients → cook → clean up)
+  total += state.tasks.length;
+  doneCount += state.tasks.filter(x=>x.done).length;
+  const openTasks=state.tasks.filter(x=>!x.done);
+  if(openTasks.length){
+    const gl=document.createElement("div"); gl.className="group-label"; gl.textContent="To-do"; wrap.appendChild(gl);
+    openTasks.forEach(tk=>{
+      shown++;
+      const row=document.createElement("div"); row.className="task";
+      row.innerHTML=`<div class="check" role="button" tabindex="0" aria-label="Complete ${esc(tk.label)}"></div>
+        <div class="grow"><div class="t-label">${esc(tk.label)}</div></div>`;
+      const complete=()=>{ tk.done=true; save(); renderToday();
+        showUndo(()=>{ tk.done=false; save(); renderToday(); }); };
       const chk=row.querySelector(".check");
       chk.onclick=complete;
       chk.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); complete(); } };
       wrap.appendChild(row);
     });
-  });
-  const total=tasks.length;
+  }
+
   if(!total) wrap.innerHTML='<div class="empty">Add a goal to get started.</div>';
   else if(!shown) wrap.innerHTML='<div class="empty">🎉 All clear for today — every task done.<br>Enjoy the rest of your day.</div>';
   document.getElementById("todaySub").textContent = !total ? "Add a goal to get started."
     : `${doneCount} of ${total} done today — ${doneCount===total?"all clear 🎉":"one step at a time."}`;
-  renderChat();
 }
 
+function chatScrollBottom(){ requestAnimationFrame(()=>window.scrollTo(0, document.body.scrollHeight)); }
 function renderChat(){
   const log=document.getElementById("chatLog");
   if(!state.chat.length){
-    state.chat.push({role:"ai", text:"Hi! I'm your assistant. Tell me how your day is going — like <b>\"I read for an hour\"</b> — and I'll update your plan. Ask <b>\"what's left today?\"</b> anytime."});
+    state.chat.push({role:"ai", text:"Hey — I'm your guide. 👋 Tell me what's on your mind: a rough day, something you want to get better at, or a goal you're not sure how to start. We'll figure out the next step together."});
     save();
   }
   log.innerHTML="";
-  state.chat.slice(-40).forEach(m=>{ const d=document.createElement("div"); d.className="msg "+(m.role==="ai"?"ai":"me"); d.innerHTML=m.text; log.appendChild(d); });
-  log.scrollTop=log.scrollHeight;
+  state.chat.slice(-60).forEach(m=>{ const d=document.createElement("div"); d.className="msg "+(m.role==="ai"?"ai":"me"); d.innerHTML=m.text; log.appendChild(d); });
+  // intro + starter chips only while the conversation is just getting going
+  const early = state.chat.filter(m=>m.role==="me").length===0;
+  const intro=document.getElementById("chatIntro"); if(intro) intro.style.display = early ? "block" : "none";
   const chips=document.getElementById("chatChips");
   chips.innerHTML="";
-  ["I read for an hour","practiced guitar","what's left today?"].forEach(txt=>{
-    const c=document.createElement("button"); c.className="chip"; c.textContent=txt;
-    c.onclick=()=>{ document.getElementById("chatInput").value=txt; sendChat(); };
-    chips.appendChild(c);
-  });
+  if(early){
+    ["I feel stuck and need to get back on track","Help me build a plan to learn something new","What should I focus on today?"].forEach(txt=>{
+      const c=document.createElement("button"); c.className="chip"; c.textContent=txt;
+      c.onclick=()=>{ document.getElementById("chatInput").value=txt; sendChat(); };
+      chips.appendChild(c);
+    });
+  }
 }
-function openAssistant(){ document.getElementById("assistBody").removeAttribute("hidden"); document.getElementById("assistToggle").classList.add("open"); }
-function sendChat(){
+async function sendChat(){
   const inp=document.getElementById("chatInput"); const text=inp.value.trim(); if(!text)return;
   state.chat.push({role:"me", text:esc(text)}); inp.value="";
-  const reply = window.Assistant.reply(text);
-  state.chat.push({role:"ai", text:reply}); save();
-  openAssistant();                       // reveal the conversation so the reply is visible
-  renderChat(); renderToday(); renderStats(); renderGoals();
+  state.chat.push({role:"ai", text:'<span class="typing">●●●</span>', _temp:true});
+  renderChat(); chatScrollBottom();
+  let replyHtml;
+  try { replyHtml = await window.Assistant.respond(text); }
+  catch(e){ replyHtml = "⚠️ Something went wrong reaching the assistant."; }
+  state.chat = state.chat.filter(m=>!m._temp);   // drop the typing bubble
+  state.chat.push({role:"ai", text:replyHtml}); save();
+  renderChat(); chatScrollBottom(); renderToday(); renderStats(); renderGoals();
 }
 
 /* ============================================================
    window.Assistant — the SWAP BOUNDARY.
-   Model 1: rule-based. Model 2: replace .reply() with a call to Claude.
+   respond(text) → Promise<html>. Uses real Claude when AI_BACKEND_URL is set,
+   otherwise the built-in rule-based assistant (Model 1). Real AI also applies
+   structured actions (complete/skip/add goal/retarget) to the plan.
    ============================================================ */
 window.Assistant = (function(){
   function parseMinutes(t){
@@ -644,7 +859,7 @@ window.Assistant = (function(){
     if(!tasks.length) return "You're all caught up for today — every task is done. 🎉";
     return "Here's what's still open today:<br>"+tasks.map(t=>"• "+t.emoji+" "+esc(t.label)).join("<br>");
   }
-  function reply(raw){
+  function ruleReply(raw){
     const t=raw.toLowerCase().trim();
     const mins=parseMinutes(t);
     const goal=matchGoal(t);
@@ -668,14 +883,157 @@ window.Assistant = (function(){
       const tgt=todayTarget(goal);
       setDone(todayStr(),goal.id,true, mins||tgt.target);
       const streak=currentStreak(goal.id);
-      let extra = mins&&goal.minutes&&mins>goal.minutes ? ` That's ${mins-goal.minutes} min past your target — love it.`
+      let extra = mins&&goalTarget(goal)&&mins>goalTarget(goal) ? ` That's ${mins-goalTarget(goal)} min past your target — love it.`
                 : (!mins&&tgt.extra ? ` Logged ${tgt.target} min (+${tgt.extra} to catch up).` : "");
       return `Checked off <b>${esc(goal.task)}</b>${mins?` — logged ${mins} min`:""}.${extra} ${streak>1?`🔥 ${streak}-day streak!`:"Great start."}`;
     }
     if(mins && !goal) return "Got it. Which task was that for — reading or guitar? Try <b>\"I read "+mins+" minutes\"</b>.";
     return "I didn't quite catch that. Model&nbsp;1 likes short, direct updates — try <b>\"I read for an hour\"</b> or <b>\"what's left today?\"</b> (see the <b>What's next</b> page for examples).";
   }
-  return { reply };
+
+  /* ---------- Real AI (Model 2) ---------- */
+  function stateSnapshot(){
+    const d=todayStr();
+    return {
+      today:d,
+      goals: state.goals.map(g=>{ const tt=todayTarget(g);
+        return { id:g.id, title:g.title, dailyTask:g.task, kind:g.type,
+                 measure:goalMetric(g), unit:goalUnit(g),
+                 targetPerDay:isBinary(g)?null:goalTarget(g), loggedToday:isBinary(g)?null:actualMinutes(g,d),
+                 todayTarget:isBinary(g)?null:tt.target, amountBehind:tt.deficit,
+                 daysLeft:(g.type==="deadline"?Math.max(0,(g.days||0)-daysBetween(g.start||state.createdAt,d)):null) }; }),
+      todaysHabitTasks: tasksForDate(d).map(t=>({ id:t.key, label:t.label, done:isDone(d,t.key) })),
+      openToDos: state.tasks.filter(x=>!x.done).map(x=>({ id:x.id, label:x.label })),
+    };
+  }
+  function systemPrompt(){
+    const d=todayStr();
+    return [
+      "You are LifeGPS — a warm, concise AI life-guide and coach. Your mission: turn the user's goals into",
+      "small, manageable daily steps and fight overwhelm and decision paralysis. Encouraging, never preachy.",
+      "A missed day is never a failure — reassure and adjust, don't guilt.",
+      "Today is "+d+"; tomorrow is "+dateAdd(d,1)+".",
+      "The user's current plan (JSON):",
+      JSON.stringify(stateSnapshot()),
+      "",
+      "COACHING STYLE (important):",
+      "- When a goal is vague or big (e.g. 'get better at cooking', 'get fit'), do NOT immediately create a generic goal.",
+      "  First ask ONE friendly clarifying question to make it concrete (which meal has the most time, current level,",
+      "  when they'll do it, etc.), and take NO action that turn — just ask.",
+      "- Once it's concrete, break it into small, SPECIFIC, checkable steps. Use real specifics — name the actual",
+      "  ingredients, the chapter, the exercise — not vague labels. You may suggest options/recipes from your knowledge.",
+      "- Use add_tasks for one-off multi-step projects; use add_goal for recurring habits. You can do both.",
+      "- TRACKING: when the user says they finished or did something ('I finished reading', 'did my pushups', 'cooked dinner',",
+      "  'knocked out the dishes'), ALWAYS mark it with a complete action (or log_progress for a partial amount like 'did 10 pushups'),",
+      "  matching it to the right goal/to-do id, then briefly confirm ('Nice — checked off Read ✓'). This keeps their Goals tab current.",
+      "",
+      "GOAL MEASURE TYPES — pick the one that truly fits, do NOT force a time value on everything:",
+      "- 'time'  → measured in minutes (read 20 min, meditate 10 min). unit is 'min'.",
+      "- 'count' → measured in a countable unit (20 pushups, 20 pages, 8 glasses). set unit to that noun.",
+      "- 'binary' → a yes/no thing with no amount (cook dinner, do the dishes, make a call). NO target, NO unit.",
+      "  For binary goals never invent minutes; they are simply done or not.",
+      "",
+      "Reply briefly (1–3 sentences) and, when appropriate, include actions. Respond with ONLY a JSON object:",
+      '{"reply":"<friendly message>","actions":[<zero or more actions>]}',
+      "Valid actions (use ONLY ids that appear in the plan above; never invent goal ids):",
+      '- {"type":"complete","id":"<goal or to-do id>","amount":<optional number>}  mark today fully done (amount only for time/count)',
+      '- {"type":"log_progress","id":"<goal id>","amount":<number>}  set partial progress toward a time/count goal (e.g. 10 of 20); not for binary',
+      '- {"type":"skip","id":"<goal id>"}  leave undone today, no guilt',
+      '- {"type":"add_goal","title":"...","emoji":"🎯","goalType":"daily"|"deadline","task":"<daily task>","metric":"time"|"count"|"binary","target":<int, omit for binary>,"unit":"<e.g. pushups; omit for time/binary>","days":<int if deadline>}',
+      '- {"type":"add_tasks","tasks":[{"label":"Buy ingredients: pasta, parsley, garlic"},{"label":"Cook the dish"},{"label":"Clean up"}]}  a checklist of concrete one-off steps',
+      '- {"type":"set_day_target","id":"<goal id>","day":"tomorrow"|"today"|"YYYY-MM-DD","amount":<int>}  ease/raise a time/count goal for ONE day only',
+      '- {"type":"set_target","id":"<goal id>","amount":<int>}  change a time/count goal target for ALL future days (lasting change only)',
+      "",
+      "CRITICAL: 'take it easy tomorrow' / 'just today' = set_day_target (one day only). Use set_target ONLY for lasting",
+      "changes ('from now on', 'going forward'). Never lower every future day when the user meant a single day.",
+      "If no change is needed, return an empty actions array. Keep replies specific and kind.",
+    ].join("\n");
+  }
+  function toApiMessages(newText){
+    const hist=state.chat.filter(m=>!m._temp).slice(-12)
+      .map(m=>({ role: m.role==="me"?"user":"assistant", content: stripHtml(m.text) }))
+      .filter(m=>m.content.trim());
+    hist.push({ role:"user", content:newText });
+    return hist;
+  }
+  function parseAI(text){
+    try { return JSON.parse(text); } catch(e){}
+    const m=text.match(/\{[\s\S]*\}/);
+    if(m){ try { return JSON.parse(m[0]); } catch(e){} }
+    return { reply:text, actions:[] };
+  }
+  function resolveDay(day){
+    const d=todayStr();
+    if(!day || day==="today") return d;
+    if(/^\d{4}-\d{2}-\d{2}$/.test(day)) return day;
+    return dateAdd(d,1);   // "tomorrow" or any other relative phrase → tomorrow
+  }
+  function newTaskId(){ return "t_"+Date.now()+"_"+Math.floor(Math.random()*10000); }
+  function applyActions(actions){
+    if(!Array.isArray(actions)) return;
+    const d=todayStr();
+    actions.forEach(a=>{
+      if(!a||!a.type) return;
+      const amt=(a.amount!=null?a.amount:a.minutes);   // accept either key from the model
+      if(a.type==="complete" && a.id){
+        const tk=state.tasks.find(x=>x.id===a.id);
+        if(tk){ tk.done=true; }                                   // one-off to-do step
+        else { const g=state.goals.find(x=>x.id===a.id);
+          if(g && isBinary(g)) setDone(d,a.id,true);
+          else setDone(d,a.id,true, amt!=null?parseInt(amt):(g?todayTarget(g).target:undefined)); }
+      }
+      else if(a.type==="log_progress" && a.id){
+        const g=state.goals.find(x=>x.id===a.id);
+        if(g && !isBinary(g)) setAmount(d, a.id, parseInt(amt)||0, todayTarget(g).target);
+      }
+      else if(a.type==="skip" && a.id){ setDone(d,a.id,false); }
+      else if(a.type==="add_goal" && a.title){
+        const metric=(a.metric==="count"||a.metric==="binary")?a.metric:"time";
+        const goal={ id:"g_"+Date.now()+"_"+Math.floor(Math.random()*1000), emoji:a.emoji||"🎯",
+          title:String(a.title), type:(a.goalType==="deadline"?"deadline":"daily"),
+          task:String(a.task||a.title), metric,
+          target: metric==="binary" ? 0 : Math.max(0,parseInt(a.target!=null?a.target:a.minutes)||15),
+          unit: metric==="time" ? "min" : (metric==="count" ? String(a.unit||"reps") : ""),
+          start:d };
+        if(goal.type==="deadline") goal.days=Math.max(1,parseInt(a.days)||20);
+        state.goals.push(goal);
+      }
+      else if(a.type==="add_tasks" && Array.isArray(a.tasks)){
+        a.tasks.forEach(tt=>{ const label=String((tt&&tt.label!=null?tt.label:tt)||"").trim();
+          if(label) state.tasks.push({ id:newTaskId(), label, done:false }); });
+      }
+      else if(a.type==="add_task" && a.label){ state.tasks.push({ id:newTaskId(), label:String(a.label), done:false }); }
+      else if(a.type==="set_day_target" && a.id){
+        const g=state.goals.find(x=>x.id===a.id);
+        if(g && !isBinary(g)){ const dd=resolveDay(a.day);
+          if(!state.overrides[dd]) state.overrides[dd]={};
+          state.overrides[dd][a.id]=Math.max(0,parseInt(amt)||0); }
+      }
+      else if(a.type==="set_target" && a.id){ const g=state.goals.find(x=>x.id===a.id); if(g && !isBinary(g)) g.target=Math.max(0,parseInt(amt)||goalTarget(g)); }
+    });
+    save();
+  }
+  async function aiRespond(userText){
+    const res=await fetch(AI_BACKEND_URL,{ method:"POST", headers:{"content-type":"application/json"},
+      body:JSON.stringify({ system:systemPrompt(), messages:toApiMessages(userText) }) });
+    if(!res.ok) throw new Error("backend "+res.status);
+    const data=await res.json();
+    if(data.error) throw new Error(data.error.message||"api error");
+    const text=(data.content||[]).map(b=>b.text||"").join("").trim();
+    const parsed=parseAI(text);
+    applyActions(parsed.actions);
+    const reply=(parsed.reply||"").trim();
+    if(reply) return esc(reply);
+    return (parsed.actions&&parsed.actions.length) ? "Done ✓" : "Got it 👍";
+  }
+  async function respond(userText){
+    if(AI_BACKEND_URL){
+      try { return await aiRespond(userText); }
+      catch(e){ return "⚠️ I couldn't reach the AI just now, so I'm using my basic mode.<br>"+ruleReply(userText); }
+    }
+    return ruleReply(userText);
+  }
+  return { respond, ruleReply, _parseAI:parseAI, _applyActions:applyActions, _snapshot:stateSnapshot, _system:systemPrompt };
 })();
 
 function currentStreak(key){
@@ -726,12 +1084,13 @@ function renderHeat(){
   }
 }
 
-const pages={goals:"page-goals",today:"page-today",stats:"page-stats",next:"page-next"};
+const pages={goals:"page-goals",today:"page-today",chat:"page-chat",stats:"page-stats",next:"page-next"};
 function go(tab){
   Object.entries(pages).forEach(([k,id])=>document.getElementById(id).classList.toggle("active",k===tab));
   document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
   window.scrollTo({top:0});
   if(tab==="goals")renderGoals(); if(tab==="today")renderToday(); if(tab==="stats")renderStats();
+  if(tab==="chat"){ renderChat(); chatScrollBottom(); setTimeout(()=>document.getElementById("chatInput").focus(),50); }
 }
 document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>go(b.dataset.tab));
 
@@ -739,11 +1098,11 @@ function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",
 function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
 function flash(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(flash._t); clearTimeout(showUndo._t); flash._t=setTimeout(()=>t.classList.remove("show"),1400); }
 function hideToast(){ document.getElementById("toast").classList.remove("show"); }
-function showUndo(key,label){
+function showUndo(onUndo){
   const t=document.getElementById("toast");
   t.innerHTML=`<span>Done ✓</span><button class="undo" type="button">Undo</button>`;
   t.classList.add("show");
-  t.querySelector(".undo").onclick=()=>{ setDone(todayStr(),key,false); renderToday(); renderStats(); hideToast(); };
+  t.querySelector(".undo").onclick=()=>{ onUndo(); hideToast(); };
   clearTimeout(flash._t); clearTimeout(showUndo._t);
   showUndo._t=setTimeout(hideToast,4200);
 }
@@ -752,22 +1111,22 @@ document.getElementById("todayDate").textContent=new Date().toLocaleDateString(u
 document.getElementById("addGoalBtn").onclick=()=>openGoalForm(null);
 document.getElementById("cancelGoal").onclick=()=>{ document.getElementById("goalForm").style.display="none"; };
 document.getElementById("gType").onchange=toggleDays;
+document.getElementById("gMetric").onchange=toggleMetric;
 document.getElementById("saveGoal").onclick=()=>{
   const f=document.getElementById("goalForm"); const editId=f.dataset.edit;
+  const metric=gMetric.value;
   const data={ emoji:gEmoji.value.trim()||"🎯", title:gTitle.value.trim()||"New goal", type:gType.value,
-    task:gTask.value.trim()||gTitle.value.trim()||"Do it", minutes:parseInt(gMinutes.value)||0 };
+    task:gTask.value.trim()||gTitle.value.trim()||"Do it",
+    metric,
+    target: metric==="binary" ? 0 : (parseInt(gMinutes.value)||0),
+    unit: metric==="time" ? "min" : (metric==="count" ? (gUnit.value.trim()||"reps") : "") };
   if(gType.value==="deadline") data.days=parseInt(gDays.value)||20;
-  if(editId){ const g=state.goals.find(x=>x.id===editId); Object.assign(g,data); }
+  if(editId){ const g=state.goals.find(x=>x.id===editId); delete g.minutes; Object.assign(g,data); }
   else { data.id="g_"+Date.now(); data.start=todayStr(); state.goals.push(data); }
   save(); f.style.display="none"; renderGoals(); renderToday(); renderStats(); flash("Goal saved ✓");
 };
 document.getElementById("chatSend").onclick=sendChat;
 document.getElementById("chatInput").onkeydown=e=>{ if(e.key==="Enter")sendChat(); };
-document.getElementById("assistToggle").onclick=()=>{
-  const b=document.getElementById("assistBody"), t=document.getElementById("assistToggle");
-  if(b.hasAttribute("hidden")){ b.removeAttribute("hidden"); t.classList.add("open"); }
-  else { b.setAttribute("hidden",""); t.classList.remove("open"); }
-};
 document.getElementById("routineEditToggle").onclick=()=>{
   routineEditMode=!routineEditMode;
   document.getElementById("routineEditToggle").textContent=routineEditMode?"Done":"Edit";
@@ -776,8 +1135,44 @@ document.getElementById("routineEditToggle").onclick=()=>{
 
 if(!STORAGE_OK){ document.getElementById("storageNote").style.display="block"; }
 
+/* ---------- Auth gate wiring ---------- */
+function showAuthGate(){ const g=document.getElementById("authGate"); if(g) g.hidden=false; }
+function hideAuthGate(){ const g=document.getElementById("authGate"); if(g) g.hidden=true; }
+function updateAccountUI(user){
+  const box=document.getElementById("accountBox"), em=document.getElementById("acctEmail");
+  if(user){ box.style.display="block"; em.textContent=(user.email||""); }
+  else { box.style.display="none"; }
+}
+document.getElementById("googleBtn").onclick=async ()=>{
+  const note=document.getElementById("authNote");
+  if(!initSupabase()){ note.textContent="Sign-in isn't available here (it needs the live site)."; return; }
+  note.textContent="";
+  try{
+    await sb.auth.signInWithOAuth({ provider:"google", options:{ redirectTo: location.href.split("#")[0] } });
+  }catch(e){ note.textContent="Couldn't start Google sign-in: "+(e&&e.message||e); }
+};
+document.getElementById("guestBtn").onclick=()=>{ hideAuthGate(); };  // local-only, no sync
+document.getElementById("signOutBtn").onclick=async ()=>{
+  if(sb){ try{ await sb.auth.signOut(); }catch(e){} }
+  currentUser=null; updateAccountUI(null); showAuthGate();
+};
+
 renderGoals(); renderToday(); renderStats();
-go("today");
+go("chat");
+
+/* ---------- Boot auth: gate first, then restore the session ---------- */
+(async function bootAuth(){
+  if(!initSupabase()) return;          // local-only (not configured, or SDK blocked in the artifact)
+  showAuthGate();
+  try{
+    const { data:{ session } } = await sb.auth.getSession();
+    if(session && session.user) await onSignedIn(session.user);
+  }catch(e){ console.warn("session check failed",e); }
+  sb.auth.onAuthStateChange(async (_e, session)=>{
+    if(session && session.user) await onSignedIn(session.user);
+    else { currentUser=null; updateAccountUI(null); }
+  });
+})();
 </script>
 </body>
 </html>
