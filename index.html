@@ -604,65 +604,56 @@
       <div class="card" id="goalProgress"></div>
     </section>
 
-    <!-- ===================== WHAT'S NEXT ===================== -->
+    <!-- ===================== SETTINGS ===================== -->
     <section class="page" id="page-next">
-      <h2 class="page-title">What's next ✨</h2>
-      <p class="sub">You're testing <b>Model&nbsp;1</b> — the skeleton. Here's what it does today, and where it's going.</p>
+      <h2 class="page-title">Settings ⚙️</h2>
+      <p class="sub">Your account, appearance, and app controls.</p>
 
-      <div class="banner">Thanks for helping me test this 🙏 Your feedback shapes the next version.</div>
-
-      <div class="compare">
-        <div class="cap now">
-          <div class="tag">Right now · Model 1</div>
-          <h3>A guided assistant</h3>
-          <p class="small muted" style="margin:2px 0 0;">It follows clear rules. It's fast, works offline, and keeps your data on your device.</p>
-          <ul>
-            <li>Understands simple, direct updates about your tasks</li>
-            <li>Checks things off and logs your time</li>
-            <li>Tracks streaks &amp; consistency</li>
-            <li>Splits goals into a daily task</li>
-          </ul>
-        </div>
-        <div class="cap soon">
-          <div class="tag">Coming next · Model 2</div>
-          <h3>A thinking partner</h3>
-          <p class="small muted" style="margin:2px 0 0;">Real AI that understands <i>you</i> — messy days, vague goals, and all.</p>
-          <ul>
-            <li>Understands natural, messy language</li>
-            <li>Reasons about <i>your</i> life and rebuilds your plan</li>
-            <li>Syncs across your phone &amp; laptop</li>
-            <li>Connects to your calendar &amp; sends nudges</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:14px;">
-        <div class="row" style="margin-bottom:8px;"><b>💬 How to talk to your assistant</b></div>
-        <p class="small muted" style="margin:0 0 10px;">Model 1 understands <b>short, direct</b> messages. Try phrasing like these — they all work:</p>
-
-        <div class="group-label">Mark something done</div>
-        <div class="say">"<b>I read for an hour</b>"</div>
-        <div class="say">"<b>practiced guitar</b>" · "<b>done reading</b>"</div>
-
-        <div class="group-label" style="margin-top:10px;">Log extra time</div>
-        <div class="say">"<b>I read 45 minutes instead of 30</b>"</div>
-
-        <div class="group-label" style="margin-top:10px;">Missed one</div>
-        <div class="say">"<b>skip guitar today</b>" · "<b>didn't read</b>"</div>
-
-        <div class="group-label" style="margin-top:10px;">Ask what's left</div>
-        <div class="say">"<b>what's left today?</b>"</div>
-
-        <div class="group-label" style="margin-top:10px;">Add a goal</div>
-        <div class="say">"<b>add a goal to drink more water</b>"</div>
-
-        <p class="small muted" style="margin:12px 0 0;">👉 In <b>Model&nbsp;2</b>, you won't need to phrase it carefully — you'll just talk, and it'll understand.</p>
-      </div>
-
+      <!-- Account (signed in) -->
       <div class="card" id="accountBox" style="display:none;">
-        <div class="row"><b>Account</b><span class="grow"></span><span class="small muted" id="acctEmail"></span></div>
+        <div class="row"><b>👤 Account</b><span class="grow"></span><span class="small muted" id="acctEmail"></span></div>
         <p class="small muted" style="margin:6px 0 0;">Your goals and progress sync to this account across your devices.</p>
         <button class="btn ghost block" id="signOutBtn" style="margin-top:12px;">Sign out</button>
+      </div>
+
+      <!-- Account (guest / signed out) -->
+      <div class="card" id="signInBox" style="display:block;">
+        <div class="row"><b>👤 Account</b></div>
+        <p class="small muted" style="margin:6px 0 12px;">You're using LifeGPS as a guest — your data lives only on this device. Sign in to sync it across your phone and laptop.</p>
+        <button class="btn block auth-google" id="settingsGoogleBtn" type="button"><span class="g">G</span> Sign in with Google</button>
+        <p class="small muted" id="settingsAuthNote" style="margin:10px 0 0;"></p>
+      </div>
+
+      <!-- Appearance -->
+      <div class="card">
+        <div class="row" style="margin-bottom:10px;"><b>🎨 Appearance</b></div>
+        <div class="subnav" id="themeNav" style="margin-bottom:0;">
+          <button type="button" data-theme-opt="light">☀️ Light</button>
+          <button type="button" data-theme-opt="dark">🌙 Dark</button>
+        </div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="card">
+        <div class="row" style="margin-bottom:6px;"><b>💌 Send feedback</b></div>
+        <p class="small muted" style="margin:0 0 10px;">Found a bug or have an idea? It comes straight to me — I read every note. 🙏</p>
+        <div class="field"><textarea id="fbText" rows="4" placeholder="What's working, what's not, what you wish it did…"></textarea></div>
+        <button class="btn block" id="sendFeedbackBtn" type="button">Send feedback</button>
+        <p class="small muted" id="fbNote" style="margin:10px 0 0;"></p>
+      </div>
+
+      <!-- Reset -->
+      <div class="card">
+        <div class="row" style="margin-bottom:6px;"><b>♻️ Reset app</b></div>
+        <p class="small muted" style="margin:0 0 12px;">Clears every goal, plan, routine, progress log, and conversation on this device and starts fresh. This can't be undone.</p>
+        <button class="btn ghost block" id="resetBtn" type="button" style="color:var(--danger);">Reset everything</button>
+        <div id="resetConfirm" style="display:none; margin-top:12px;">
+          <p class="small" style="margin:0 0 10px; font-weight:600;">Are you sure? This erases everything and can't be undone.</p>
+          <div class="row" style="gap:8px;">
+            <button class="btn ghost" id="resetCancel" type="button" style="flex:1;">Cancel</button>
+            <button class="btn" id="resetYes" type="button" style="flex:1; background:var(--danger);">Yes, reset</button>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -686,7 +677,7 @@
   <button data-tab="today"><span class="ic">✓</span>Today</button>
   <button data-tab="chat" class="center active"><span class="ic">💬</span>Guide</button>
   <button data-tab="stats"><span class="ic">📊</span>Progress</button>
-  <button data-tab="next"><span class="ic">✨</span>Next</button>
+  <button data-tab="next"><span class="ic">⚙️</span>Settings</button>
 </nav>
 <!-- Guided practice session -->
 <div class="dp-modal" id="dpSession" hidden>
@@ -905,6 +896,7 @@ async function onSignedIn(user){
   }
   renderGoals(); renderToday(); renderStats(); renderChat();
   updateAccountUI(user);
+  if(typeof applyTheme==="function") applyTheme();
 }
 
 /* ---------- Goal measure model: time / count / binary ---------- */
@@ -1574,9 +1566,9 @@ if(!STORAGE_OK){ document.getElementById("storageNote").style.display="block"; }
 function showAuthGate(){ const g=document.getElementById("authGate"); if(g) g.hidden=false; }
 function hideAuthGate(){ const g=document.getElementById("authGate"); if(g) g.hidden=true; }
 function updateAccountUI(user){
-  const box=document.getElementById("accountBox"), em=document.getElementById("acctEmail");
-  if(user){ box.style.display="block"; em.textContent=(user.email||""); }
-  else { box.style.display="none"; }
+  const box=document.getElementById("accountBox"), em=document.getElementById("acctEmail"), sib=document.getElementById("signInBox");
+  if(user){ box.style.display="block"; if(sib) sib.style.display="none"; em.textContent=(user.email||""); }
+  else { box.style.display="none"; if(sib) sib.style.display="block"; }
 }
 document.getElementById("googleBtn").onclick=async ()=>{
   const note=document.getElementById("authNote");
@@ -1590,6 +1582,58 @@ document.getElementById("guestBtn").onclick=()=>{ hideAuthGate(); };  // local-o
 document.getElementById("signOutBtn").onclick=async ()=>{
   if(sb){ try{ await sb.auth.signOut(); }catch(e){} }
   currentUser=null; updateAccountUI(null); showAuthGate();
+};
+document.getElementById("settingsGoogleBtn").onclick=async ()=>{
+  const note=document.getElementById("settingsAuthNote");
+  if(!initSupabase()){ note.textContent="Sign-in isn't available here (it needs the live site)."; return; }
+  note.textContent="";
+  try{ await sb.auth.signInWithOAuth({ provider:"google", options:{ redirectTo: location.origin+location.pathname } }); }
+  catch(e){ note.textContent="Couldn't start Google sign-in: "+(e&&e.message||e); }
+};
+
+/* ---------- Settings: theme, feedback, reset ---------- */
+function resolvedTheme(){
+  if(state.theme==="light"||state.theme==="dark") return state.theme;
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+function applyTheme(){
+  const t=state.theme;
+  if(t==="light"||t==="dark") document.documentElement.setAttribute("data-theme",t);
+  else document.documentElement.removeAttribute("data-theme");   // follow the system
+  const cur=resolvedTheme();
+  document.querySelectorAll("#themeNav button").forEach(b=>b.classList.toggle("on", b.dataset.themeOpt===cur));
+}
+document.querySelectorAll("#themeNav button").forEach(b=>b.onclick=()=>{
+  state.theme=b.dataset.themeOpt; save(); applyTheme();
+});
+applyTheme();
+
+document.getElementById("sendFeedbackBtn").onclick=()=>{
+  const note=document.getElementById("fbNote");
+  const txt=document.getElementById("fbText").value.trim();
+  if(!txt){ note.textContent="Write a note first 🙂"; return; }
+  const who=(currentUser&&currentUser.email)?(" (from "+currentUser.email+")"):"";
+  const subject=encodeURIComponent("LifeGPS feedback"+who);
+  const body=encodeURIComponent(txt+"\n\n— sent from LifeGPS");
+  window.location.href="mailto:owenmaceachern3@gmail.com?subject="+subject+"&body="+body;
+  note.textContent="Opening your email app — just hit send. Thank you! 🙏";
+};
+
+const _resetConfirm=document.getElementById("resetConfirm");
+document.getElementById("resetBtn").onclick=()=>{ _resetConfirm.style.display="block"; };
+document.getElementById("resetCancel").onclick=()=>{ _resetConfirm.style.display="none"; };
+document.getElementById("resetYes").onclick=async ()=>{
+  const theme=state.theme;                 // keep the chosen appearance across the reset
+  state=seed(); state.theme=theme;
+  dpSel=0; dpActive=null;
+  persist(state);
+  if(sb && currentUser){
+    try{ await sb.from("lifegps_state").upsert({ user_id:currentUser.id, data:state, updated_at:new Date().toISOString() }); }catch(e){}
+  }
+  _resetConfirm.style.display="none";
+  renderGoals(); renderToday(); renderStats(); renderChat();
+  applyTheme();
+  go("today"); flash("App reset ✓");
 };
 
 /* ============================================================
