@@ -314,6 +314,178 @@
     #page-chat:not(.active) .chat-bar input{flex:1;}
     #page-chat:not(.active) .msg{max-width:90%;}
   }
+
+  /* ============================================================
+     Development Plans + adaptive practice routines (dp- namespace)
+     ============================================================ */
+  .subnav{display:flex; gap:4px; background:var(--bg2); border:1px solid var(--line); border-radius:13px; padding:4px; margin-bottom:18px;}
+  .subnav button{flex:1; padding:9px 8px; border-radius:9px; font-weight:600; font-size:13.5px; color:var(--muted); transition:.15s;}
+  .subnav button:hover{color:var(--text);}
+  .subnav button.on{background:var(--card); color:var(--accent); box-shadow:var(--shadow);}
+  .subpage{display:none;} .subpage.active{display:block; animation:fade .25s ease;}
+
+  .dp-areas{display:flex; gap:11px; overflow-x:auto; padding-bottom:6px; margin-bottom:4px;}
+  .dp-area{flex:0 0 auto; min-width:172px; text-align:left; background:var(--card); border:1px solid var(--line);
+    border-radius:15px; padding:13px 14px; transition:.15s;}
+  .dp-area:hover{transform:translateY(-2px); box-shadow:var(--shadow);}
+  .dp-area.on{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft);}
+  .dp-area .emo{font-size:21px;}
+  .dp-area .nm{font-weight:700; margin:6px 0 2px; font-size:15px;}
+  .dp-area .st{font-size:12px; color:var(--muted);}
+  .dp-area.add{display:flex; align-items:center; justify-content:center; min-width:120px; border-style:dashed; color:var(--muted); font-weight:600;}
+
+  .dp-banner{margin:16px 0 4px; background:linear-gradient(120deg,var(--accent-soft),transparent 78%);
+    border:1px solid var(--line); border-radius:16px; padding:14px 16px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+  .dp-banner .flag{font-size:23px;}
+  .dp-banner .to{font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-weight:700;}
+  .dp-banner .goal{font-weight:800; font-size:17px; margin-top:1px;}
+  .dp-banner .eta{margin-left:auto; text-align:right;}
+  .dp-banner .eta b{font-size:16px;} .dp-banner .eta span{display:block; font-size:11.5px; color:var(--muted);}
+
+  .dp-journeywrap{margin:14px 0 0; border:1px solid var(--line); border-radius:18px; background:var(--card); overflow:hidden;}
+  .dp-avpick{display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:13px 16px 0;}
+  .dp-avpick .lab{font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-right:2px;}
+  .dp-avopt{width:44px; height:44px; border-radius:11px; border:1px solid var(--line); background:var(--bg2); display:grid; place-items:center; transition:.15s; padding:0;}
+  .dp-avopt:hover{transform:translateY(-2px);}
+  .dp-avopt.on{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); background:var(--accent-soft);}
+  .dp-avopt svg{width:29px; height:33px; display:block;}
+
+  .dp-journey{overflow-x:auto; overflow-y:hidden;}
+  .dp-road{display:flex; align-items:end; min-width:max-content; padding:30px 34px 26px;}
+  .dp-st{width:206px; display:grid; grid-template-rows:176px 60px auto; justify-items:center; position:relative;}
+  .dp-st::before{content:""; position:absolute; top:206px; left:50%; width:206px; height:5px; border-radius:5px; background:var(--line); z-index:0;}
+  .dp-st:last-child::before{display:none;}
+  .dp-st.done::before{background:linear-gradient(90deg,var(--green),var(--accent));}
+  .dp-st.current::before{background:linear-gradient(90deg,var(--accent),var(--line));}
+  .dp-above{grid-row:1; align-self:end; width:190px; text-align:center; padding-bottom:12px;}
+  .dp-st.current .dp-above{padding-bottom:54px;}
+  .dp-above .now{font-size:10.5px; text-transform:uppercase; letter-spacing:.09em; font-weight:700; color:var(--accent); margin-bottom:5px;}
+  .dp-skill{display:block; font-size:12px; background:var(--bg2); border:1px solid var(--line); border-radius:9px; padding:6px 8px; margin:6px 0; color:var(--text);}
+  .dp-st.locked .dp-skill{background:transparent; border-color:transparent; color:var(--muted); opacity:.6; padding:3px 0; margin:3px 0;}
+  .dp-node{grid-row:2; z-index:2; width:60px; height:60px; border-radius:50%; display:grid; place-items:center; font-size:24px; background:var(--card); border:3px solid var(--line); position:relative;}
+  .dp-st.done .dp-node{background:var(--green-soft); border-color:var(--green);}
+  .dp-st.current .dp-node{background:var(--accent-soft); border-color:var(--accent); box-shadow:0 0 0 6px var(--accent-soft);}
+  .dp-st.locked .dp-node{opacity:.7; filter:grayscale(.6);}
+  .dp-nbadge{position:absolute; right:-5px; bottom:-5px; width:23px; height:23px; border-radius:50%; display:grid; place-items:center; font-size:12px; background:var(--card); border:2px solid var(--card);}
+  .dp-st.done .dp-nbadge{background:var(--green); color:#fff;}
+  .dp-st.locked .dp-nbadge{background:var(--muted); color:var(--card);}
+  .dp-stitle{grid-row:3; margin-top:12px; text-align:center; width:190px;}
+  .dp-stitle .k{font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); font-weight:700;}
+  .dp-stitle .t{font-weight:700; font-size:14px; margin-top:2px;}
+  .dp-st.locked .dp-stitle .t{color:var(--muted);}
+  .dp-here{display:inline-block; margin-top:6px; font-size:10.5px; font-weight:700; color:var(--accent); background:var(--accent-soft); border-radius:8px; padding:2px 8px;}
+  .dp-avatar{position:absolute; top:132px; left:50%; transform:translateX(-50%); z-index:3; animation:dpbob 2.4s ease-in-out infinite;}
+  .dp-avatar svg{display:block; width:40px; height:44px;}
+  @keyframes dpbob{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(-5px);}}
+  .dp-goalpin{width:140px; display:grid; grid-template-rows:176px 60px auto; justify-items:center;}
+  .dp-goalpin .dp-node{background:linear-gradient(135deg,var(--accent),var(--accent-2,#8a7bff)); border-color:transparent; color:#fff; box-shadow:var(--shadow);}
+  .dp-scrollhint{display:flex; justify-content:center; color:var(--muted); font-size:12px; padding:0 0 14px;}
+
+  /* current stage card */
+  .dp-scard{margin-top:18px; background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px 18px;}
+  .dp-schead{display:flex; align-items:center; gap:14px; justify-content:space-between; flex-wrap:wrap;}
+  .dp-schead .k{font-size:11.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--accent); font-weight:700;}
+  .dp-schead h3{margin:2px 0 0; font-size:18px;}
+  .dp-schead .prog{font-size:12.5px; color:var(--muted); font-weight:600; white-space:nowrap;}
+  .dp-sk{list-style:none; margin:16px 0 0; padding:0;}
+  .dp-sk li{display:flex; align-items:flex-start; gap:12px; padding:13px 2px; border-top:1px solid var(--line);}
+  .dp-sk li:first-child{border-top:0;}
+  .dp-box{width:20px; height:20px; border-radius:6px; border:2px solid var(--line); flex:0 0 auto; margin-top:1px;}
+  .dp-sk li.done .dp-box{background:var(--green); border-color:var(--green); position:relative;}
+  .dp-sk li.done .dp-box::after{content:"✓"; color:#fff; font-size:13px; position:absolute; inset:0; display:grid; place-items:center;}
+  .dp-box.ring{border-color:var(--accent); position:relative;}
+  .dp-box.ring::after{content:""; position:absolute; inset:3px; border-radius:3px; background:var(--accent); opacity:.4;}
+  .dp-sk .lbl{font-size:14.5px;}
+  .dp-sk li.done .lbl{color:var(--muted); text-decoration:line-through;}
+  .dp-sk li.up .lbl{color:var(--muted);}
+  .dp-sk li.now{background:var(--accent-soft); border-radius:12px; border-top:0; padding:13px 12px; margin:6px 0;}
+  .dp-sk li.now + li{border-top:0;}
+  .dp-nowbody{flex:1; min-width:0;}
+  .dp-nowtop{display:flex; align-items:center; gap:10px;}
+  .dp-pill{margin-left:auto; font-size:11px; font-weight:700; color:var(--accent); background:var(--card); padding:3px 9px; border-radius:999px; white-space:nowrap;}
+  .dp-tagm{margin-left:auto; font-size:11px; font-weight:700; color:var(--green); white-space:nowrap;}
+  .dp-tagm.up{color:var(--muted); font-weight:600;}
+  .dp-ingrain{margin-top:9px;}
+  .dp-ingtop{display:flex; justify-content:space-between; gap:10px; font-size:12px; color:var(--muted); margin-bottom:5px;}
+  .dp-bar2{height:7px; background:var(--bg2); border:1px solid var(--line); border-radius:6px; overflow:hidden;}
+  .dp-bar2 i{display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2,#8a7bff)); border-radius:6px; transition:width .4s ease;}
+  .dp-vidlink{display:inline-block; margin-top:8px; font-size:13px; color:var(--accent); text-decoration:none; font-weight:600;}
+  .dp-vidlink:hover{text-decoration:underline;}
+  .dp-launch{margin-top:16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+    background:linear-gradient(120deg,var(--accent-soft),transparent 82%); border:1px solid var(--accent); border-radius:15px; padding:15px 16px;}
+  .dp-launch .lz{flex:1; min-width:200px;}
+  .dp-launch .lzk{font-size:11px; text-transform:uppercase; letter-spacing:.09em; font-weight:800; color:var(--accent);}
+  .dp-launch .lzt{font-weight:700; font-size:17px; margin:3px 0 3px;}
+  .dp-launch .lzs{font-size:12.5px; color:var(--muted);}
+  .dp-sfoot{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-top:16px; padding-top:14px; border-top:1px solid var(--line);}
+  .dp-acts{display:flex; gap:8px; flex-wrap:wrap;}
+  .dp-tiny{padding:8px 12px; font-size:13px; border-radius:10px; background:var(--bg2); color:var(--text); border:1px solid var(--line); font-weight:600;}
+  .dp-tiny:hover{border-color:var(--accent); color:var(--accent);}
+  .dp-tiny:disabled{opacity:.4; cursor:not-allowed;}
+  .dp-empty{background:var(--card); border:1px dashed var(--line); border-radius:16px; padding:26px 20px; text-align:center; color:var(--muted); margin-top:8px;}
+  .dp-empty .big{font-size:30px;} .dp-empty b{color:var(--text);}
+
+  /* overlays */
+  .dp-modal{position:fixed; inset:0; background:rgba(6,8,14,.6); z-index:80; display:grid; place-items:center; padding:18px;}
+  .dp-modal[hidden]{display:none;}
+  .dp-card{width:min(540px,100%); max-height:92vh; overflow:auto; background:var(--card); border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow); padding:20px;}
+  .dp-card.dp-narrow{width:min(430px,100%);}
+  .dp-top{display:flex; align-items:flex-start; justify-content:space-between; gap:12px;}
+  .dp-eyebrow{font-size:12px; text-transform:uppercase; letter-spacing:.09em; font-weight:800; color:var(--accent);}
+  .dp-h{font-weight:800; font-size:22px; margin-top:2px;}
+  .dp-x{background:var(--bg2); color:var(--text); width:34px; height:34px; border-radius:10px; font-size:16px; flex:0 0 auto;}
+  .dp-callout{margin:14px 0; background:var(--accent-soft); border:1px solid var(--line); border-radius:13px; padding:12px 14px; font-size:13.5px; line-height:1.55;}
+  .dp-steps{display:flex; flex-direction:column; gap:8px; margin:6px 0 16px;}
+  .dp-step{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:11px; border:1px solid var(--line); font-size:14px;}
+  .dp-step .n{width:22px; height:22px; border-radius:50%; background:var(--bg2); display:grid; place-items:center; font-size:12px; flex:0 0 auto; font-weight:700; color:var(--muted);}
+  .dp-step .mm{margin-left:auto; color:var(--muted); font-size:12.5px;}
+  .dp-step.active{border-color:var(--accent); background:var(--accent-soft);}
+  .dp-step.active .n{background:var(--accent); color:#fff;}
+  .dp-step.past .n{background:var(--green); color:#fff;}
+  .dp-step.past .sl{color:var(--muted); text-decoration:line-through;}
+  .dp-run{background:var(--bg2); border:1px solid var(--line); border-radius:15px; padding:18px; text-align:center;}
+  .dp-timer{font-weight:800; font-size:38px; letter-spacing:1px;}
+  .dp-do{color:var(--text); margin-top:6px; font-size:14.5px; line-height:1.5;}
+  .dp-vid{display:inline-flex; align-items:center; gap:8px; margin-top:12px; font-size:13px; color:var(--accent); text-decoration:none; font-weight:600; background:var(--card); border:1px solid var(--line); padding:8px 12px; border-radius:12px;}
+  .dp-nav{display:flex; gap:10px; margin-top:16px;} .dp-nav .btn{flex:1;}
+  .dp-chatline{margin-top:14px; text-align:center; font-size:13px; color:var(--muted); background:var(--bg2); border:1px dashed var(--line); border-radius:12px; padding:11px;}
+  .dp-chatline:hover{color:var(--accent); border-color:var(--accent);}
+  .dp-cibody{color:var(--muted); margin:12px 0 18px; font-size:14.5px; line-height:1.55;}
+
+  .dp-winwrap{background:rgba(6,8,14,.72);}
+  .dp-wincard{position:relative; overflow:hidden; width:min(430px,100%); text-align:center; border:1px solid var(--accent); border-radius:22px; padding:32px 24px;}
+  .dp-winav{display:inline-block; animation:dpwalk .7s ease;} .dp-winav svg{width:54px; height:60px;}
+  @keyframes dpwalk{from{transform:translateX(-42px); opacity:0;} to{transform:none; opacity:1;}}
+  .dp-winnext{color:var(--muted); margin:4px 0 20px;} .dp-wincard .dp-h{margin:5px 0 4px;}
+  .dp-confetti{position:absolute; inset:0; pointer-events:none; overflow:hidden;}
+  .dp-confetti i{position:absolute; top:-14px; width:8px; height:13px; border-radius:2px; animation:dpfall linear forwards;}
+  @keyframes dpfall{to{transform:translateY(540px) rotate(420deg); opacity:.15;}}
+
+  /* practice routines (Routines sub-page) */
+  .dp-rcard{background:var(--card); border:1px solid var(--accent); border-radius:16px; padding:15px 16px; margin-top:12px;
+    background:linear-gradient(120deg,var(--accent-soft),transparent 60%), var(--card);}
+  .dp-rhead{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+  .dp-remo{font-size:21px; width:40px; height:40px; border-radius:11px; background:var(--bg2); display:grid; place-items:center; flex:0 0 auto;}
+  .dp-rname{font-weight:700; font-size:16px;} .dp-rmeta{font-size:12px; color:var(--muted); margin-top:1px;}
+  .dp-adapt{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:800; color:var(--accent); background:var(--accent-soft); border:1px solid var(--accent-soft); padding:3px 9px; border-radius:999px; white-space:nowrap;}
+  .dp-rsteps{margin-top:13px; display:flex; flex-direction:column; gap:8px;}
+  .dp-rstep{display:flex; align-items:center; gap:11px; padding:10px 12px; border:1px solid var(--line); border-radius:11px; background:var(--card);}
+  .dp-rstep .ri{width:27px; height:27px; border-radius:8px; background:var(--bg2); display:grid; place-items:center; font-size:14px; flex:0 0 auto;}
+  .dp-rstep .rt{font-size:14px; font-weight:600;} .dp-rstep .rd{font-size:12px; color:var(--muted);}
+  .dp-rstep .rm{margin-left:auto; color:var(--muted); font-size:12.5px; white-space:nowrap;}
+  .dp-rstep.focus{border-color:var(--accent); background:var(--accent-soft);}
+  .dp-rstep .tagf{font-size:10px; font-weight:800; color:var(--accent); letter-spacing:.04em; text-transform:uppercase; margin-left:6px;}
+  .dp-changelog{margin-top:13px; background:var(--bg2); border:1px solid var(--line); border-radius:13px; padding:12px 14px;}
+  .dp-clt{font-size:12.5px; font-weight:700; display:flex; align-items:center; gap:7px;}
+  .dp-clt .when{margin-left:auto; color:var(--muted); font-weight:500; font-size:11.5px;}
+  .dp-cll{display:flex; align-items:flex-start; gap:9px; margin-top:9px; font-size:12.5px; color:var(--muted); line-height:1.45;}
+  .dp-clt2{flex:0 0 auto; font-size:10px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; padding:2px 7px; border-radius:6px; margin-top:1px;}
+  .dp-clt2.add{color:var(--green); background:var(--green-soft);}
+  .dp-clt2.ret{color:var(--muted); background:var(--card); border:1px solid var(--line);}
+  .dp-clt2.next{color:var(--amber); background:rgba(240,160,46,.15);}
+  .dp-cll b{color:var(--text); font-weight:600;}
+  .dp-rfoot{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:15px;}
+  .dp-rfoot .fnote{color:var(--muted); font-size:12px;}
 </style>
 
 <div class="wrap">
@@ -328,8 +500,16 @@
   <main>
     <!-- ===================== GOALS ===================== -->
     <section class="page" id="page-goals">
+      <div class="subnav" id="subnav">
+        <button data-sub="goals" class="on" type="button">Goals</button>
+        <button data-sub="routines" type="button">Routines</button>
+        <button data-sub="plans" type="button">Development Plans</button>
+      </div>
+
+      <!-- ---------- sub: Goals ---------- -->
+      <div class="subpage active" id="sub-goals">
       <h2 class="page-title">Your goals</h2>
-      <p class="sub">The direction. Set what matters, and your assistant turns it into daily steps.</p>
+      <p class="sub">The direction. Set what matters, and your guide turns it into daily steps.</p>
       <div id="goalsList"></div>
       <button class="btn ghost block" id="addGoalBtn">＋ Add a goal</button>
 
@@ -364,11 +544,26 @@
         </div>
       </div>
 
-      <div class="hr"></div>
-      <div class="row" style="margin-bottom:2px;"><div class="group-label" style="margin:0;">Routines</div><span class="grow"></span><button class="link" id="routineEditToggle" type="button">Edit</button></div>
-      <p class="sub" style="margin-bottom:12px;">Small anchors for the start and end of your day.</p>
-      <div class="card" id="routineMorning"></div>
-      <div class="card" id="routineNight"></div>
+      </div><!-- /sub-goals -->
+
+      <!-- ---------- sub: Routines ---------- -->
+      <div class="subpage" id="sub-routines">
+        <div class="row" style="margin-bottom:2px;"><h2 class="page-title" style="margin:0;">Your routines</h2><span class="grow"></span><button class="link" id="routineEditToggle" type="button">Edit</button></div>
+        <p class="sub" style="margin-bottom:14px;">Small anchors for your day — plus practice routines your guide builds and quietly rewrites as you improve. You don't maintain these; you just show up.</p>
+        <div class="group-label" style="margin-top:4px;">Daily anchors</div>
+        <div class="card" id="routineMorning"></div>
+        <div class="card" id="routineNight"></div>
+        <div class="group-label">Practice routines · self-adapting</div>
+        <div id="practiceList"></div>
+      </div><!-- /sub-routines -->
+
+      <!-- ---------- sub: Development Plans ---------- -->
+      <div class="subpage" id="sub-plans">
+        <h2 class="page-title">Development plans</h2>
+        <p class="sub" style="margin-bottom:14px;">Tell your guide what you want to get better at — it builds the whole road, step by step, so you never have to research it or feel lost about where to start.</p>
+        <div id="planAreas" class="dp-areas"></div>
+        <div id="planBody"></div>
+      </div><!-- /sub-plans -->
     </section>
 
     <!-- ===================== TODAY ===================== -->
@@ -493,6 +688,53 @@
   <button data-tab="stats"><span class="ic">📊</span>Progress</button>
   <button data-tab="next"><span class="ic">✨</span>Next</button>
 </nav>
+<!-- Guided practice session -->
+<div class="dp-modal" id="dpSession" hidden>
+  <div class="dp-card">
+    <div class="dp-top">
+      <div><div class="dp-eyebrow" id="dpSesArea">Guitar Practice · Stage 2</div><div class="dp-h" id="dpSesTitle">Warm-up</div></div>
+      <button class="dp-x" onclick="dpCloseSession()" aria-label="Close">✕</button>
+    </div>
+    <div class="dp-callout" id="dpSesCallout">🧭 <b>Your guide:</b> I put a short warm-up first — you're still building finger strength, so it helps everything after it stick. Not into it? Tap <b>Edit with guide</b> and tell me. <b>You own the plan.</b></div>
+    <div class="dp-steps" id="dpSesSteps"></div>
+    <div class="dp-run">
+      <div class="dp-timer" id="dpSesTimer">05:00</div>
+      <div class="dp-do" id="dpSesDo"></div>
+      <div id="dpSesVideo"></div>
+    </div>
+    <div class="dp-nav">
+      <button class="btn ghost" id="dpSesPrev" onclick="dpStepPrev()">← Back</button>
+      <button class="btn" id="dpSesNext" onclick="dpStepNext()">Next step →</button>
+    </div>
+    <div class="dp-chatline" onclick="dpAskGuide()">💬 Stuck mid-practice? Your guide is one tap away — just ask.</div>
+  </div>
+</div>
+
+<!-- Guide check-in -->
+<div class="dp-modal" id="dpCheckin" hidden>
+  <div class="dp-card dp-narrow">
+    <div class="dp-eyebrow">🧭 Guide check-in</div>
+    <div class="dp-h" id="dpCiTitle">How's the Am pentatonic scale?</div>
+    <p class="dp-cibody" id="dpCiBody"></p>
+    <div class="dp-nav">
+      <button class="btn ghost" onclick="dpCiMore()">I'd like more time</button>
+      <button class="btn" onclick="dpCiGot()">I've got it 💪</button>
+    </div>
+  </div>
+</div>
+
+<!-- Little-win celebration -->
+<div class="dp-modal dp-winwrap" id="dpWin" hidden>
+  <div class="dp-card dp-wincard">
+    <div class="dp-confetti" id="dpConfetti"></div>
+    <div class="dp-winav" id="dpWinAvatar"></div>
+    <div class="dp-eyebrow" style="color:var(--accent);">Little win</div>
+    <div class="dp-h" id="dpWinStage">Stage complete</div>
+    <p class="dp-winnext" id="dpWinNext"></p>
+    <button class="btn" id="dpWinBtn" onclick="dpWinContinue()">See what's next →</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -558,7 +800,34 @@ function seed(){
     chat:[],
     tasks:[],            // one-off to-do steps (goal breakdowns), not recurring
     overrides:{},        // overrides[date][goalId] = minutes  (one-day eased/raised target)
+    traveler:"explorer", // chosen journey avatar (user-level)
+    plans:[ seedGuitarPlan() ],   // development plans (the guide builds these)
     createdAt:start,
+  };
+}
+// A starter development plan so the feature isn't empty on first run.
+function seedGuitarPlan(){
+  return {
+    id:"plan_guitar", emoji:"🎸", title:"Learn guitar",
+    goal:"Play a full song at an open mic", eta:"~6 months", goalId:"g_guitar",
+    cur:1,   // current stage index
+    stages:[
+      {icon:"🎵", k:"Stage 1", t:"Getting comfortable", mastered:3, sess:0,
+        skills:[{n:"Tune & hold the guitar",est:3},{n:"Finger position",est:3},{n:"Read simple tab",est:4}],
+        video:"Your very first day with a guitar", vlen:"5 min"},
+      {icon:"🎸", k:"Stage 2", t:"First chords & a scale", mastered:2, sess:3,
+        skills:[{n:"Open chords: Em·Am·C·G",est:5},{n:"Clean chord changes",est:4},{n:"Am pentatonic scale",est:5}],
+        video:"Am pentatonic — the first scale to learn", vlen:"4 min"},
+      {icon:"🥁", k:"Stage 3", t:"Rhythm & strumming", mastered:0, sess:0,
+        skills:[{n:"Downstroke timing",est:4},{n:"Common strum patterns",est:6},{n:"Play to a metronome",est:5}],
+        video:"How to strum in time — beginner guide", vlen:"6 min"},
+      {icon:"🎼", k:"Stage 4", t:"Barre chords & CAGED", mastered:0, sess:0,
+        skills:[{n:"The F barre chord",est:8},{n:"CAGED shapes",est:7},{n:"Move chords up the neck",est:6}],
+        video:"The F barre chord, finally", vlen:"7 min"},
+      {icon:"⭐", k:"Stage 5", t:"Your first full song", mastered:0, sess:0,
+        skills:[{n:"Learn a 4-chord song",est:5},{n:"Play it start to finish",est:6},{n:"Sing + play together",est:8}],
+        video:"Play your first 4-chord song", vlen:"8 min"},
+    ],
   };
 }
 // Upgrade older saves: routine items used to be plain strings with no id/time.
@@ -573,6 +842,17 @@ function normalize(s){
   });
   if(!Array.isArray(s.tasks)) s.tasks=[];
   if(!s.overrides || typeof s.overrides!=="object") s.overrides={};
+  if(!Array.isArray(s.plans)) s.plans=[seedGuitarPlan()];   // upgrade older saves with the starter plan
+  if(!s.traveler) s.traveler="explorer";
+  // defensive plan shape (in case of partial data from the AI later)
+  s.plans.forEach(p=>{
+    if(typeof p.cur!=="number") p.cur=0;
+    p.stages=(p.stages||[]).map(st=>({
+      icon:st.icon||"⭐", k:st.k||"Stage", t:st.t||"", video:st.video||"", vlen:st.vlen||"4 min",
+      mastered:typeof st.mastered==="number"?st.mastered:0, sess:typeof st.sess==="number"?st.sess:0,
+      skills:(st.skills||[]).map(sk=> typeof sk==="string" ? {n:sk,est:5} : {n:sk.n||"",est:sk.est||5}),
+    }));
+  });
   // Upgrade goals to the metric model (time / count / binary).
   s.goals=(s.goals||[]).map(g=>{
     if(!g.metric) g.metric="time";
@@ -643,6 +923,10 @@ function tasksForDate(date){
   });
   state.routines.morning.forEach(r=> out.push({key:r.id, label:r.text, emoji:"🌅", group:"Morning", routineMin:r.minutes}));
   state.routines.night.forEach(r=> out.push({key:r.id, label:r.text, emoji:"🌙", group:"Night", routineMin:r.minutes}));
+  (state.plans||[]).forEach(p=>{                       // one practice session per active development plan
+    if(p.cur < (p.stages||[]).length)
+      out.push({key:"dp_"+p.id, label:p.title+" Practice", emoji:p.emoji||"🎯", group:"Practice", planId:p.id, practice:true, routineMin:30});
+  });
   return out;
 }
 function dayLog(date){ if(!state.logs[date]) state.logs[date]={done:{},minutes:{}}; return state.logs[date]; }
@@ -739,7 +1023,7 @@ function renderGoals(){
   });
   wrap.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ if(confirm("Delete this goal?")){ state.goals=state.goals.filter(x=>x.id!==b.dataset.del); save(); renderGoals(); renderToday(); renderStats(); }});
   wrap.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openGoalForm(state.goals.find(x=>x.id===b.dataset.edit)));
-  renderRoutines();
+  renderRoutines(); renderPractice(); renderPlans();
 }
 function goalProgress(g){
   const start=g.start||state.createdAt;
@@ -863,6 +1147,27 @@ function renderToday(){
       wrap.appendChild(row);
     });
   });
+
+  // Practice sessions from development plans — tapping opens the guided step-by-step session.
+  const practiceTasks = tasks.filter(t=>t.group==="Practice");
+  total += practiceTasks.length;
+  doneCount += practiceTasks.filter(t=>isDone(todayStr(),t.key)).length;
+  const openPractice = practiceTasks.filter(t=>!isDone(todayStr(),t.key));
+  if(openPractice.length){
+    const gl=document.createElement("div"); gl.className="group-label"; gl.textContent="Practice"; wrap.appendChild(gl);
+    openPractice.forEach(t=>{
+      shown++;
+      const row=document.createElement("div"); row.className="task";
+      row.innerHTML=`<div class="check" role="button" tabindex="0" aria-label="Start ${esc(t.label)}"></div>
+        <div class="grow"><div class="t-label"><span class="t-emoji">${t.emoji||""}</span>${esc(t.label)}</div></div>
+        <div class="t-min" role="button" tabindex="0" aria-label="Start session">▶ ${t.routineMin}m</div>`;
+      const openS=()=>dpOpenSession(t.planId);
+      const chk=row.querySelector(".check"); const mn=row.querySelector(".t-min");
+      chk.onclick=openS; mn.onclick=openS;
+      chk.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openS(); } };
+      wrap.appendChild(row);
+    });
+  }
 
   // One-off to-do steps the assistant broke a goal into (e.g. buy ingredients → cook → clean up)
   total += state.tasks.length;
@@ -998,6 +1303,8 @@ window.Assistant = (function(){
                  daysLeft:(g.type==="deadline"?Math.max(0,(g.days||0)-daysBetween(g.start||state.createdAt,d)):null) }; }),
       todaysHabitTasks: tasksForDate(d).map(t=>({ id:t.key, label:t.label, done:isDone(d,t.key) })),
       openToDos: state.tasks.filter(x=>!x.done).map(x=>({ id:x.id, label:x.label })),
+      developmentPlans: (state.plans||[]).map(p=>({ id:p.id, title:p.title, goal:p.goal,
+        stage:(p.cur<p.stages.length ? ("Stage "+(p.cur+1)+"/"+p.stages.length+": "+(p.stages[p.cur]&&p.stages[p.cur].t)) : "complete") })),
     };
   }
   function systemPrompt(){
@@ -1021,6 +1328,18 @@ window.Assistant = (function(){
       "  'knocked out the dishes'), ALWAYS mark it with a complete action (or log_progress for a partial amount like 'did 10 pushups'),",
       "  matching it to the right goal/to-do id, then briefly confirm ('Nice — checked off Read ✓'). This keeps their Goals tab current.",
       "",
+      "DEVELOPMENT PLANS (a core feature — the heart of the app):",
+      "- When the user wants to LEARN or GET BETTER AT a skill over time — especially if they don't know where to start",
+      "  ('I want to learn guitar', 'help me get better at public speaking', 'I'd like to run a 10K') — build them a",
+      "  DEVELOPMENT PLAN with add_plan. This beats a plain goal: it's a step-by-step road so they never have to research it.",
+      "- If the request is vague, ask ONE friendly clarifying question first (their current level, the end goal they picture,",
+      "  how much time per session) and take NO action that turn. Once it's concrete, build the plan.",
+      "- A plan = a real end GOAL reached through 4–6 ordered STAGES (fundamentals → advanced). Each stage teaches 2–4",
+      "  concrete, specifically-named SKILLS. For each skill estimate 'sessions' = how many practice sessions it realistically",
+      "  takes to ingrain it (usually 3–8). Give each stage a fitting emoji icon and one suggested starter video title.",
+      "- Keep it TIGHT so the JSON fits: 4–6 stages, 2–4 skills each, short names. After building, your reply should be one",
+      "  warm sentence telling them it's ready under Goals → Development Plans. Never duplicate a plan they already have (see plans above).",
+      "",
       "GOAL MEASURE TYPES — pick the one that truly fits, do NOT force a time value on everything:",
       "- 'time'  → measured in minutes (read 20 min, meditate 10 min). unit is 'min'.",
       "- 'count' → measured in a countable unit (20 pushups, 20 pages, 8 glasses). set unit to that noun.",
@@ -1035,6 +1354,7 @@ window.Assistant = (function(){
       '- {"type":"skip","id":"<goal id>"}  leave undone today, no guilt',
       '- {"type":"add_goal","title":"...","emoji":"🎯","goalType":"daily"|"deadline","task":"<daily task>","metric":"time"|"count"|"binary","target":<int, omit for binary>,"unit":"<e.g. pushups; omit for time/binary>","days":<int if deadline>}',
       '- {"type":"add_tasks","tasks":[{"label":"Buy ingredients: pasta, parsley, garlic"},{"label":"Cook the dish"},{"label":"Clean up"}]}  a checklist of concrete one-off steps',
+      '- {"type":"add_plan","emoji":"🎸","title":"Learn guitar","goal":"Play a full song at an open mic","eta":"~6 months","stages":[{"name":"Getting comfortable","icon":"🎵","video":"Your first day with a guitar","videoLen":"5 min","skills":[{"skill":"Tune & hold the guitar","sessions":3},{"skill":"Basic finger placement","sessions":4}]},{"name":"First chords","icon":"🎶","video":"4 beginner chords","videoLen":"6 min","skills":[{"skill":"Open chords Em, Am, C, G","sessions":5},{"skill":"Clean chord changes","sessions":4}]}]}  build a step-by-step development plan (a skill road). Use this for "learn/get better at" requests.',
       '- {"type":"set_day_target","id":"<goal id>","day":"tomorrow"|"today"|"YYYY-MM-DD","amount":<int>}  ease/raise a time/count goal for ONE day only',
       '- {"type":"set_target","id":"<goal id>","amount":<int>}  change a time/count goal target for ALL future days (lasting change only)',
       "",
@@ -1097,6 +1417,23 @@ window.Assistant = (function(){
           if(label) state.tasks.push({ id:newTaskId(), label, done:false }); });
       }
       else if(a.type==="add_task" && a.label){ state.tasks.push({ id:newTaskId(), label:String(a.label), done:false }); }
+      else if(a.type==="add_plan" && a.title && Array.isArray(a.stages)){
+        const stages=a.stages.slice(0,8).map((st,i)=>({
+          icon:String(st.icon||"⭐"), k:"Stage "+(i+1), t:String(st.name||st.title||("Stage "+(i+1))),
+          mastered:0, sess:0,
+          skills:(Array.isArray(st.skills)?st.skills:[]).slice(0,6).map(sk=>
+            (typeof sk==="string") ? {n:sk, est:5}
+              : {n:String(sk.skill||sk.n||sk.name||"").trim(), est:Math.max(1,parseInt(sk.sessions!=null?sk.sessions:sk.est)||4)}
+          ).filter(x=>x.n),
+          video:String(st.video||("A beginner's guide")), vlen:String(st.videoLen||st.vlen||"5 min"),
+        })).filter(st=>st.skills.length);
+        if(stages.length){
+          state.plans.push({ id:"plan_"+Date.now()+"_"+Math.floor(Math.random()*1000),
+            emoji:String(a.emoji||"🎯"), title:String(a.title), goal:String(a.goal||a.title),
+            eta:String(a.eta||""), cur:0, stages });
+          dpSel=state.plans.length-1;   // surface the new plan on the Development Plans page
+        }
+      }
       else if(a.type==="set_day_target" && a.id){
         const g=state.goals.find(x=>x.id===a.id);
         if(g && !isBinary(g)){ const dd=resolveDay(a.day);
@@ -1254,6 +1591,210 @@ document.getElementById("signOutBtn").onclick=async ()=>{
   if(sb){ try{ await sb.auth.signOut(); }catch(e){} }
   currentUser=null; updateAccountUI(null); showAuthGate();
 };
+
+/* ============================================================
+   Development Plans + adaptive practice routines (front-end module)
+   ============================================================ */
+const DP_AVATARS = [
+  {id:'explorer', name:'Explorer', svg:`<svg viewBox="0 0 40 46" xmlns="http://www.w3.org/2000/svg"><ellipse cx="20" cy="44" rx="11" ry="2.4" fill="rgba(0,0,0,.22)"/><rect x="12" y="18" width="16" height="19" rx="7" fill="var(--accent)"/><rect x="16" y="35" width="3.2" height="8" rx="1.6" fill="#2b2f45"/><rect x="20.8" y="35" width="3.2" height="8" rx="1.6" fill="#2b2f45"/><circle cx="20" cy="11" r="7.2" fill="#f4c89f"/><path d="M12.8 11a7.2 7.2 0 0 1 14.4 0c-2-2.2-4.6-2.9-7.2-2.9S14.8 8.8 12.8 11Z" fill="#5b3b28"/><circle cx="17.4" cy="11.2" r="1" fill="#2b2f45"/><circle cx="22.6" cy="11.2" r="1" fill="#2b2f45"/><path d="M17.6 14c1.4 1 3.4 1 4.8 0" stroke="#2b2f45" stroke-width="1" stroke-linecap="round" fill="none"/></svg>`},
+  {id:'rockstar', name:'Rockstar', svg:`<svg viewBox="0 0 40 46" xmlns="http://www.w3.org/2000/svg"><ellipse cx="20" cy="44" rx="11" ry="2.4" fill="rgba(0,0,0,.22)"/><rect x="12" y="18" width="16" height="19" rx="7" fill="#e2604a"/><rect x="16" y="35" width="3.2" height="8" rx="1.6" fill="#2b2f45"/><rect x="20.8" y="35" width="3.2" height="8" rx="1.6" fill="#2b2f45"/><circle cx="20" cy="11" r="7.2" fill="#f4c89f"/><path d="M12.9 12a7.1 7.1 0 0 1 14.2 0c-1-3.4-4-4.7-7.1-4.7S13.9 8.6 12.9 12Z" fill="#22242e"/><circle cx="17.5" cy="11.4" r="1" fill="#2b2f45"/><circle cx="22.5" cy="11.4" r="1" fill="#2b2f45"/><ellipse cx="27" cy="31" rx="4.6" ry="5.6" fill="#8a4b2a" transform="rotate(24 27 31)"/><rect x="11.5" y="21" width="15" height="2.3" rx="1.15" fill="#caa06a" transform="rotate(24 19 22)"/></svg>`},
+  {id:'pin', name:'Map pin', svg:`<svg viewBox="0 0 40 46" xmlns="http://www.w3.org/2000/svg"><ellipse cx="20" cy="43" rx="7" ry="2.2" fill="rgba(0,0,0,.22)"/><path d="M20 3c-6.1 0-11 4.7-11 11 0 8 11 22 11 22s11-14 11-22C31 7.7 26.1 3 20 3Z" fill="var(--accent)"/><circle cx="20" cy="14.5" r="6.6" fill="#fff"/><circle cx="17.7" cy="14" r="1.1" fill="#2b2f45"/><circle cx="22.3" cy="14" r="1.1" fill="#2b2f45"/><path d="M17.8 17c1.2 1.1 3.2 1.1 4.4 0" stroke="#2b2f45" stroke-width="1.1" stroke-linecap="round" fill="none"/></svg>`},
+  {id:'comet', name:'Spark', svg:`<svg viewBox="0 0 40 46" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="dpcg" cx="40%" cy="34%" r="70%"><stop offset="0" stop-color="#c7ceff"/><stop offset="1" stop-color="var(--accent)"/></radialGradient></defs><ellipse cx="20" cy="44" rx="8" ry="2.2" fill="rgba(0,0,0,.2)"/><path d="M31 9l3.5-4M32 15l4.5-2M31 21l3.5 3.2" stroke="var(--accent-2,#8a7bff)" stroke-width="1.5" stroke-linecap="round"/><circle cx="19" cy="20" r="12" fill="url(#dpcg)"/><circle cx="15.6" cy="18" r="1.4" fill="#fff"/><circle cx="22.4" cy="18" r="1.4" fill="#fff"/><path d="M15.6 23.6c1.8 1.6 5.4 1.6 7.2 0" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>`},
+  {id:'fox', name:'Fox', svg:`<svg viewBox="0 0 40 46" xmlns="http://www.w3.org/2000/svg"><ellipse cx="20" cy="43" rx="9" ry="2.2" fill="rgba(0,0,0,.2)"/><path d="M8.5 13l4.5 9 7-3-5.5-9z" fill="#e0823a"/><path d="M31.5 13l-4.5 9-7-3 5.5-9z" fill="#e0823a"/><path d="M20 9c-6.8 0-10.5 5.6-10.5 12.5S14 34 20 34s10.5-5.6 10.5-12.5S26.8 9 20 9Z" fill="#f4a24d"/><path d="M20 34c-4.8 0-7.7-2.8-8.7-6.6 3 2.7 5.8 3.6 8.7 3.6s5.7-.9 8.7-3.6C27.7 31.2 24.8 34 20 34Z" fill="#fff"/><circle cx="16" cy="20.5" r="1.4" fill="#2b2f45"/><circle cx="24" cy="20.5" r="1.4" fill="#2b2f45"/><path d="M18.2 25h3.6L20 27z" fill="#2b2f45"/></svg>`},
+];
+function dpAvSvg(){ const a=DP_AVATARS.find(x=>x.id===state.traveler)||DP_AVATARS[0]; return a.svg; }
+let dpSel = 0;                 // selected development area
+let dpActive = null;           // plan whose session/win is open
+let dpSess = {steps:[], i:0, mode:'full'};
+function planById(id){ return (state.plans||[]).find(p=>p.id===id); }
+
+function renderPlans(){
+  const areas=document.getElementById("planAreas"), body=document.getElementById("planBody");
+  if(!areas||!body) return;
+  if(!state.plans.length){
+    areas.innerHTML="";
+    body.innerHTML=`<div class="dp-empty"><div class="big">🧭</div><p style="margin:10px auto 0;max-width:44ch;">No development plans yet. Tell your guide something you want to get better at — like <b>“I want to learn guitar”</b> — and it'll build your whole road right here.</p></div>`;
+    return;
+  }
+  if(dpSel>=state.plans.length) dpSel=0;
+  areas.innerHTML = state.plans.map((p,i)=>{
+    const total=p.stages.length, cur=Math.min(p.cur+1,total);
+    return `<button class="dp-area ${i===dpSel?'on':''}" onclick="dpSelectArea(${i})"><div class="emo">${p.emoji||'🎯'}</div><div class="nm">${esc(p.title)}</div><div class="st">Stage ${cur} of ${total}</div></button>`;
+  }).join("") + `<button class="dp-area add" onclick="dpNewArea()">＋ New area</button>`;
+  const p=state.plans[dpSel];
+  body.innerHTML =
+    `<div class="dp-banner"><span class="flag">${p.emoji||'🎯'}</span><div><div class="to">Where this road leads</div><div class="goal">${esc(p.goal||'Your goal')}</div></div><div class="eta"><b>${esc(p.eta||'')}</b><span>at your current pace</span></div></div>`+
+    `<div class="dp-journeywrap"><div class="dp-avpick" id="dpAvpick"></div><div class="dp-journey"><div class="dp-road">${dpJourneyHTML(p)}</div></div><div class="dp-scrollhint">← scroll the road to see everything coming up →</div></div>`+
+    dpCardHTML(p);
+  dpRenderPicker();
+}
+function dpRenderPicker(){
+  const el=document.getElementById("dpAvpick"); if(!el) return;
+  el.innerHTML=`<span class="lab">Your traveler</span>`+DP_AVATARS.map(a=>`<button class="dp-avopt ${a.id===state.traveler?'on':''}" title="${a.name}" onclick="dpSetTraveler('${a.id}')">${a.svg}</button>`).join("");
+}
+function dpSetTraveler(id){ state.traveler=id; save(); renderPlans(); }
+function dpSelectArea(i){ dpSel=i; renderPlans(); }
+function dpNewArea(){ go("chat"); const inp=document.getElementById("chatInput"); if(inp){ inp.value="I'd like to get better at "; setTimeout(()=>inp.focus(),60); } }
+
+function dpJourneyHTML(plan){
+  let h="";
+  plan.stages.forEach((s,idx)=>{
+    const st = idx<plan.cur ? "done" : (idx===plan.cur ? "current" : "locked");
+    const badge = st==="done" ? '<span class="dp-nbadge">✓</span>' : st==="locked" ? '<span class="dp-nbadge">🔒</span>' : '';
+    const av = st==="current" ? `<div class="dp-avatar">${dpAvSvg()}</div>` : "";
+    const now = st==="current" ? '<div class="now">Now learning</div>' : "";
+    const here = st==="current" ? '<span class="dp-here">You are here</span>' : "";
+    const skills = s.skills.map(k=>`<span class="dp-skill">${esc(k.n)}</span>`).join("");
+    h+=`<div class="dp-st ${st}"><div class="dp-above">${now}${skills}</div>${av}<div class="dp-node">${s.icon}${badge}</div><div class="dp-stitle"><div class="k">${esc(s.k)}</div><div class="t">${esc(s.t)}</div>${here}</div></div>`;
+  });
+  h+=`<div class="dp-goalpin"><div class="dp-above"></div><div class="dp-node">🏆</div><div class="dp-stitle"><div class="k">The goal</div><div class="t">Arrive</div></div></div>`;
+  return h;
+}
+function dpCardHTML(plan){
+  const ci=plan.cur;
+  if(ci>=plan.stages.length)
+    return `<div class="dp-scard"><div class="dp-schead"><div><div class="k">Journey complete</div><h3>🏆 ${esc(plan.goal||'Goal reached')}</h3></div></div><p class="sub" style="margin:12px 0 0;">Every stage done. Time to make it real.</p></div>`;
+  const s=plan.stages[ci], last=ci>=plan.stages.length-1, curIdx=s.mastered;
+  const skills=s.skills.map((k,i)=>{
+    if(i<s.mastered) return `<li class="done"><span class="dp-box"></span><span class="lbl">${esc(k.n)}</span><span class="dp-tagm">Mastered</span></li>`;
+    if(i===curIdx){ const pct=Math.min(100,Math.round((s.sess/k.est)*100));
+      return `<li class="now"><span class="dp-box ring"></span><div class="dp-nowbody"><div class="dp-nowtop"><span class="lbl">${esc(k.n)}</span><span class="dp-pill">Today · 10 min</span></div><div class="dp-ingrain"><div class="dp-ingtop"><span>Ingraining — ${s.sess} of ${k.est} sessions</span><span>~${k.est} to make it stick</span></div><div class="dp-bar2"><i style="width:${pct}%"></i></div></div><a class="dp-vidlink" href="#" onclick="return dpVid(event)">▶ ${esc(s.video)} · ${esc(s.vlen)}</a></div></li>`;
+    }
+    return `<li class="up"><span class="dp-box"></span><span class="lbl">${esc(k.n)}</span><span class="dp-tagm up">~${k.est} sessions</span></li>`;
+  }).join("");
+  const curSkill=s.skills[curIdx]||s.skills[s.skills.length-1];
+  return `<div class="dp-scard">
+    <div class="dp-schead"><div><div class="k">Now learning · ${esc(s.k)}</div><h3>${esc(s.t)}</h3></div><div class="prog">${s.mastered} / ${s.skills.length} mastered</div></div>
+    <ul class="dp-sk">${skills}</ul>
+    <div class="dp-launch"><div class="lz"><div class="lzk">Today · in your To-do as “${esc(plan.title)} Practice”</div><div class="lzt">Your 30-minute session is ready</div><div class="lzs">Warm-up · Refresh · ${esc(curSkill.n)} · Free play — built for you by your guide</div></div><button class="btn" onclick="dpOpenSession('${plan.id}')">▶ Start</button></div>
+    <div class="dp-sfoot"><div class="dp-acts">
+      <button class="dp-tiny" onclick="dpBack('${plan.id}')" ${ci===0?'disabled':''}>← Back a stage</button>
+      <button class="dp-tiny" onclick="dpRefresh('${plan.id}')">🔄 Refresh my knowledge</button>
+      <button class="dp-tiny" onclick="dpAdvance('${plan.id}')">${last?'Finish 🏆':'I feel ready — jump ahead →'}</button>
+    </div><a class="link" href="#" onclick="dpEditRoutine('${plan.id}');return false;">Edit with guide</a></div>
+  </div>`;
+}
+
+/* ---- guided session ---- */
+function dpBuildSteps(plan,mode){
+  const s=plan.stages[plan.cur], done=s.skills.slice(0,s.mastered).map(x=>x.n);
+  const cur=s.skills[s.mastered]||s.skills[s.skills.length-1];
+  const warm={t:"Warm-up",m:5,d:"Ease in — loosen up and get moving."};
+  const refresh={t:"Refresh",m:8,d:"Revisit what you already know: "+(done.length?done.join(" · "):"your earlier basics")+"."};
+  if(mode==='review') return [warm,refresh];
+  return [warm,refresh,{t:"Today's focus",m:12,d:cur.n+" — slow and deliberate.",video:s.video,vlen:s.vlen},{t:"Free play",m:5,d:"Play freely and enjoy it — no rules."}];
+}
+function dpOpenSession(planId,mode){
+  const p=planById(planId); if(!p||p.cur>=p.stages.length){ flash("This plan is complete 🎉"); return; }
+  dpActive=p; dpSess.mode=(mode==='review')?'review':'full'; dpSess.steps=dpBuildSteps(p,dpSess.mode); dpSess.i=0;
+  document.getElementById("dpSesCallout").style.display=(dpSess.mode==='review')?'none':'';
+  document.getElementById("dpSession").hidden=false; dpRenderSession();
+}
+function dpCloseSession(){ document.getElementById("dpSession").hidden=true; }
+function dpFmt(m){ return String(m).padStart(2,'0')+":00"; }
+function dpRenderSession(){
+  const p=dpActive, s=p.stages[p.cur];
+  document.getElementById("dpSesArea").textContent=p.title+" Practice · "+s.k;
+  const steps=dpSess.steps, i=dpSess.i, cur=steps[i];
+  document.getElementById("dpSesTitle").textContent=cur.t;
+  document.getElementById("dpSesTimer").textContent=dpFmt(cur.m);
+  document.getElementById("dpSesDo").textContent=cur.d;
+  document.getElementById("dpSesVideo").innerHTML=cur.video?`<a class="dp-vid" href="#" onclick="return dpVid(event)">▶ ${esc(cur.video)} · ${esc(cur.vlen)}</a>`:"";
+  document.getElementById("dpSesSteps").innerHTML=steps.map((st,x)=>`<div class="dp-step ${x===i?'active':(x<i?'past':'')}"><span class="n">${x<i?'✓':x+1}</span><span class="sl">${esc(st.t)}</span><span class="mm">${st.m} min</span></div>`).join("");
+  document.getElementById("dpSesPrev").disabled=i===0;
+  document.getElementById("dpSesNext").textContent=(i>=steps.length-1)?'Finish ✓':'Next step →';
+}
+function dpStepPrev(){ if(dpSess.i>0){ dpSess.i--; dpRenderSession(); } }
+function dpStepNext(){ if(dpSess.i>=dpSess.steps.length-1) dpFinishSession(); else { dpSess.i++; dpRenderSession(); } }
+function dpFinishSession(){
+  dpCloseSession();
+  const p=dpActive;
+  if(dpSess.mode==='review'){ flash("Nice refresher 👍"); return; }
+  const s=p.stages[p.cur], sk=s.skills[s.mastered];
+  setDone(todayStr(),"dp_"+p.id,true);              // today's practice logged → leaves Today
+  if(sk){ s.sess=(s.sess||0)+1; save(); }
+  renderPlans(); renderToday(); renderStats();
+  if(sk && s.sess>=sk.est) dpOpenCheckin();
+  else if(sk) flash(`Logged — ${sk.n}: ${s.sess} of ${sk.est} sessions`);
+}
+function dpAskGuide(){ flash("Your guide chat is one tap away 💬"); }
+function dpVid(e){ if(e) e.preventDefault(); flash("In the real app this opens a hand-picked video ▶"); return false; }
+
+/* ---- mastery check-in + little win ---- */
+function dpOpenCheckin(){
+  const p=dpActive, s=p.stages[p.cur], sk=s.skills[s.mastered];
+  document.getElementById("dpCiTitle").textContent="How's the "+sk.n+"?";
+  document.getElementById("dpCiBody").textContent=`You've practiced this ${s.sess} times now — about what it takes to make it stick. Be honest: how's it feeling?`;
+  document.getElementById("dpCheckin").hidden=false;
+}
+function dpCiGot(){
+  document.getElementById("dpCheckin").hidden=true;
+  const p=dpActive, s=p.stages[p.cur];
+  s.mastered++; s.sess=0; save();
+  if(s.mastered>=s.skills.length){ renderPlans(); dpOpenWin(); }
+  else { renderPlans(); flash("Locked in 💪 Next: "+s.skills[s.mastered].n); }
+}
+function dpCiMore(){
+  document.getElementById("dpCheckin").hidden=true;
+  const p=dpActive, s=p.stages[p.cur], sk=s.skills[s.mastered];
+  sk.est+=2; save(); renderPlans(); flash("No rush — added a couple more sessions.");
+}
+function dpOpenWin(){
+  const p=dpActive, ci=p.cur, s=p.stages[ci], next=p.stages[ci+1];
+  document.getElementById("dpWinAvatar").innerHTML=dpAvSvg();
+  document.getElementById("dpWinStage").textContent=s.k+" complete";
+  document.getElementById("dpWinNext").textContent=next?("Stage "+(ci+2)+" unlocked — "+next.t):"You reached the goal — make it real! 🎤";
+  document.getElementById("dpWinBtn").textContent=next?"See what's next →":"Take a bow 🙌";
+  document.getElementById("dpWin").hidden=false; dpConfetti();
+}
+function dpWinContinue(){
+  document.getElementById("dpWin").hidden=true;
+  const p=dpActive; if(p.cur<p.stages.length) p.cur++; save();
+  renderPlans(); renderToday(); renderStats();
+}
+function dpConfetti(){
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const c=document.getElementById("dpConfetti"); if(!c) return; c.innerHTML="";
+  const cols=['#5b6cff','#8a7bff','#20b57e','#f0a02e','#e2604a'];
+  for(let i=0;i<44;i++){ const x=document.createElement("i"); x.style.left=Math.random()*100+'%'; x.style.background=cols[i%cols.length]; x.style.animationDuration=(1.3+Math.random()*1.5)+'s'; x.style.animationDelay=(Math.random()*.35)+'s'; c.appendChild(x); }
+}
+function dpBack(id){ const p=planById(id); if(!p||p.cur<=0){ flash("Already at the first stage."); return; }
+  p.cur--; const s=p.stages[p.cur]; s.mastered=Math.max(0,s.skills.length-1); s.sess=0; save(); renderPlans(); renderToday(); flash("↩ Moved back a stage — revisit anytime."); }
+function dpAdvance(id){ const p=planById(id); if(!p) return; dpActive=p; dpOpenWin(); }
+function dpRefresh(id){ dpOpenSession(id,'review'); }
+function dpEditRoutine(id){ const p=planById(id); go("chat"); const inp=document.getElementById("chatInput"); if(inp){ inp.value="Let's adjust my "+(p?p.title:"")+" practice routine — "; setTimeout(()=>inp.focus(),60); } }
+
+/* ---- practice routines on the Routines sub-page ---- */
+function renderPractice(){
+  const el=document.getElementById("practiceList"); if(!el) return;
+  if(!state.plans.length){ el.innerHTML=`<div class="small muted" style="padding:8px 2px;">No practice routines yet — they appear here automatically when your guide builds a development plan.</div>`; return; }
+  el.innerHTML = state.plans.map(dpPracticeCard).join("");
+}
+function dpPracticeCard(p){
+  const done=p.cur>=p.stages.length;
+  const s=p.stages[Math.min(p.cur,p.stages.length-1)];
+  const cur=s.skills[Math.min(s.mastered,s.skills.length-1)];
+  const steps = done ? [] : [
+    {i:"🤸",t:"Warm-up",d:"Ease in and loosen up",m:5},
+    {i:"🔁",t:"Refresh",d:"Revisit what you know",m:8},
+    {i:"🎯",t:"Today's focus",d:cur?cur.n:'',m:12,focus:true},
+    {i:"🎶",t:"Free play",d:"Play freely, enjoy it",m:5},
+  ];
+  const stepsHTML=steps.map(st=>`<div class="dp-rstep ${st.focus?'focus':''}"><span class="ri">${st.i}</span><div><div class="rt">${esc(st.t)}${st.focus?'<span class="tagf">now</span>':''}</div><div class="rd">${esc(st.d)}</div></div><span class="rm">${st.m} min</span></div>`).join("");
+  return `<div class="dp-rcard">
+    <div class="dp-rhead"><span class="dp-remo">${p.emoji||'🎯'}</span><div><div class="dp-rname">${esc(p.title)} Practice</div><div class="dp-rmeta">from your ${esc(p.title)} plan · Stage ${Math.min(p.cur+1,p.stages.length)} of ${p.stages.length}</div></div><span class="dp-adapt">✨ Self-adapting</span></div>
+    ${done?'<p class="sub" style="margin:12px 0 0;">Plan complete 🎉</p>':`<div class="dp-rsteps">${stepsHTML}</div>`}
+    <div class="dp-rfoot">${done?'':`<button class="btn" onclick="dpOpenSession('${p.id}')">▶ Start practice · 30 min</button>`}<button class="btn ghost" onclick="dpEditRoutine('${p.id}')">✏️ Edit with guide</button>${done?'':'<span class="fnote">Also waiting in your <b>Today</b>.</span>'}</div>
+  </div>`;
+}
+
+/* ---- sub-page switcher inside the Goals tab ---- */
+function goSub(name){
+  document.querySelectorAll("#subnav button").forEach(b=>b.classList.toggle("on",b.dataset.sub===name));
+  ["goals","routines","plans"].forEach(k=>{ const el=document.getElementById("sub-"+k); if(el) el.classList.toggle("active",k===name); });
+  window.scrollTo({top:0});
+}
+document.querySelectorAll("#subnav button").forEach(b=>b.onclick=()=>goSub(b.dataset.sub));
 
 renderGoals(); renderToday(); renderStats();
 /* Desktop re-opens on Today (with the Guide box); phone opens on the full Guide. */
