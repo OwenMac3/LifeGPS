@@ -562,8 +562,19 @@
   .life-gnote{margin-top:6px; font-size:12.5px; color:var(--muted); line-height:1.5;}
   .life-mapwrap{display:flex; align-items:center; gap:18px; flex-wrap:wrap;}
 
-  .life-goalcard{background:linear-gradient(135deg, var(--accent) 0%, #8a7bff 100%); color:#fff; border:none;}
+  .life-goalcard{background:linear-gradient(135deg,#2b3242,#3d4661); color:#fff; border:none;}
   .life-goalhead{display:flex; align-items:center; gap:13px;}
+  .life-goaledit-btn{width:30px; height:30px; border-radius:9px; background:rgba(255,255,255,.16); color:#fff; font-size:14px; flex:0 0 auto; margin-left:6px;}
+  .life-goaledit-btn:hover{background:rgba(255,255,255,.28);}
+  .life-goaledit{margin-top:14px; background:rgba(255,255,255,.12); border-radius:13px; padding:13px;}
+  .life-ge-row{display:flex; align-items:center; gap:9px;}
+  .life-ge-lbl{font-size:12px; font-weight:700; opacity:.85; text-transform:uppercase; letter-spacing:.04em;}
+  .life-ge-row input{width:72px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); color:#fff; border-radius:10px; padding:8px 10px; font-size:18px; text-align:center;}
+  .life-ge-row .btn{background:#fff; color:#333; border:none;}
+  .life-swatches{display:flex; gap:9px; flex-wrap:wrap; margin-top:8px;}
+  .life-swatch{width:32px; height:32px; border-radius:50%; border:2px solid transparent; flex:0 0 auto; box-shadow:0 1px 3px rgba(0,0,0,.3);}
+  .life-swatch.on{border-color:#fff; box-shadow:0 0 0 2px rgba(255,255,255,.4);}
+  .life-goaledit .btn.block{width:100%;}
   .life-goalemoji{width:48px; height:48px; border-radius:14px; background:rgba(255,255,255,.18); display:grid; place-items:center; font-size:26px; flex:0 0 auto;}
   .life-goalttl{min-width:0;}
   .life-goalname{font-size:18px; font-weight:800; line-height:1.15;}
@@ -925,7 +936,7 @@ function seedBudget(){
     setup:false,
     currency:"$",
     income:0,                 // monthly take-home
-    savings:{ label:"Savings goal", target:0, saved:0, monthly:0 },  // monthly = amount the plan sets aside each month
+    savings:{ label:"Savings goal", target:0, saved:0, monthly:0, color:"", emoji:"" },  // monthly = set aside/mo; color/emoji = user styling
     recurring:[],             // fixed monthly bills [{id, name, amount, category}] — auto-counted every month
     categories:[],            // [{name, planned}] target monthly spend per VARIABLE category
     expenses:[],              // [{id, date, amount, category, note}] variable spending logged
@@ -1021,8 +1032,10 @@ function normalize(s){
   else {
     if(typeof s.budget.income!=="number") s.budget.income=0;
     if(typeof s.budget.currency!=="string") s.budget.currency="$";
-    if(!s.budget.savings || typeof s.budget.savings!=="object") s.budget.savings={label:"Savings goal", target:0, saved:0, monthly:0};
+    if(!s.budget.savings || typeof s.budget.savings!=="object") s.budget.savings={label:"Savings goal", target:0, saved:0, monthly:0, color:"", emoji:""};
     if(typeof s.budget.savings.monthly!=="number") s.budget.savings.monthly=0;
+    if(typeof s.budget.savings.color!=="string") s.budget.savings.color="";
+    if(typeof s.budget.savings.emoji!=="string") s.budget.savings.emoji="";
     if(!Array.isArray(s.budget.recurring)) s.budget.recurring=[];
     s.budget.recurring=s.budget.recurring.map(r=>({ id:r.id||rid(), name:String(r.name||"Bill"), amount:Math.max(0,parseFloat(r.amount)||0), category:String(r.category||"Bills") }));
     if(!Array.isArray(s.budget.categories)) s.budget.categories=[];
@@ -2218,6 +2231,19 @@ function bGoalEmoji(label){ const l=(label||"").toLowerCase();
   if(/wedding|ring/.test(l)) return "💍"; if(/school|tuition|college|course/.test(l)) return "🎓";
   if(/baby|kid/.test(l)) return "🍼"; if(/computer|laptop|pc|phone|tech/.test(l)) return "💻";
   if(/business|startup/.test(l)) return "🚀"; if(/debt|loan|payoff/.test(l)) return "🎯"; return "⭐"; }
+// Goal card colour presets (muted 'slate' is the default so it doesn't shout over the other cards).
+const GOAL_COLORS=[
+  {id:"slate",  css:"linear-gradient(135deg,#2b3242,#3d4661)"},
+  {id:"indigo", css:"linear-gradient(135deg,#4a54c7,#7b6fe0)"},
+  {id:"ocean",  css:"linear-gradient(135deg,#274a6b,#3b82a5)"},
+  {id:"forest", css:"linear-gradient(135deg,#1f6b52,#2ba579)"},
+  {id:"sunset", css:"linear-gradient(135deg,#b3543a,#e0913a)"},
+  {id:"rose",   css:"linear-gradient(135deg,#8f3560,#c86fa2)"},
+  {id:"plum",   css:"linear-gradient(135deg,#523182,#7d6fd0)"},
+];
+function bGoalColorCss(){ const c=(GOAL_COLORS.find(x=>x.id===state.budget.savings.color)||GOAL_COLORS[0]); return c.css; }
+function bGoalEmojiResolved(){ const e=state.budget.savings.emoji; return e && e.trim() ? e.trim() : bGoalEmoji(state.budget.savings.label); }
+let bGoalEditOpen=false;
 // SVG donut from [{label,value,color}]; centerBig/centerSub optional.
 function bDonut(segments, centerBig, centerSub){
   const R=54, cx=64, cy=64, sw=17, C=2*Math.PI*R;
@@ -2233,6 +2259,11 @@ function bDonut(segments, centerBig, centerSub){
 }
 function bLegend(segments){
   return `<div class="life-legend">`+segments.filter(s=>(+s.value||0)>0).map(s=>`<div class="life-leg"><span class="life-dot" style="background:${s.color}"></span><span class="life-leg-n">${esc(s.label)}</span><span class="grow"></span><span class="life-leg-v">${bMoney(s.value)}</span></div>`).join("")+`</div>`;
+}
+function bLegendPct(segments, total){
+  total=total||segments.reduce((s,x)=>s+(+x.value||0),0)||1;
+  return `<div class="life-legend">`+segments.filter(s=>(+s.value||0)>0).map(s=>{ const pct=Math.round(s.value/total*100);
+    return `<div class="life-leg"><span class="life-dot" style="background:${s.color}"></span><span class="life-leg-n">${esc(s.label)}</span><span class="grow"></span><span class="life-leg-v"><b>${pct}%</b> · ${bMoney(s.value)}</span></div>`; }).join("")+`</div>`;
 }
 
 function renderBudget(){
@@ -2287,39 +2318,50 @@ function renderBudget(){
       </div>
     </div>`;
 
-  // Money map donut — where the whole income goes
-  const mapSegs=[
-    {label:"Fixed bills", value:plan.fixed, color:'#8893a5'},
-    {label:"Savings", value:plan.save, color:'#20b57e'},
-    ...cats.map((c,i)=>({label:c.name, value:+c.planned||0, color:LIFE_COLORS[i%LIFE_COLORS.length]})),
-  ];
-  if(plan.unallocated>0.5) mapSegs.push({label:"Unallocated", value:plan.unallocated, color:'#c2c8d4'});
-  const mapCard = plan.income>0 ? `
+  // Spending donut — ACTUAL money spent this month, by category, as % of total spent
+  const spendSegs=[];
+  if(recurTotal>0) spendSegs.push({label:"Fixed bills", value:recurTotal, color:'#8893a5'});
+  Object.keys(varByCat).sort((a,c)=>varByCat[c]-varByCat[a]).forEach((name,i)=>{ if(varByCat[name]>0) spendSegs.push({label:name, value:varByCat[name], color:LIFE_COLORS[i%LIFE_COLORS.length]}); });
+  const spentTotal=spendSegs.reduce((s,x)=>s+x.value,0);
+  const mapCard = spentTotal>0 ? `
     <div class="card">
-      <div class="row" style="margin-bottom:10px;"><b>🗺️ Where your money goes</b></div>
+      <div class="row" style="margin-bottom:10px;"><b>🗺️ Where your money goes</b><span class="grow"></span><span class="small muted">${bMonth()}</span></div>
       <div class="life-mapwrap">
-        ${bDonut(mapSegs, bMoney(plan.income), "per month")}
-        ${bLegend(mapSegs)}
+        ${bDonut(spendSegs, bMoney(spentTotal), "spent")}
+        ${bLegendPct(spendSegs, spentTotal)}
       </div>
-      ${plan.unallocated<0?`<div class="small" style="margin-top:12px; color:var(--danger); font-weight:600;">⚠️ Your targets are ${bMoney(-plan.unallocated)} over what's left — trim a category or lower savings.</div>`:''}
-    </div>` : "";
+      <p class="small muted" style="margin:12px 0 0;">Your actual spending this month — fixed bills count automatically. Track each category against its target below. 👇</p>
+    </div>` : `
+    <div class="card">
+      <div class="row" style="margin-bottom:6px;"><b>🗺️ Where your money goes</b></div>
+      <p class="small muted" style="margin:0;">No spending yet this month — log some below and this breakdown fills in. 🌱</p>
+    </div>`;
 
-  // Savings goal — reframed to feel exciting, not anxious
-  const gemoji=bGoalEmoji(sv.label);
+  // Savings goal — reframed to feel exciting, not anxious; colour + emoji are user-editable
+  const gemoji=bGoalEmojiResolved();
   const nm=bNextMilestone();
   let goalMsg;
   if(sv.target>0 && sv.saved>=sv.target){ goalMsg=`🎉 You did it — your ${esc(sv.label)} is fully funded!`; }
   else if(eta){ goalMsg=`${gemoji} You're on your way! Keep ${bMoney(sv.monthly)} flowing each month and this is <b>yours by ${eta}</b>.`; }
   else { goalMsg=`Pick a monthly amount and I'll show you the exact month this becomes real. 💬`; }
   const milestoneLine = (nm && nm.months) ? `<div class="life-nextms">🎯 Next milestone: <b>${nm.pct}%</b> (${bMoney(nm.amount)}) — about <b>${nm.months} month${nm.months===1?'':'s'}</b> away</div>` : "";
+  const editPanel = bGoalEditOpen ? `
+      <div class="life-goaledit">
+        <div class="life-ge-row"><span class="life-ge-lbl">Emoji</span><input id="bGoalEmojiInp" maxlength="4" value="${esc(sv.emoji||"")}" placeholder="${bGoalEmoji(sv.label)}"><button class="btn sm" onclick="dpSetGoalEmoji()">Set</button></div>
+        <div class="life-ge-lbl" style="margin-top:10px;">Colour</div>
+        <div class="life-swatches">${GOAL_COLORS.map(c=>`<button class="life-swatch ${((sv.color||'slate')===c.id)?'on':''}" style="background:${c.css}" onclick="dpSetGoalColor('${c.id}')" aria-label="${c.id}"></button>`).join("")}</div>
+        <button class="btn sm ghost block" style="margin-top:12px;" onclick="dpToggleGoalEdit()">Done</button>
+      </div>` : "";
   const goalCard=`
-    <div class="card life-goalcard">
+    <div class="card life-goalcard" style="background:${bGoalColorCss()};">
       <div class="life-goalhead">
         <div class="life-goalemoji">${gemoji}</div>
         <div class="life-goalttl"><div class="life-goalname">${esc(sv.label||"Savings goal")}</div><div class="life-goalsub">${bMoney(sv.saved)} saved of ${bMoney(sv.target)}</div></div>
         <span class="grow"></span>
         <div class="life-goalpct">${svPct}<span>%</span></div>
+        <button class="life-goaledit-btn" onclick="dpToggleGoalEdit()" aria-label="Edit goal style" title="Edit colour & emoji">✎</button>
       </div>
+      ${editPanel}
       <div class="life-goalbar"><i style="width:${svPct}%;"></i><span class="ms" style="left:25%"></span><span class="ms" style="left:50%"></span><span class="ms" style="left:75%"></span></div>
       <div class="life-goalmsg">${goalMsg}</div>
       ${milestoneLine}
@@ -2346,6 +2388,7 @@ function renderBudget(){
     <div class="card">
       <div class="row" style="margin-bottom:10px;"><b>📊 Category targets</b><span class="grow"></span><span class="small muted">${bMoney(varSpent)} spent</span></div>
       ${catRows}
+      ${plan.unallocated<0?`<div class="small" style="margin-top:12px; color:var(--danger); font-weight:600;">⚠️ Your targets are ${bMoney(-plan.unallocated)} over what's left to spend (${bMoney(plan.toSpend)}) — trim a target or lower savings.</div>`:''}
     </div>`;
 
   // Fixed / recurring bills
@@ -2432,6 +2475,9 @@ function dpAddSavings(){
   state.budget.savings.saved=Math.max(0,(state.budget.savings.saved||0)+amt);
   save(); renderBudget(); flash(amt>0?"Added to savings 🎉":"Savings updated");
 }
+function dpToggleGoalEdit(){ bGoalEditOpen=!bGoalEditOpen; renderBudget(); }
+function dpSetGoalColor(id){ state.budget.savings.color=id; save(); renderBudget(); }
+function dpSetGoalEmoji(){ const v=(document.getElementById("bGoalEmojiInp").value||"").trim(); state.budget.savings.emoji=v; save(); renderBudget(); flash(v?"Emoji updated":"Using the default emoji"); }
 
 /* ---------- Health ---------- */
 function hToday(){ return (state.health.meals[todayStr()]||[]); }
