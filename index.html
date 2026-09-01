@@ -548,6 +548,39 @@
   .life-meal:first-of-type{border-top:none;}
   .life-meal-main{display:flex; flex-direction:column; gap:2px;}
   .life-meal-main b{font-size:14px;}
+
+  /* ---- Budget charts + exciting goal ---- */
+  .life-donut{flex:0 0 auto;}
+  .life-legend{flex:1; min-width:160px; display:flex; flex-direction:column; gap:7px;}
+  .life-leg{display:flex; align-items:center; gap:8px; font-size:13px;}
+  .life-leg-n{color:var(--text);} .life-leg-v{color:var(--muted); font-weight:600;}
+  .life-dot{width:11px; height:11px; border-radius:50%; flex:0 0 auto;}
+  .life-gaugecard{}
+  .life-gaugewrap{display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-top:4px;}
+  .life-gaugeside{flex:1; min-width:150px; display:flex; flex-direction:column; gap:7px;}
+  .life-gline{display:flex; align-items:center; gap:8px; font-size:13.5px;}
+  .life-gnote{margin-top:6px; font-size:12.5px; color:var(--muted); line-height:1.5;}
+  .life-mapwrap{display:flex; align-items:center; gap:18px; flex-wrap:wrap;}
+
+  .life-goalcard{background:linear-gradient(135deg, var(--accent) 0%, #8a7bff 100%); color:#fff; border:none;}
+  .life-goalhead{display:flex; align-items:center; gap:13px;}
+  .life-goalemoji{width:48px; height:48px; border-radius:14px; background:rgba(255,255,255,.18); display:grid; place-items:center; font-size:26px; flex:0 0 auto;}
+  .life-goalttl{min-width:0;}
+  .life-goalname{font-size:18px; font-weight:800; line-height:1.15;}
+  .life-goalsub{font-size:12.5px; opacity:.85; margin-top:2px;}
+  .life-goalpct{font-size:30px; font-weight:800; line-height:1;}
+  .life-goalpct span{font-size:15px; opacity:.8;}
+  .life-goalbar{position:relative; height:14px; border-radius:99px; background:rgba(255,255,255,.22); overflow:hidden; margin:16px 0 0;}
+  .life-goalbar i{display:block; height:100%; border-radius:99px; background:#fff; transition:width .5s ease;}
+  .life-goalbar .ms{position:absolute; top:0; bottom:0; width:2px; background:rgba(255,255,255,.45);}
+  .life-goalmsg{margin-top:14px; font-size:14px; line-height:1.5;}
+  .life-goalmsg b{font-weight:800;}
+  .life-nextms{margin-top:10px; font-size:13px; background:rgba(255,255,255,.16); border-radius:11px; padding:9px 12px;}
+  .life-goalactions{display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; align-items:center;}
+  .life-goalactions input{flex:1; min-width:90px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); color:#fff; border-radius:11px; padding:9px 12px;}
+  .life-goalactions input::placeholder{color:rgba(255,255,255,.7);}
+  .life-goalactions .btn{background:#fff; color:var(--accent); border:none;}
+  .life-goalactions .btn.ghost{background:rgba(255,255,255,.18); color:#fff;}
 </style>
 
 <div class="wrap">
@@ -1944,7 +1977,7 @@ function dpRenderPicker(){
 }
 function dpSetTraveler(id){ state.traveler=id; save(); renderPlans(); }
 function dpSelectArea(i){ dpSel=i; renderPlans(); }
-function dpNewArea(){ go("chat"); const inp=document.getElementById("chatInput"); if(inp){ inp.value="I'd like to get better at "; setTimeout(()=>{inp.focus(); chatAutoGrow();},60); } }
+function dpNewArea(){ if(typeof promptGuide==="function"){ promptGuide("I'd like to get better at "); return; } go("chat"); const inp=document.getElementById("chatInput"); if(inp){ inp.value="I'd like to get better at "; setTimeout(()=>{inp.focus(); chatAutoGrow();},60); } }
 
 function dpJourneyHTML(plan){
   let h="";
@@ -2124,7 +2157,7 @@ function dpQuizSkip(){ document.getElementById("dpQuiz").hidden=true; dpOpenWin(
 function dpQuizContinue(){ document.getElementById("dpQuiz").hidden=true; dpOpenWin(); }
 function dpQuizClose(){ document.getElementById("dpQuiz").hidden=true; }
 function dpRefresh(id){ dpOpenSession(id,'review'); }
-function dpEditRoutine(id){ const p=planById(id); go("chat"); const inp=document.getElementById("chatInput"); if(inp){ inp.value="Let's adjust my "+(p?p.title:"")+" practice routine — "; setTimeout(()=>{inp.focus(); chatAutoGrow();},60); } }
+function dpEditRoutine(id){ const p=planById(id); const t="Let's adjust my "+(p?p.title:"")+" practice routine — "; if(typeof promptGuide==="function"){ promptGuide(t); return; } go("chat"); const inp=document.getElementById("chatInput"); if(inp){ inp.value=t; setTimeout(()=>{inp.focus(); chatAutoGrow();},60); } }
 
 /* ---- practice routines on the Routines sub-page ---- */
 function renderPractice(){
@@ -2178,6 +2211,29 @@ function bPlan(){
 }
 function bMonthsToGoal(){ const s=state.budget.savings; if((+s.monthly||0)<=0 || (+s.target||0)<=(+s.saved||0)) return null; return Math.ceil((s.target-s.saved)/s.monthly); }
 function bGoalEta(){ const m=bMonthsToGoal(); if(m==null) return null; const d=new Date(); d.setMonth(d.getMonth()+m); return d.toLocaleDateString(undefined,{month:"short",year:"numeric"}); }
+const LIFE_COLORS=['#5b6cff','#20b57e','#f0a02e','#e2604a','#8a7bff','#3bb0d6','#d67ab0','#7bbf5a','#eab308','#5eb1a8'];
+function bGoalEmoji(label){ const l=(label||"").toLowerCase();
+  if(/car|vehicle|truck/.test(l)) return "🚗"; if(/house|home|down ?payment|mortgage/.test(l)) return "🏡";
+  if(/trip|travel|vacation|holiday|flight/.test(l)) return "✈️"; if(/emergency|rainy|safety/.test(l)) return "🛟";
+  if(/wedding|ring/.test(l)) return "💍"; if(/school|tuition|college|course/.test(l)) return "🎓";
+  if(/baby|kid/.test(l)) return "🍼"; if(/computer|laptop|pc|phone|tech/.test(l)) return "💻";
+  if(/business|startup/.test(l)) return "🚀"; if(/debt|loan|payoff/.test(l)) return "🎯"; return "⭐"; }
+// SVG donut from [{label,value,color}]; centerBig/centerSub optional.
+function bDonut(segments, centerBig, centerSub){
+  const R=54, cx=64, cy=64, sw=17, C=2*Math.PI*R;
+  const shown=segments.filter(s=>(+s.value||0)>0);
+  const total=shown.reduce((s,x)=>s+(+x.value||0),0);
+  let acc=0, arcs="";
+  if(total>0){ shown.forEach(s=>{ const arc=(s.value/total)*C;
+    arcs+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${s.color}" stroke-width="${sw}" stroke-dasharray="${arc.toFixed(2)} ${(C-arc).toFixed(2)}" stroke-dashoffset="${(-acc).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})" stroke-linecap="butt"/>`;
+    acc+=arc; }); }
+  const track=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="var(--bg2)" stroke-width="${sw}"/>`;
+  const center = centerBig ? `<text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="19" font-weight="800" fill="var(--text)">${centerBig}</text>`+(centerSub?`<text x="${cx}" y="${cy+16}" text-anchor="middle" font-size="10.5" fill="var(--muted)">${centerSub}</text>`:""):"";
+  return `<svg viewBox="0 0 128 128" class="life-donut" width="128" height="128">${track}${arcs}${center}</svg>`;
+}
+function bLegend(segments){
+  return `<div class="life-legend">`+segments.filter(s=>(+s.value||0)>0).map(s=>`<div class="life-leg"><span class="life-dot" style="background:${s.color}"></span><span class="life-leg-n">${esc(s.label)}</span><span class="grow"></span><span class="life-leg-v">${bMoney(s.value)}</span></div>`).join("")+`</div>`;
+}
 
 function renderBudget(){
   const el=document.getElementById("budgetBody"); if(!el) return;
@@ -2213,41 +2269,64 @@ function renderBudget(){
   const cats=(b.categories||[]);
   const recent=(b.expenses||[]).slice(-6).reverse();
   const catOptions=[...new Set([...cats.map(c=>c.name),...BUDGET_CATS])].map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
+  const left=plan.toSpend-varSpent;
 
-  // Savings ETA line — the "inevitable plan" message
-  let etaLine;
-  if(sv.saved>=sv.target && sv.target>0){ etaLine=`<span class="life-eta good">Goal reached — nice work! 🎉</span>`; }
-  else if(eta){ etaLine=`<span class="life-eta good">On plan, you'll hit this by <b>${eta}</b> · ${months} month${months===1?'':'s'} at ${bMoney(sv.monthly)}/mo</span>`; }
-  else { etaLine=`<span class="life-eta warn">Set a monthly savings amount to give this goal a finish line — ask your guide 💬</span>`; }
-
-  // Plan summary rows
-  const planCard=`
-    <div class="card">
-      <div class="row" style="margin-bottom:4px;"><b>🗺️ Your monthly plan</b></div>
-      <div class="life-plan">
-        <div class="life-planrow"><span>Income</span><span class="grow"></span><b>${bMoney(plan.income)}</b></div>
-        <div class="life-planrow sub"><span>− Fixed bills</span><span class="grow"></span>−${bMoney(plan.fixed)}</div>
-        <div class="life-planrow sub"><span>− Savings</span><span class="grow"></span>−${bMoney(plan.save)}</div>
-        <div class="life-planrow total"><span>Left to spend</span><span class="grow"></span><b>${bMoney(plan.toSpend)}</b></div>
-      </div>
-      <div class="small ${plan.unallocated<0?'':'muted'}" style="margin-top:10px; ${plan.unallocated<0?'color:var(--danger);font-weight:600;':''}">
-        ${plan.unallocated<0
-          ? `⚠️ Your category targets are ${bMoney(-plan.unallocated)} over what's left — trim a target or lower savings.`
-          : (plan.planned>0
-              ? `Allocated ${bMoney(plan.planned)} of ${bMoney(plan.toSpend)} across categories · ${bMoney(plan.unallocated)} unallocated.`
-              : `No category targets yet — ask your guide to set spending targets for the month.`)}
+  // HERO: how much is left to spend this month (a friendly gauge)
+  const gaugeSegs=[{label:"spent", value:Math.min(varSpent,plan.toSpend), color:(varSpent>plan.toSpend?'#e2604a':'#5b6cff')},{label:"left", value:Math.max(0,plan.toSpend-varSpent), color:'var(--bg2)'}];
+  const gaugeCenter = left>=0 ? bMoney(left) : bMoney(-left);
+  const gaugeCard=`
+    <div class="card life-gaugecard">
+      <div class="row" style="margin-bottom:6px;"><b>💸 Left to spend</b><span class="grow"></span><span class="small muted">${bMonth()}</span></div>
+      <div class="life-gaugewrap">
+        ${bDonut(gaugeSegs, gaugeCenter, left>=0?"left":"over")}
+        <div class="life-gaugeside">
+          <div class="life-gline"><span class="life-dot" style="background:#5b6cff"></span>Spent<span class="grow"></span><b>${bMoney(varSpent)}</b></div>
+          <div class="life-gline"><span class="life-dot" style="background:var(--bg2);border:1px solid var(--line)"></span>Budget<span class="grow"></span><b>${bMoney(plan.toSpend)}</b></div>
+          <div class="life-gnote">${left>=0?`You've got <b>${bMoney(left)}</b> of freedom left this month. 🌿`:`You're <b>${bMoney(-left)}</b> over — ease up or ask your guide to rebalance.`}</div>
+        </div>
       </div>
     </div>`;
 
-  // Savings goal card
-  const saveCard=`
-    <div class="card life-savecard">
-      <div class="row"><b>🎯 ${esc(sv.label||"Savings goal")}</b><span class="grow"></span><span class="small muted">${bMoney(sv.saved)} / ${bMoney(sv.target)}</span></div>
-      <div class="life-bigbar" style="margin-top:10px;"><i style="width:${svPct}%;"></i></div>
-      <div style="margin-top:8px;">${etaLine}</div>
-      <div class="row" style="margin-top:10px;"><span class="small muted">${svPct}% there${sv.target>sv.saved?" · "+bMoney(sv.target-sv.saved)+" to go":""}</span><span class="grow"></span>
-        <input id="bSaveAdd" type="number" inputmode="decimal" placeholder="add $" style="width:88px;padding:8px 10px;">
-        <button class="btn sm" style="margin-left:8px;" onclick="dpAddSavings()">Save</button>
+  // Money map donut — where the whole income goes
+  const mapSegs=[
+    {label:"Fixed bills", value:plan.fixed, color:'#8893a5'},
+    {label:"Savings", value:plan.save, color:'#20b57e'},
+    ...cats.map((c,i)=>({label:c.name, value:+c.planned||0, color:LIFE_COLORS[i%LIFE_COLORS.length]})),
+  ];
+  if(plan.unallocated>0.5) mapSegs.push({label:"Unallocated", value:plan.unallocated, color:'#c2c8d4'});
+  const mapCard = plan.income>0 ? `
+    <div class="card">
+      <div class="row" style="margin-bottom:10px;"><b>🗺️ Where your money goes</b></div>
+      <div class="life-mapwrap">
+        ${bDonut(mapSegs, bMoney(plan.income), "per month")}
+        ${bLegend(mapSegs)}
+      </div>
+      ${plan.unallocated<0?`<div class="small" style="margin-top:12px; color:var(--danger); font-weight:600;">⚠️ Your targets are ${bMoney(-plan.unallocated)} over what's left — trim a category or lower savings.</div>`:''}
+    </div>` : "";
+
+  // Savings goal — reframed to feel exciting, not anxious
+  const gemoji=bGoalEmoji(sv.label);
+  const nm=bNextMilestone();
+  let goalMsg;
+  if(sv.target>0 && sv.saved>=sv.target){ goalMsg=`🎉 You did it — your ${esc(sv.label)} is fully funded!`; }
+  else if(eta){ goalMsg=`${gemoji} You're on your way! Keep ${bMoney(sv.monthly)} flowing each month and this is <b>yours by ${eta}</b>.`; }
+  else { goalMsg=`Pick a monthly amount and I'll show you the exact month this becomes real. 💬`; }
+  const milestoneLine = (nm && nm.months) ? `<div class="life-nextms">🎯 Next milestone: <b>${nm.pct}%</b> (${bMoney(nm.amount)}) — about <b>${nm.months} month${nm.months===1?'':'s'}</b> away</div>` : "";
+  const goalCard=`
+    <div class="card life-goalcard">
+      <div class="life-goalhead">
+        <div class="life-goalemoji">${gemoji}</div>
+        <div class="life-goalttl"><div class="life-goalname">${esc(sv.label||"Savings goal")}</div><div class="life-goalsub">${bMoney(sv.saved)} saved of ${bMoney(sv.target)}</div></div>
+        <span class="grow"></span>
+        <div class="life-goalpct">${svPct}<span>%</span></div>
+      </div>
+      <div class="life-goalbar"><i style="width:${svPct}%;"></i><span class="ms" style="left:25%"></span><span class="ms" style="left:50%"></span><span class="ms" style="left:75%"></span></div>
+      <div class="life-goalmsg">${goalMsg}</div>
+      ${milestoneLine}
+      <div class="life-goalactions">
+        <input id="bSaveAdd" type="number" inputmode="decimal" placeholder="add $">
+        <button class="btn sm" onclick="dpAddSavings()">＋ Add to fund</button>
+        <button class="btn sm ghost" onclick="dpExtraIncome()">💰 Log extra income</button>
       </div>
     </div>`;
 
@@ -2299,10 +2378,26 @@ function renderBudget(){
       <p class="small muted" style="margin:12px 0 0;">Or tell your guide 💬 <i>"I spent $14 on lunch."</i></p>
     </div>`;
 
-  el.innerHTML = planCard + saveCard + catCard + recurCard + logCard +
+  el.innerHTML = goalCard + gaugeCard + mapCard + catCard + recurCard + logCard +
     `<div class="card life-editrow"><button class="dp-tiny" onclick="dpPlanWithGuide()">💬 Adjust plan with guide</button> <button class="dp-tiny" onclick="dpBudgetEdit()">✎ Edit basics</button></div>`;
 }
-function dpPlanWithGuide(){ go("chat"); const inp=document.getElementById("chatInput"); if(inp){ inp.value="Help me build (or adjust) my monthly budget plan — ask me what you need."; setTimeout(()=>{inp.focus(); if(typeof chatAutoGrow==="function") chatAutoGrow();},60); } }
+// The first savings milestone not yet reached (25/50/75/100%), with an ETA in months.
+function bNextMilestone(){
+  const s=state.budget.savings; const t=+s.target||0, saved=+s.saved||0, m=+s.monthly||0;
+  if(t<=0 || saved>=t) return null;
+  const marks=[0.25,0.5,0.75,1].map(f=>f*t);
+  const next=marks.find(a=>a>saved+0.01); if(next==null) return null;
+  return { pct:Math.round(next/t*100), amount:next, months: m>0?Math.max(1,Math.ceil((next-saved)/m)):null };
+}
+// Prefill the guide. On desktop keep the current tab (use the docked chat box); on phone open the Guide page.
+function promptGuide(text){
+  const desktop=window.matchMedia("(min-width:920px)").matches;
+  if(!desktop) go("chat");
+  const inp=document.getElementById("chatInput");
+  if(inp){ inp.value=text; setTimeout(()=>{ inp.focus(); if(typeof chatAutoGrow==="function") chatAutoGrow(); },60); }
+}
+function dpPlanWithGuide(){ promptGuide("Help me build (or adjust) my monthly budget plan — ask me what you need."); }
+function dpExtraIncome(){ promptGuide("I just got some extra income and want to put it to good use — ask me how much and help me decide what to do with it."); }
 function dpBudgetSetup(){
   const b=state.budget, g=id=>document.getElementById(id);
   b.income=parseFloat(g("bIncome").value)||0;
