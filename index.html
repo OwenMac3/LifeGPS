@@ -285,14 +285,16 @@
     .compare{grid-template-columns:1fr 1fr;}
 
     /* ---- Guide as its own FULL PAGE (when the Guide tab is selected) ---- */
+    /* Give the full-screen chat more room than the other pages */
+    body[data-tab="chat"] main{max-width:1080px;}
     #page-chat.active{
       min-height:calc(100vh - 76px); position:relative;
       display:flex; flex-direction:column;
     }
     #page-chat.active .chat-scroll{padding-bottom:12px;}
     #page-chat.active .chat-bar{
-      position:sticky; left:auto; transform:none; bottom:24px; width:auto;
-      max-width:840px; margin:20px auto 0; padding:8px 0;
+      position:sticky; left:auto; transform:none; bottom:24px;
+      width:auto; max-width:none; align-self:stretch; margin:20px 0 0; padding:8px 0;
       border-top:none; background:transparent;
     }
     #page-chat.active .msg{max-width:74%;}
