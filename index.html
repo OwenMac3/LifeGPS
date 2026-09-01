@@ -161,9 +161,11 @@
   .typing{letter-spacing:2px;color:var(--muted);animation:pulse 1.1s ease-in-out infinite;}
   @keyframes pulse{0%,100%{opacity:.35;}50%{opacity:1;}}
   .chat-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(66px + env(safe-area-inset-bottom));
-    width:100%;max-width:560px;padding:8px 16px 10px;display:flex;gap:9px;align-items:center;z-index:16;
+    width:100%;max-width:560px;padding:8px 16px 10px;display:flex;gap:9px;align-items:flex-end;z-index:16;
     background:linear-gradient(to top, var(--bg) 74%, transparent);}
-  .chat-bar input{flex:1;border-radius:22px;padding:12px 16px;background:var(--card);border:1px solid var(--line);}
+  .chat-bar textarea{flex:1;border-radius:22px;padding:12px 16px;background:var(--card);border:1px solid var(--line);
+    resize:none;line-height:1.35;max-height:132px;overflow-y:auto;font-family:inherit;font-size:15px;color:var(--text);
+    display:block;}
   .chat-bar .btn{border-radius:50%;width:46px;height:46px;padding:0;font-size:16px;flex:none;}
   .chip-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;}
   .chip{background:var(--chip);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:9px 13px;font-size:13px;font-weight:600;text-align:left;}
@@ -311,7 +313,7 @@
       padding:12px 14px calc(12px + env(safe-area-inset-bottom));
       border-top:1px solid var(--line); background:var(--card);
     }
-    #page-chat:not(.active) .chat-bar input{flex:1;}
+    #page-chat:not(.active) .chat-bar textarea{flex:1;}
     #page-chat:not(.active) .msg{max-width:90%;}
   }
 
@@ -586,7 +588,7 @@
         <div class="chip-row" id="chatChips"></div>
       </div>
       <div class="chat-bar">
-        <input id="chatInput" placeholder="Talk to your guide…" autocomplete="off" />
+        <textarea id="chatInput" placeholder="Talk to your guide…" rows="1" autocomplete="off"></textarea>
         <button class="btn" id="chatSend" aria-label="Send">➤</button>
       </div>
     </section>
@@ -1211,7 +1213,7 @@ function renderChat(){
 }
 async function sendChat(){
   const inp=document.getElementById("chatInput"); const text=inp.value.trim(); if(!text)return;
-  state.chat.push({role:"me", text:esc(text)}); inp.value="";
+  state.chat.push({role:"me", text:esc(text)}); inp.value=""; inp.style.height="auto";
   state.chat.push({role:"ai", text:'<span class="typing">●●●</span>', _temp:true});
   renderChat(); chatScrollBottom();
   let replyHtml;
@@ -1553,7 +1555,15 @@ document.getElementById("saveGoal").onclick=()=>{
   save(); f.style.display="none"; renderGoals(); renderToday(); renderStats(); flash("Goal saved ✓");
 };
 document.getElementById("chatSend").onclick=sendChat;
-document.getElementById("chatInput").onkeydown=e=>{ if(e.key==="Enter")sendChat(); };
+function chatAutoGrow(){
+  const inp=document.getElementById("chatInput"); if(!inp) return;
+  inp.style.height="auto";
+  inp.style.height=Math.min(inp.scrollHeight, 132)+"px";
+}
+document.getElementById("chatInput").oninput=chatAutoGrow;
+document.getElementById("chatInput").onkeydown=e=>{
+  if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); sendChat(); }   // Shift+Enter = newline
+};
 document.getElementById("routineEditToggle").onclick=()=>{
   routineEditMode=!routineEditMode;
   document.getElementById("routineEditToggle").textContent=routineEditMode?"Done":"Edit";
@@ -1678,7 +1688,7 @@ function dpRenderPicker(){
 }
 function dpSetTraveler(id){ state.traveler=id; save(); renderPlans(); }
 function dpSelectArea(i){ dpSel=i; renderPlans(); }
-function dpNewArea(){ go("chat"); const inp=document.getElementById("chatInput"); if(inp){ inp.value="I'd like to get better at "; setTimeout(()=>inp.focus(),60); } }
+function dpNewArea(){ go("chat"); const inp=document.getElementById("chatInput"); if(inp){ inp.value="I'd like to get better at "; setTimeout(()=>{inp.focus(); chatAutoGrow();},60); } }
 
 function dpJourneyHTML(plan){
   let h="";
@@ -1806,7 +1816,7 @@ function dpBack(id){ const p=planById(id); if(!p||p.cur<=0){ flash("Already at t
   p.cur--; const s=p.stages[p.cur]; s.mastered=Math.max(0,s.skills.length-1); s.sess=0; save(); renderPlans(); renderToday(); flash("↩ Moved back a stage — revisit anytime."); }
 function dpAdvance(id){ const p=planById(id); if(!p) return; dpActive=p; dpOpenWin(); }
 function dpRefresh(id){ dpOpenSession(id,'review'); }
-function dpEditRoutine(id){ const p=planById(id); go("chat"); const inp=document.getElementById("chatInput"); if(inp){ inp.value="Let's adjust my "+(p?p.title:"")+" practice routine — "; setTimeout(()=>inp.focus(),60); } }
+function dpEditRoutine(id){ const p=planById(id); go("chat"); const inp=document.getElementById("chatInput"); if(inp){ inp.value="Let's adjust my "+(p?p.title:"")+" practice routine — "; setTimeout(()=>{inp.focus(); chatAutoGrow();},60); } }
 
 /* ---- practice routines on the Routines sub-page ---- */
 function renderPractice(){
