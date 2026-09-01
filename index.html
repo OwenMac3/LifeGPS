@@ -490,6 +490,64 @@
   .dp-cll b{color:var(--text); font-weight:600;}
   .dp-rfoot{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:15px;}
   .dp-rfoot .fnote{color:var(--muted); font-size:12px;}
+
+  /* ---- Optional stage quiz ---- */
+  .dp-qq{margin:0 0 16px;}
+  .dp-qq-q{font-weight:600; font-size:14.5px; margin-bottom:9px; line-height:1.4;}
+  .dp-qopts{display:flex; flex-direction:column; gap:7px;}
+  .dp-qopt{text-align:left; padding:11px 13px; border-radius:11px; border:1px solid var(--line); background:var(--bg2); color:var(--text); font-size:14px; width:100%; transition:.12s;}
+  button.dp-qopt:hover{border-color:var(--accent);}
+  .dp-qopt.sel{border-color:var(--accent); background:var(--accent-soft); color:var(--accent); font-weight:600;}
+  .dp-qopt.res{cursor:default;}
+  .dp-qopt.res.right{border-color:var(--green); background:var(--green-soft); color:var(--green); font-weight:600;}
+  .dp-qopt.res.wrong{border-color:var(--danger); background:rgba(226,96,74,.12); color:var(--danger);}
+  .dp-qresult{text-align:center; margin:2px 0 16px;}
+  .dp-qscore{font-size:26px; font-weight:800;}
+  .dp-qmsg{color:var(--muted); font-size:13.5px; margin-top:3px;}
+  .dp-qweak{background:var(--bg2); border:1px solid var(--line); border-radius:12px; padding:11px 13px; font-size:13px; color:var(--muted); margin-bottom:16px; line-height:1.5;}
+  .dp-qweak b{color:var(--text);}
+
+  /* ---- Life tab (Budget + Health) ---- */
+  .life-bigbar{height:11px; border-radius:99px; background:var(--bg2); border:1px solid var(--line); overflow:hidden;}
+  .life-bigbar i{display:block; height:100%; background:var(--accent); border-radius:99px; transition:width .4s ease;}
+  .life-3up{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+  .life-4up{display:grid; grid-template-columns:repeat(4,1fr); gap:8px;}
+  .life-2up{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+  .life-plan{margin-top:10px;}
+  .life-planrow{display:flex; align-items:center; font-size:14.5px; padding:5px 0;}
+  .life-planrow.sub{color:var(--muted); font-size:13.5px; padding:3px 0;}
+  .life-planrow.total{border-top:1px solid var(--line); margin-top:6px; padding-top:9px; font-size:15px;}
+  .life-eta{font-size:13px; display:inline-block; line-height:1.5;}
+  .life-eta.good{color:var(--green); font-weight:600;}
+  .life-eta.warn{color:var(--amber); font-weight:600;}
+  .life-stat{background:var(--bg2); border:1px solid var(--line); border-radius:13px; padding:11px 10px; text-align:center;}
+  .life-stat .v{font-size:17px; font-weight:800; line-height:1.1;}
+  .life-stat .k{font-size:11.5px; color:var(--muted); margin-top:3px; text-transform:uppercase; letter-spacing:.03em;}
+  .life-savecard{background:linear-gradient(135deg, var(--accent-soft), var(--card));}
+  .life-catrow{display:flex; align-items:center; gap:10px; margin:9px 0;}
+  .life-catname{flex:0 0 92px; font-size:13px; font-weight:600;}
+  .life-catbar{flex:1; height:9px; border-radius:99px; background:var(--bg2); overflow:hidden;}
+  .life-catbar i{display:block; height:100%; background:var(--accent); border-radius:99px;}
+  .life-catval{flex:0 0 auto; font-size:12.5px; color:var(--muted); min-width:56px; text-align:right;}
+  .life-exp{display:flex; align-items:center; gap:9px; padding:9px 0; border-top:1px solid var(--line); font-size:13.5px;}
+  .life-exp-cat{font-weight:600;}
+  .life-exp-note{color:var(--muted); font-size:12.5px;}
+  .life-del{width:26px; height:26px; border-radius:8px; background:var(--bg2); color:var(--muted); font-size:12px; flex:0 0 auto; margin-left:6px;}
+  .life-del:hover{color:var(--danger); background:rgba(226,96,74,.12);}
+  .life-editrow{text-align:center; background:transparent; border:none; box-shadow:none; padding:0;}
+  .life-calwrap{display:flex; align-items:baseline; gap:12px; margin:10px 0;}
+  .life-calbig{font-size:32px; font-weight:800; line-height:1;}
+  .life-calbig span{font-size:14px; font-weight:600; color:var(--muted); margin-left:6px;}
+  .life-calnote{margin-left:auto; font-size:13px; font-weight:700; color:var(--green);}
+  .life-calnote.over{color:var(--danger);}
+  .life-macro{margin:11px 0;}
+  .life-macro-n{font-size:13px; font-weight:600;}
+  .life-bar2{height:8px; border-radius:99px; background:var(--bg2); border:1px solid var(--line); overflow:hidden; margin-top:5px;}
+  .life-bar2 i{display:block; height:100%; border-radius:99px; transition:width .4s ease;}
+  .life-meal{display:flex; align-items:center; gap:9px; padding:10px 0; border-top:1px solid var(--line);}
+  .life-meal:first-of-type{border-top:none;}
+  .life-meal-main{display:flex; flex-direction:column; gap:2px;}
+  .life-meal-main b{font-size:14px;}
 </style>
 
 <div class="wrap">
@@ -608,6 +666,18 @@
       <div class="card" id="goalProgress"></div>
     </section>
 
+    <!-- ===================== LIFE (Budget + Health) ===================== -->
+    <section class="page" id="page-life">
+      <h2 class="page-title">Life 💛</h2>
+      <p class="sub">Money and body — your guide helps you steady both over time.</p>
+      <div class="subnav" id="lifeNav">
+        <button type="button" data-life="budget" class="on">💰 Budget</button>
+        <button type="button" data-life="health">🍎 Health</button>
+      </div>
+      <div class="subpage active" id="life-budget"><div id="budgetBody"></div></div>
+      <div class="subpage" id="life-health"><div id="healthBody"></div></div>
+    </section>
+
     <!-- ===================== SETTINGS ===================== -->
     <section class="page" id="page-next">
       <h2 class="page-title">Settings ⚙️</h2>
@@ -681,6 +751,7 @@
   <button data-tab="today"><span class="ic">✓</span>Today</button>
   <button data-tab="chat" class="center active"><span class="ic">💬</span>Guide</button>
   <button data-tab="stats"><span class="ic">📊</span>Progress</button>
+  <button data-tab="life"><span class="ic">💛</span>Life</button>
   <button data-tab="next"><span class="ic">⚙️</span>Settings</button>
 </nav>
 <!-- Guided practice session -->
@@ -715,6 +786,19 @@
       <button class="btn ghost" onclick="dpCiMore()">I'd like more time</button>
       <button class="btn" onclick="dpCiGot()">I've got it 💪</button>
     </div>
+  </div>
+</div>
+
+<!-- Optional knowledge check before advancing a stage -->
+<div class="dp-modal" id="dpQuiz" hidden>
+  <div class="dp-card">
+    <div class="dp-top">
+      <div><div class="dp-eyebrow">🧭 Quick check</div><div class="dp-h" id="dpQuizTitle">Quick check</div></div>
+      <button class="dp-x" onclick="dpQuizClose()" aria-label="Close">✕</button>
+    </div>
+    <p class="dp-cibody" id="dpQuizIntro">A quick, no-pressure check before you move on. It won't hold you back — it just shows what's solid and what to revisit.</p>
+    <div id="dpQuizBody"></div>
+    <div class="dp-nav" id="dpQuizFoot"></div>
   </div>
 </div>
 
@@ -797,7 +881,30 @@ function seed(){
     overrides:{},        // overrides[date][goalId] = minutes  (one-day eased/raised target)
     traveler:"explorer", // chosen journey avatar (user-level)
     plans:[ seedGuitarPlan() ],   // development plans (the guide builds these)
+    budget: seedBudget(),         // Life tab · Budget
+    health: seedHealth(),         // Life tab · Health
     createdAt:start,
+  };
+}
+// Budget starts empty until the user (or guide) sets it up.
+function seedBudget(){
+  return {
+    setup:false,
+    currency:"$",
+    income:0,                 // monthly take-home
+    savings:{ label:"Savings goal", target:0, saved:0, monthly:0 },  // monthly = amount the plan sets aside each month
+    recurring:[],             // fixed monthly bills [{id, name, amount, category}] — auto-counted every month
+    categories:[],            // [{name, planned}] target monthly spend per VARIABLE category
+    expenses:[],              // [{id, date, amount, category, note}] variable spending logged
+  };
+}
+// Health starts empty until set up.
+function seedHealth(){
+  return {
+    setup:false,
+    calorieTarget:0,
+    macroTargets:{ protein:0, carbs:0, fat:0 },   // grams/day
+    meals:{},                                     // meals[YYYY-MM-DD] = [{id, name, cal, protein, carbs, fat}]
   };
 }
 // A starter development plan so the feature isn't empty on first run.
@@ -809,19 +916,39 @@ function seedGuitarPlan(){
     stages:[
       {icon:"🎵", k:"Stage 1", t:"Getting comfortable", mastered:3, sess:0,
         skills:[{n:"Tune & hold the guitar",est:3},{n:"Finger position",est:3},{n:"Read simple tab",est:4}],
-        video:"Your very first day with a guitar", vlen:"5 min"},
+        video:"Your very first day with a guitar", vlen:"5 min", videoUrl:"",
+        quiz:[
+          {q:"On a right-handed guitar, which hand frets the notes?", options:["The left hand","The right hand","Neither — you strum only"], answer:0},
+          {q:"In guitar tab, the numbers tell you…", options:["Which fret to press","How loud to play","The song's lyrics"], answer:0}
+        ]},
       {icon:"🎸", k:"Stage 2", t:"First chords & a scale", mastered:2, sess:3,
         skills:[{n:"Open chords: Em·Am·C·G",est:5},{n:"Clean chord changes",est:4},{n:"Am pentatonic scale",est:5}],
-        video:"Am pentatonic — the first scale to learn", vlen:"4 min"},
+        video:"Am pentatonic — the first scale to learn", vlen:"4 min", videoUrl:"",
+        quiz:[
+          {q:"How many notes per octave does the pentatonic scale have?", options:["Five","Seven","Three"], answer:0},
+          {q:"A 'clean' chord change means…", options:["Every note rings clearly right after switching","You strum as fast as possible","You mute all the strings"], answer:0}
+        ]},
       {icon:"🥁", k:"Stage 3", t:"Rhythm & strumming", mastered:0, sess:0,
         skills:[{n:"Downstroke timing",est:4},{n:"Common strum patterns",est:6},{n:"Play to a metronome",est:5}],
-        video:"How to strum in time — beginner guide", vlen:"6 min"},
+        video:"How to strum in time — beginner guide", vlen:"6 min", videoUrl:"",
+        quiz:[
+          {q:"A metronome mainly helps you practice…", options:["Keeping steady time","Tuning the guitar","Reading sheet music"], answer:0},
+          {q:"A downstroke strums…", options:["From the low strings toward the high strings","Only the highest string","Nothing — it mutes"], answer:0}
+        ]},
       {icon:"🎼", k:"Stage 4", t:"Barre chords & CAGED", mastered:0, sess:0,
         skills:[{n:"The F barre chord",est:8},{n:"CAGED shapes",est:7},{n:"Move chords up the neck",est:6}],
-        video:"The F barre chord, finally", vlen:"7 min"},
+        video:"The F barre chord, finally", vlen:"7 min", videoUrl:"",
+        quiz:[
+          {q:"A barre chord uses one finger to…", options:["Press several strings across a single fret","Play just one note","Tune the guitar"], answer:0},
+          {q:"The CAGED system is built from how many open-chord shapes?", options:["Five","Four","Seven"], answer:0}
+        ]},
       {icon:"⭐", k:"Stage 5", t:"Your first full song", mastered:0, sess:0,
         skills:[{n:"Learn a 4-chord song",est:5},{n:"Play it start to finish",est:6},{n:"Sing + play together",est:8}],
-        video:"Play your first 4-chord song", vlen:"8 min"},
+        video:"Play your first 4-chord song", vlen:"8 min", videoUrl:"",
+        quiz:[
+          {q:"Playing a song start to finish mainly builds…", options:["Memory of the whole piece and endurance","Only speed","Only tuning skill"], answer:0},
+          {q:"Singing while playing gets easier once you can…", options:["Play the chords almost automatically","Read standard notation","Play extremely fast"], answer:0}
+        ]},
     ],
   };
 }
@@ -844,10 +971,40 @@ function normalize(s){
     if(typeof p.cur!=="number") p.cur=0;
     p.stages=(p.stages||[]).map(st=>({
       icon:st.icon||"⭐", k:st.k||"Stage", t:st.t||"", video:st.video||"", vlen:st.vlen||"4 min",
+      videoUrl:st.videoUrl||"",
       mastered:typeof st.mastered==="number"?st.mastered:0, sess:typeof st.sess==="number"?st.sess:0,
       skills:(st.skills||[]).map(sk=> typeof sk==="string" ? {n:sk,est:5} : {n:sk.n||"",est:sk.est||5}),
+      quiz:Array.isArray(st.quiz)?st.quiz.map(q=>({q:q.q||"", options:Array.isArray(q.options)?q.options:[], answer:typeof q.answer==="number"?q.answer:0})):[],
     }));
   });
+  // Backfill the starter guitar plan (from older saves) with quiz + video data added in later versions.
+  const gp=s.plans.find(p=>p.id==="plan_guitar");
+  if(gp){ const seedgp=seedGuitarPlan();
+    gp.stages.forEach((st,i)=>{ const src=seedgp.stages[i]; if(!src) return;
+      if(!Array.isArray(st.quiz)||!st.quiz.length) st.quiz=src.quiz;
+      if(!st.videoUrl) st.videoUrl=src.videoUrl||""; }); }
+  // Budget module (new) — see Life tab.
+  if(!s.budget || typeof s.budget!=="object") s.budget=seedBudget();
+  else {
+    if(typeof s.budget.income!=="number") s.budget.income=0;
+    if(typeof s.budget.currency!=="string") s.budget.currency="$";
+    if(!s.budget.savings || typeof s.budget.savings!=="object") s.budget.savings={label:"Savings goal", target:0, saved:0, monthly:0};
+    if(typeof s.budget.savings.monthly!=="number") s.budget.savings.monthly=0;
+    if(!Array.isArray(s.budget.recurring)) s.budget.recurring=[];
+    s.budget.recurring=s.budget.recurring.map(r=>({ id:r.id||rid(), name:String(r.name||"Bill"), amount:Math.max(0,parseFloat(r.amount)||0), category:String(r.category||"Bills") }));
+    if(!Array.isArray(s.budget.categories)) s.budget.categories=[];
+    s.budget.categories=s.budget.categories.map(c=>(typeof c==="string")?{name:c,planned:0}:{name:String(c.name||""),planned:Math.max(0,parseFloat(c.planned)||0)}).filter(c=>c.name);
+    if(!Array.isArray(s.budget.expenses)) s.budget.expenses=[];
+    s.budget.setup=!!s.budget.setup;
+  }
+  // Health module (new) — see Life tab.
+  if(!s.health || typeof s.health!=="object") s.health=seedHealth();
+  else {
+    if(typeof s.health.calorieTarget!=="number") s.health.calorieTarget=0;
+    if(!s.health.macroTargets || typeof s.health.macroTargets!=="object") s.health.macroTargets={protein:0,carbs:0,fat:0};
+    if(!s.health.meals || typeof s.health.meals!=="object") s.health.meals={};
+    s.health.setup=!!s.health.setup;
+  }
   // Upgrade goals to the metric model (time / count / binary).
   s.goals=(s.goals||[]).map(g=>{
     if(!g.metric) g.metric="time";
@@ -898,7 +1055,7 @@ async function onSignedIn(user){
   }else{
     try{ await sb.from("lifegps_state").upsert({ user_id:user.id, data:state, updated_at:new Date().toISOString() }); }catch(e){}  // first login → seed the cloud from this device
   }
-  renderGoals(); renderToday(); renderStats(); renderChat();
+  renderGoals(); renderToday(); renderStats(); renderChat(); if(typeof renderLife==="function") renderLife();
   updateAccountUI(user);
   if(typeof applyTheme==="function") applyTheme();
 }
@@ -1301,6 +1458,17 @@ window.Assistant = (function(){
       openToDos: state.tasks.filter(x=>!x.done).map(x=>({ id:x.id, label:x.label })),
       developmentPlans: (state.plans||[]).map(p=>({ id:p.id, title:p.title, goal:p.goal,
         stage:(p.cur<p.stages.length ? ("Stage "+(p.cur+1)+"/"+p.stages.length+": "+(p.stages[p.cur]&&p.stages[p.cur].t)) : "complete") })),
+      budget: (function(){ const b=state.budget; if(!b.setup) return {setup:false};
+        const plan=bPlan(), byCat=bVarSpentByCat();
+        return { setup:true, currency:b.currency, monthlyIncome:b.income, month:bMonth(),
+                 fixedBills:(b.recurring||[]).map(r=>({name:r.name, amount:r.amount, category:r.category})), fixedBillsTotal:Math.round(plan.fixed),
+                 monthlySavings:b.savings.monthly, leftToSpendAfterBillsAndSavings:Math.round(plan.toSpend),
+                 categoryTargets:(b.categories||[]).map(c=>({name:c.name, planned:c.planned, spentThisMonth:Math.round(byCat[c.name]||0)})),
+                 unallocated:Math.round(plan.unallocated), variableSpentThisMonth:Math.round(bVarSpentTotal()),
+                 savings:{ label:b.savings.label, target:b.savings.target, saved:b.savings.saved, perMonth:b.savings.monthly, monthsToGoal:bMonthsToGoal() } }; })(),
+      health: (function(){ const h=state.health; if(!h.setup) return {setup:false};
+        const t=hTotals(); return { setup:true, calorieTarget:h.calorieTarget, macroTargets:h.macroTargets,
+                 todaySoFar:{ cal:Math.round(t.cal), protein:Math.round(t.protein), carbs:Math.round(t.carbs), fat:Math.round(t.fat) } }; })(),
     };
   }
   function systemPrompt(){
@@ -1336,6 +1504,29 @@ window.Assistant = (function(){
       "- Keep it TIGHT so the JSON fits: 4–6 stages, 2–4 skills each, short names. After building, your reply should be one",
       "  warm sentence telling them it's ready under Goals → Development Plans. Never duplicate a plan they already have (see plans above).",
       "",
+      "BUDGET — build a PLAN, not just a tracker (Life tab · a core feature):",
+      "- The goal: turn income into a monthly PLAN where reaching the savings goal is inevitable if they follow it. The math is",
+      "  income − fixed bills − monthly savings = money left for variable spending categories.",
+      "- SETUP INTERVIEW: when the user wants a budget (or budget.setup is false), run a short, friendly interview — ask a few",
+      "  questions across one or two turns, NOT all at once: (1) monthly take-home income; (2) their recurring/FIXED bills and",
+      "  amounts (rent, phone, subscriptions, insurance, transit); (3) what they're saving for, the total, and how much they",
+      "  want to save each month; (4) roughly how they want to spend the rest (which categories matter). Take no action until you",
+      "  have enough, then call set_budget with the FULL plan: income, savingsLabel, savingsTarget, savingsMonthly, recurring:[{name,amount,category}],",
+      "  and categories:[{name,planned}] — set each category's 'planned' MONTHLY TARGET so the targets fit within income minus bills minus savings.",
+      "- If income minus bills minus savings doesn't cover their category wishes, say so and propose adjustments (trim a category, or",
+      "  lower monthly savings a little) so the plan actually balances. Then confirm the ETA (e.g. 'you'll hit $5,000 by Mar 2027').",
+      "- ADAPT ANYTIME: change fixed bills with set_recurring:{items:[{name,amount,category}]} (send the full updated list), change",
+      "  targets with set_categories:{categories:[{name,planned}]}, or adjust the plan with set_budget. Log day-to-day spending with",
+      "  add_expense (amount, category, note) into a VARIABLE category (not a fixed bill). Use add_to_savings when they set money aside.",
+      "- The snapshot's budget block shows their current income, fixed bills, targets vs spent, and months-to-goal — use it. Offer brief,",
+      "  practical encouragement; never give regulated investment advice.",
+      "",
+      "HEALTH — meal tracking (Life tab · a core feature):",
+      "- When the user says what they ate ('I had 2 eggs, toast and a coffee'), ESTIMATE the calories and macros from your",
+      "  knowledge and log it with log_meal (name, cal, protein, carbs, fat in grams). Estimate reasonably; note it's approximate.",
+      "- If health.setup is false, you may suggest sensible daily targets and set them with set_calorie_target. Keep it supportive,",
+      "  never shaming about food. You are not a medical professional — for medical concerns, suggest a doctor.",
+      "",
       "GOAL MEASURE TYPES — pick the one that truly fits, do NOT force a time value on everything:",
       "- 'time'  → measured in minutes (read 20 min, meditate 10 min). unit is 'min'.",
       "- 'count' → measured in a countable unit (20 pushups, 20 pages, 8 glasses). set unit to that noun.",
@@ -1353,6 +1544,16 @@ window.Assistant = (function(){
       '- {"type":"add_plan","emoji":"🎸","title":"Learn guitar","goal":"Play a full song at an open mic","eta":"~6 months","stages":[{"name":"Getting comfortable","icon":"🎵","video":"Your first day with a guitar","videoLen":"5 min","skills":[{"skill":"Tune & hold the guitar","sessions":3},{"skill":"Basic finger placement","sessions":4}]},{"name":"First chords","icon":"🎶","video":"4 beginner chords","videoLen":"6 min","skills":[{"skill":"Open chords Em, Am, C, G","sessions":5},{"skill":"Clean chord changes","sessions":4}]}]}  build a step-by-step development plan (a skill road). Use this for "learn/get better at" requests.',
       '- {"type":"set_day_target","id":"<goal id>","day":"tomorrow"|"today"|"YYYY-MM-DD","amount":<int>}  ease/raise a time/count goal for ONE day only',
       '- {"type":"set_target","id":"<goal id>","amount":<int>}  change a time/count goal target for ALL future days (lasting change only)',
+      '- {"type":"set_budget","income":<monthly take-home>,"savingsLabel":"Trip fund","savingsTarget":<int>,"savingsMonthly":<save per month>,"recurring":[{"name":"Rent","amount":1200,"category":"Housing"},{"name":"Netflix","amount":16,"category":"Subscriptions"}],"categories":[{"name":"Food","planned":400},{"name":"Fun","planned":150}]}  build/adjust the full monthly budget PLAN',
+      '- {"type":"set_recurring","items":[{"name":"Rent","amount":1200,"category":"Housing"}]}  replace the full list of fixed monthly bills',
+      '- {"type":"set_categories","categories":[{"name":"Food","planned":400},{"name":"Transport","planned":120}]}  set monthly spend TARGETS per variable category',
+      '- {"type":"add_expense","amount":<number>,"category":"Food","note":"lunch"}  log one VARIABLE expense (today unless you set date YYYY-MM-DD)',
+      '- {"type":"add_to_savings","amount":<number>}  move money into the savings goal',
+      '- {"type":"set_calorie_target","calories":<int>,"protein":<g>,"carbs":<g>,"fat":<g>}  set daily nutrition targets',
+      '- {"type":"log_meal","name":"2 eggs & toast","cal":<int>,"protein":<g>,"carbs":<g>,"fat":<g>}  log a meal you ESTIMATED (today unless date given)',
+      "",
+      "For add_plan you MAY also give each stage a real 'videoUrl' (a specific YouTube watch link you're confident exists;",
+      "otherwise omit it and the app makes a working search link) and a short 'quiz':[{\"q\":\"...\",\"options\":[\"a\",\"b\",\"c\"],\"answer\":<index of correct>}] (2-3 questions) used as an optional knowledge check.",
       "",
       "CRITICAL: 'take it easy tomorrow' / 'just today' = set_day_target (one day only). Use set_target ONLY for lasting",
       "changes ('from now on', 'going forward'). Never lower every future day when the user meant a single day.",
@@ -1422,6 +1623,12 @@ window.Assistant = (function(){
               : {n:String(sk.skill||sk.n||sk.name||"").trim(), est:Math.max(1,parseInt(sk.sessions!=null?sk.sessions:sk.est)||4)}
           ).filter(x=>x.n),
           video:String(st.video||("A beginner's guide")), vlen:String(st.videoLen||st.vlen||"5 min"),
+          videoUrl:(typeof st.videoUrl==="string"&&/^https?:\/\//i.test(st.videoUrl))?st.videoUrl:"",
+          quiz:(Array.isArray(st.quiz)?st.quiz:[]).slice(0,4).map(q=>({
+            q:String(q.q||q.question||"").trim(),
+            options:(Array.isArray(q.options)?q.options:[]).slice(0,4).map(o=>String(o)),
+            answer:Math.max(0,parseInt(q.answer!=null?q.answer:0)||0),
+          })).filter(q=>q.q&&q.options.length>=2),
         })).filter(st=>st.skills.length);
         if(stages.length){
           state.plans.push({ id:"plan_"+Date.now()+"_"+Math.floor(Math.random()*1000),
@@ -1437,8 +1644,55 @@ window.Assistant = (function(){
           state.overrides[dd][a.id]=Math.max(0,parseInt(amt)||0); }
       }
       else if(a.type==="set_target" && a.id){ const g=state.goals.find(x=>x.id===a.id); if(g && !isBinary(g)) g.target=Math.max(0,parseInt(amt)||goalTarget(g)); }
+      // ---- Life · Budget ----
+      else if(a.type==="set_budget"){
+        const b=state.budget;
+        if(a.currency) b.currency=String(a.currency).slice(0,3);
+        if(a.income!=null) b.income=Math.max(0,parseFloat(a.income)||0);
+        if(a.savingsLabel!=null) b.savings.label=String(a.savingsLabel);
+        if(a.savingsTarget!=null) b.savings.target=Math.max(0,parseFloat(a.savingsTarget)||0);
+        if(a.savingsSaved!=null) b.savings.saved=Math.max(0,parseFloat(a.savingsSaved)||0);
+        if(a.savingsMonthly!=null) b.savings.monthly=Math.max(0,parseFloat(a.savingsMonthly)||0);
+        if(Array.isArray(a.categories)) b.categories=a.categories.map(c=>(typeof c==="string")?{name:c,planned:0}:{name:String(c.name||""),planned:Math.max(0,parseFloat(c.planned)||0)}).filter(c=>c.name);
+        if(Array.isArray(a.recurring)) b.recurring=a.recurring.map(r=>({ id:rid(), name:String(r.name||"Bill"), amount:Math.max(0,parseFloat(r.amount)||0), category:String(r.category||"Bills") })).filter(r=>r.amount>0);
+        b.setup=true;
+      }
+      else if(a.type==="set_recurring" && Array.isArray(a.items)){
+        state.budget.recurring=a.items.map(r=>({ id:rid(), name:String(r.name||"Bill"), amount:Math.max(0,parseFloat(r.amount)||0), category:String(r.category||"Bills") })).filter(r=>r.amount>0);
+        state.budget.setup=true;
+      }
+      else if(a.type==="set_categories" && Array.isArray(a.categories)){
+        state.budget.categories=a.categories.map(c=>(typeof c==="string")?{name:c,planned:0}:{name:String(c.name||""),planned:Math.max(0,parseFloat(c.planned)||0)}).filter(c=>c.name);
+        state.budget.setup=true;
+      }
+      else if(a.type==="add_expense" && a.amount!=null){
+        state.budget.expenses.push({ id:rid(), date:(/^\d{4}-\d{2}-\d{2}$/.test(a.date||"")?a.date:d),
+          amount:Math.max(0,parseFloat(a.amount)||0), category:String(a.category||"Other"), note:String(a.note||"") });
+        state.budget.setup=true;
+      }
+      else if(a.type==="add_to_savings" && a.amount!=null){
+        state.budget.savings.saved=Math.max(0,(state.budget.savings.saved||0)+(parseFloat(a.amount)||0));
+      }
+      // ---- Life · Health ----
+      else if(a.type==="set_calorie_target"){
+        const h=state.health;
+        if(a.calories!=null) h.calorieTarget=Math.max(0,parseInt(a.calories)||0);
+        h.macroTargets={ protein:Math.max(0,parseInt(a.protein!=null?a.protein:h.macroTargets.protein)||0),
+                         carbs:Math.max(0,parseInt(a.carbs!=null?a.carbs:h.macroTargets.carbs)||0),
+                         fat:Math.max(0,parseInt(a.fat!=null?a.fat:h.macroTargets.fat)||0) };
+        h.setup=true;
+      }
+      else if(a.type==="log_meal" && a.name){
+        const dd=(/^\d{4}-\d{2}-\d{2}$/.test(a.date||"")?a.date:d);
+        if(!state.health.meals[dd]) state.health.meals[dd]=[];
+        state.health.meals[dd].push({ id:rid(), name:String(a.name),
+          cal:Math.max(0,parseFloat(a.cal!=null?a.cal:a.calories)||0),
+          protein:Math.max(0,parseFloat(a.protein)||0), carbs:Math.max(0,parseFloat(a.carbs)||0), fat:Math.max(0,parseFloat(a.fat)||0) });
+        state.health.setup=true;
+      }
     });
     save();
+    if(typeof renderLife==="function") renderLife();
   }
   async function aiRespond(userText){
     const res=await fetch(AI_BACKEND_URL,{ method:"POST", headers:{"content-type":"application/json"},
@@ -1511,14 +1765,14 @@ function renderHeat(){
   }
 }
 
-const pages={goals:"page-goals",today:"page-today",chat:"page-chat",stats:"page-stats",next:"page-next"};
+const pages={goals:"page-goals",today:"page-today",chat:"page-chat",stats:"page-stats",life:"page-life",next:"page-next"};
 function go(tab){
   Object.entries(pages).forEach(([k,id])=>document.getElementById(id).classList.toggle("active",k===tab));
   document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
   // Tag the body so CSS knows whether the Guide is the full page or the docked box.
   document.body.dataset.tab = tab;
   window.scrollTo({top:0});
-  if(tab==="goals")renderGoals(); if(tab==="today")renderToday(); if(tab==="stats")renderStats();
+  if(tab==="goals")renderGoals(); if(tab==="today")renderToday(); if(tab==="stats")renderStats(); if(tab==="life")renderLife();
   // Keep the Guide up to date whether it's the full page or the small docked box.
   renderChat(); chatScrollBottom();
   if(tab==="chat"){ setTimeout(()=>document.getElementById("chatInput").focus(),50); }
@@ -1643,7 +1897,7 @@ document.getElementById("resetYes").onclick=async ()=>{
     try{ await sb.from("lifegps_state").upsert({ user_id:currentUser.id, data:state, updated_at:new Date().toISOString() }); }catch(e){}
   }
   _resetConfirm.style.display="none";
-  renderGoals(); renderToday(); renderStats(); renderChat();
+  renderGoals(); renderToday(); renderStats(); renderChat(); renderLife();
   applyTheme();
   go("today"); flash("App reset ✓");
 };
@@ -1714,7 +1968,7 @@ function dpCardHTML(plan){
   const skills=s.skills.map((k,i)=>{
     if(i<s.mastered) return `<li class="done"><span class="dp-box"></span><span class="lbl">${esc(k.n)}</span><span class="dp-tagm">Mastered</span></li>`;
     if(i===curIdx){ const pct=Math.min(100,Math.round((s.sess/k.est)*100));
-      return `<li class="now"><span class="dp-box ring"></span><div class="dp-nowbody"><div class="dp-nowtop"><span class="lbl">${esc(k.n)}</span><span class="dp-pill">Today · 10 min</span></div><div class="dp-ingrain"><div class="dp-ingtop"><span>Ingraining — ${s.sess} of ${k.est} sessions</span><span>~${k.est} to make it stick</span></div><div class="dp-bar2"><i style="width:${pct}%"></i></div></div><a class="dp-vidlink" href="#" onclick="return dpVid(event)">▶ ${esc(s.video)} · ${esc(s.vlen)}</a></div></li>`;
+      return `<li class="now"><span class="dp-box ring"></span><div class="dp-nowbody"><div class="dp-nowtop"><span class="lbl">${esc(k.n)}</span><span class="dp-pill">Today · 10 min</span></div><div class="dp-ingrain"><div class="dp-ingtop"><span>Ingraining — ${s.sess} of ${k.est} sessions</span><span>~${k.est} to make it stick</span></div><div class="dp-bar2"><i style="width:${pct}%"></i></div></div><a class="dp-vidlink" href="${dpVideoUrl(s)}" target="_blank" rel="noopener noreferrer">▶ ${esc(s.video)} · ${esc(s.vlen)}</a></div></li>`;
     }
     return `<li class="up"><span class="dp-box"></span><span class="lbl">${esc(k.n)}</span><span class="dp-tagm up">~${k.est} sessions</span></li>`;
   }).join("");
@@ -1738,7 +1992,7 @@ function dpBuildSteps(plan,mode){
   const warm={t:"Warm-up",m:5,d:"Ease in — loosen up and get moving."};
   const refresh={t:"Refresh",m:8,d:"Revisit what you already know: "+(done.length?done.join(" · "):"your earlier basics")+"."};
   if(mode==='review') return [warm,refresh];
-  return [warm,refresh,{t:"Today's focus",m:12,d:cur.n+" — slow and deliberate.",video:s.video,vlen:s.vlen},{t:"Free play",m:5,d:"Play freely and enjoy it — no rules."}];
+  return [warm,refresh,{t:"Today's focus",m:12,d:cur.n+" — slow and deliberate.",video:s.video,vlen:s.vlen,videoUrl:s.videoUrl},{t:"Free play",m:5,d:"Play freely and enjoy it — no rules."}];
 }
 function dpOpenSession(planId,mode){
   const p=planById(planId); if(!p||p.cur>=p.stages.length){ flash("This plan is complete 🎉"); return; }
@@ -1755,7 +2009,7 @@ function dpRenderSession(){
   document.getElementById("dpSesTitle").textContent=cur.t;
   document.getElementById("dpSesTimer").textContent=dpFmt(cur.m);
   document.getElementById("dpSesDo").textContent=cur.d;
-  document.getElementById("dpSesVideo").innerHTML=cur.video?`<a class="dp-vid" href="#" onclick="return dpVid(event)">▶ ${esc(cur.video)} · ${esc(cur.vlen)}</a>`:"";
+  document.getElementById("dpSesVideo").innerHTML=cur.video?`<a class="dp-vid" href="${dpVideoUrl(cur)}" target="_blank" rel="noopener noreferrer">▶ ${esc(cur.video)} · ${esc(cur.vlen)}</a>`:"";
   document.getElementById("dpSesSteps").innerHTML=steps.map((st,x)=>`<div class="dp-step ${x===i?'active':(x<i?'past':'')}"><span class="n">${x<i?'✓':x+1}</span><span class="sl">${esc(st.t)}</span><span class="mm">${st.m} min</span></div>`).join("");
   document.getElementById("dpSesPrev").disabled=i===0;
   document.getElementById("dpSesNext").textContent=(i>=steps.length-1)?'Finish ✓':'Next step →';
@@ -1774,7 +2028,14 @@ function dpFinishSession(){
   else if(sk) flash(`Logged — ${sk.n}: ${s.sess} of ${sk.est} sessions`);
 }
 function dpAskGuide(){ flash("Your guide chat is one tap away 💬"); }
-function dpVid(e){ if(e) e.preventDefault(); flash("In the real app this opens a hand-picked video ▶"); return false; }
+// Resolve a stage's recommended video to a real, always-working link.
+// Uses the guide's specific pick (videoUrl) when present, else a YouTube search of the title.
+function dpVideoUrl(st){
+  const url=st&&st.videoUrl;
+  if(url && /^https?:\/\//i.test(url)) return url;
+  const q=encodeURIComponent(((st&&st.video)||"how to")+" tutorial");
+  return "https://www.youtube.com/results?search_query="+q;
+}
 
 /* ---- mastery check-in + little win ---- */
 function dpOpenCheckin(){
@@ -1816,7 +2077,52 @@ function dpConfetti(){
 }
 function dpBack(id){ const p=planById(id); if(!p||p.cur<=0){ flash("Already at the first stage."); return; }
   p.cur--; const s=p.stages[p.cur]; s.mastered=Math.max(0,s.skills.length-1); s.sess=0; save(); renderPlans(); renderToday(); flash("↩ Moved back a stage — revisit anytime."); }
-function dpAdvance(id){ const p=planById(id); if(!p) return; dpActive=p; dpOpenWin(); }
+/* ---- optional stage quiz (shown when jumping ahead manually) ---- */
+let dpQuizState=null;
+function dpAdvance(id){
+  const p=planById(id); if(!p) return; dpActive=p;
+  const s=p.stages[p.cur];
+  if(s && Array.isArray(s.quiz) && s.quiz.length){ dpStartQuiz(); }   // offer the check first
+  else dpOpenWin();                                                    // no quiz data → straight to the win
+}
+function dpStartQuiz(){
+  const s=dpActive.stages[dpActive.cur];
+  dpQuizState={ s, answers:s.quiz.map(()=>null), graded:false };
+  document.getElementById("dpQuiz").hidden=false;
+  dpRenderQuiz();
+}
+function dpQuizScore(){ let c=0; dpQuizState.s.quiz.forEach((q,i)=>{ if(dpQuizState.answers[i]===q.answer) c++; }); return c; }
+function dpRenderQuiz(){
+  const st=dpQuizState, s=st.s, quiz=s.quiz;
+  document.getElementById("dpQuizTitle").textContent="Quick check — "+s.k;
+  const body=document.getElementById("dpQuizBody"), foot=document.getElementById("dpQuizFoot"), intro=document.getElementById("dpQuizIntro");
+  if(!st.graded){
+    intro.style.display="";
+    body.innerHTML=quiz.map((q,qi)=>`<div class="dp-qq">
+        <div class="dp-qq-q">${qi+1}. ${esc(q.q)}</div>
+        <div class="dp-qopts">${q.options.map((o,oi)=>`<button type="button" class="dp-qopt ${st.answers[qi]===oi?'sel':''}" onclick="dpQuizPick(${qi},${oi})">${esc(o)}</button>`).join("")}</div>
+      </div>`).join("");
+    foot.innerHTML=`<button class="btn ghost" onclick="dpQuizSkip()">Skip &amp; advance</button><button class="btn" onclick="dpQuizGrade()">Check answers</button>`;
+  } else {
+    intro.style.display="none";
+    const total=quiz.length, correct=dpQuizScore(), pct=Math.round(correct/total*100);
+    const weak=quiz.filter((q,i)=>st.answers[i]!==q.answer);
+    const msg = pct>=80 ? "Solid — you clearly know this stage. 🎉" : pct>=50 ? "Good enough to move on — just brush up the misses." : "Worth another look before you rely on it — but it's your call.";
+    let head=`<div class="dp-qresult"><div class="dp-qscore">${correct}/${total} · ${pct}%</div><div class="dp-qmsg">${msg}</div></div>`;
+    if(weak.length){ head+=`<div class="dp-qweak"><b>Worth revisiting:</b> ${weak.map(q=>esc(q.q.replace(/[?].*$/,'').trim())).join(" · ")}</div>`; }
+    body.innerHTML=head+quiz.map((q,qi)=>{
+      const ok=st.answers[qi]===q.answer;
+      return `<div class="dp-qq graded"><div class="dp-qq-q">${ok?'✅':'❌'} ${qi+1}. ${esc(q.q)}</div>
+        <div class="dp-qopts">${q.options.map((o,oi)=>{ let c=''; if(oi===q.answer) c='right'; else if(oi===st.answers[qi]) c='wrong'; return `<div class="dp-qopt res ${c}">${esc(o)}</div>`; }).join("")}</div></div>`;
+    }).join("");
+    foot.innerHTML=`<button class="btn ghost" onclick="dpQuizClose()">Keep practicing</button><button class="btn" onclick="dpQuizContinue()">Advance anyway →</button>`;
+  }
+}
+function dpQuizPick(qi,oi){ if(dpQuizState.graded) return; dpQuizState.answers[qi]=oi; dpRenderQuiz(); }
+function dpQuizGrade(){ dpQuizState.graded=true; dpRenderQuiz(); }
+function dpQuizSkip(){ document.getElementById("dpQuiz").hidden=true; dpOpenWin(); }
+function dpQuizContinue(){ document.getElementById("dpQuiz").hidden=true; dpOpenWin(); }
+function dpQuizClose(){ document.getElementById("dpQuiz").hidden=true; }
 function dpRefresh(id){ dpOpenSession(id,'review'); }
 function dpEditRoutine(id){ const p=planById(id); go("chat"); const inp=document.getElementById("chatInput"); if(inp){ inp.value="Let's adjust my "+(p?p.title:"")+" practice routine — "; setTimeout(()=>{inp.focus(); chatAutoGrow();},60); } }
 
@@ -1844,6 +2150,277 @@ function dpPracticeCard(p){
   </div>`;
 }
 
+/* ============================================================
+   LIFE tab — Budget + Health (front-end module)
+   ============================================================ */
+function renderLife(){ renderBudget(); renderHealth(); }
+function goLife(name){
+  document.querySelectorAll("#lifeNav button").forEach(b=>b.classList.toggle("on",b.dataset.life===name));
+  ["budget","health"].forEach(k=>{ const el=document.getElementById("life-"+k); if(el) el.classList.toggle("active",k===name); });
+  window.scrollTo({top:0});
+}
+document.querySelectorAll("#lifeNav button").forEach(b=>b.onclick=()=>goLife(b.dataset.life));
+
+/* ---------- Budget (a PLAN, not just a tracker) ---------- */
+const BUDGET_CATS=["Food","Transport","Fun","Health","Shopping","Groceries","Eating out","Other"];
+function bMoney(n){ const b=state.budget; const v=Math.round((+n||0)*100)/100; return (b.currency||"$")+v.toLocaleString(undefined,{maximumFractionDigits:2}); }
+function bMonth(){ return todayStr().slice(0,7); }
+function bMonthExpenses(){ const m=bMonth(); return (state.budget.expenses||[]).filter(e=>String(e.date||"").slice(0,7)===m); }
+function bVarSpentByCat(){ const map={}; bMonthExpenses().forEach(e=>{ const c=e.category||"Other"; map[c]=(map[c]||0)+(+e.amount||0); }); return map; }
+function bRecurringTotal(){ return (state.budget.recurring||[]).reduce((s,r)=>s+(+r.amount||0),0); }
+function bPlannedTotal(){ return (state.budget.categories||[]).reduce((s,c)=>s+(+c.planned||0),0); }
+function bVarSpentTotal(){ return bMonthExpenses().reduce((s,e)=>s+(+e.amount||0),0); }
+// The plan math: income − fixed bills − monthly savings = money for variable categories.
+function bPlan(){
+  const b=state.budget, income=+b.income||0, fixed=bRecurringTotal(), save=+b.savings.monthly||0;
+  const toSpend=income-fixed-save, planned=bPlannedTotal();
+  return { income, fixed, save, toSpend, planned, unallocated:toSpend-planned };
+}
+function bMonthsToGoal(){ const s=state.budget.savings; if((+s.monthly||0)<=0 || (+s.target||0)<=(+s.saved||0)) return null; return Math.ceil((s.target-s.saved)/s.monthly); }
+function bGoalEta(){ const m=bMonthsToGoal(); if(m==null) return null; const d=new Date(); d.setMonth(d.getMonth()+m); return d.toLocaleDateString(undefined,{month:"short",year:"numeric"}); }
+
+function renderBudget(){
+  const el=document.getElementById("budgetBody"); if(!el) return;
+  const b=state.budget;
+  if(!b.setup){
+    el.innerHTML=`
+      <div class="card life-savecard">
+        <div class="row" style="margin-bottom:6px;"><b>💰 Build your budget plan</b></div>
+        <p class="small muted" style="margin:0 0 14px;">Your guide will ask a few questions — income, fixed bills, what you're saving for — and turn it into a real monthly plan where hitting your goal is just a matter of following it.</p>
+        <button class="btn block" onclick="dpPlanWithGuide()">💬 Plan my budget with the guide</button>
+      </div>
+      <div class="card">
+        <div class="row" style="margin-bottom:6px;"><b>…or start with the basics</b></div>
+        <p class="small muted" style="margin:0 0 12px;">Enter a few numbers now — the guide can fill in bills and category targets later.</p>
+        <div class="field"><label class="fld">Monthly take-home income</label><input id="bIncome" type="number" inputmode="decimal" placeholder="e.g. 3000" value="${b.income||""}"></div>
+        <div class="field"><label class="fld">What are you saving toward?</label><input id="bSaveLabel" placeholder="e.g. Emergency fund, a trip, a car" value="${esc(b.savings.label||"")}"></div>
+        <div class="life-3up">
+          <div class="field"><label class="fld">Goal amount</label><input id="bSaveTarget" type="number" inputmode="decimal" placeholder="5000" value="${b.savings.target||""}"></div>
+          <div class="field"><label class="fld">Save / month</label><input id="bSaveMonthly" type="number" inputmode="decimal" placeholder="400" value="${b.savings.monthly||""}"></div>
+          <div class="field"><label class="fld">Already saved</label><input id="bSaveNow" type="number" inputmode="decimal" placeholder="500" value="${b.savings.saved||""}"></div>
+        </div>
+        <button class="btn block ghost" onclick="dpBudgetSetup()">Start my plan</button>
+      </div>`;
+    return;
+  }
+
+  const plan=bPlan(), sv=b.savings;
+  const svPct=sv.target>0?Math.min(100,Math.round(sv.saved/sv.target*100)):0;
+  const eta=bGoalEta(), months=bMonthsToGoal();
+  const varByCat=bVarSpentByCat();
+  const varSpent=bVarSpentTotal();
+  const recurTotal=bRecurringTotal();
+  const cats=(b.categories||[]);
+  const recent=(b.expenses||[]).slice(-6).reverse();
+  const catOptions=[...new Set([...cats.map(c=>c.name),...BUDGET_CATS])].map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
+
+  // Savings ETA line — the "inevitable plan" message
+  let etaLine;
+  if(sv.saved>=sv.target && sv.target>0){ etaLine=`<span class="life-eta good">Goal reached — nice work! 🎉</span>`; }
+  else if(eta){ etaLine=`<span class="life-eta good">On plan, you'll hit this by <b>${eta}</b> · ${months} month${months===1?'':'s'} at ${bMoney(sv.monthly)}/mo</span>`; }
+  else { etaLine=`<span class="life-eta warn">Set a monthly savings amount to give this goal a finish line — ask your guide 💬</span>`; }
+
+  // Plan summary rows
+  const planCard=`
+    <div class="card">
+      <div class="row" style="margin-bottom:4px;"><b>🗺️ Your monthly plan</b></div>
+      <div class="life-plan">
+        <div class="life-planrow"><span>Income</span><span class="grow"></span><b>${bMoney(plan.income)}</b></div>
+        <div class="life-planrow sub"><span>− Fixed bills</span><span class="grow"></span>−${bMoney(plan.fixed)}</div>
+        <div class="life-planrow sub"><span>− Savings</span><span class="grow"></span>−${bMoney(plan.save)}</div>
+        <div class="life-planrow total"><span>Left to spend</span><span class="grow"></span><b>${bMoney(plan.toSpend)}</b></div>
+      </div>
+      <div class="small ${plan.unallocated<0?'':'muted'}" style="margin-top:10px; ${plan.unallocated<0?'color:var(--danger);font-weight:600;':''}">
+        ${plan.unallocated<0
+          ? `⚠️ Your category targets are ${bMoney(-plan.unallocated)} over what's left — trim a target or lower savings.`
+          : (plan.planned>0
+              ? `Allocated ${bMoney(plan.planned)} of ${bMoney(plan.toSpend)} across categories · ${bMoney(plan.unallocated)} unallocated.`
+              : `No category targets yet — ask your guide to set spending targets for the month.`)}
+      </div>
+    </div>`;
+
+  // Savings goal card
+  const saveCard=`
+    <div class="card life-savecard">
+      <div class="row"><b>🎯 ${esc(sv.label||"Savings goal")}</b><span class="grow"></span><span class="small muted">${bMoney(sv.saved)} / ${bMoney(sv.target)}</span></div>
+      <div class="life-bigbar" style="margin-top:10px;"><i style="width:${svPct}%;"></i></div>
+      <div style="margin-top:8px;">${etaLine}</div>
+      <div class="row" style="margin-top:10px;"><span class="small muted">${svPct}% there${sv.target>sv.saved?" · "+bMoney(sv.target-sv.saved)+" to go":""}</span><span class="grow"></span>
+        <input id="bSaveAdd" type="number" inputmode="decimal" placeholder="add $" style="width:88px;padding:8px 10px;">
+        <button class="btn sm" style="margin-left:8px;" onclick="dpAddSavings()">Save</button>
+      </div>
+    </div>`;
+
+  // Category targets (spent vs planned)
+  const shownCats = cats.length ? cats : Object.keys(varByCat).map(n=>({name:n,planned:0}));
+  const catRows = shownCats.length ? shownCats.map(c=>{
+    const spent=varByCat[c.name]||0, planned=+c.planned||0;
+    const w=planned>0?Math.min(100,Math.round(spent/planned*100)):(spent>0?100:0);
+    const over=planned>0&&spent>planned;
+    return `<div class="life-catrow">
+      <span class="life-catname">${esc(c.name)}</span>
+      <div class="life-catbar"><i style="width:${w}%; background:${over?'var(--danger)':'var(--accent)'};"></i></div>
+      <span class="life-catval">${bMoney(spent)}${planned>0?` / ${bMoney(planned)}`:''}</span>
+    </div>`;
+  }).join("") : `<p class="small muted" style="margin:6px 0 0;">No categories yet — your guide can set monthly targets, or just log spending below.</p>`;
+  const catCard=`
+    <div class="card">
+      <div class="row" style="margin-bottom:10px;"><b>📊 Category targets</b><span class="grow"></span><span class="small muted">${bMoney(varSpent)} spent</span></div>
+      ${catRows}
+    </div>`;
+
+  // Fixed / recurring bills
+  const recurRows=(b.recurring||[]).length ? b.recurring.map(r=>`<div class="life-exp"><span class="life-exp-cat">${esc(r.name)}</span><span class="life-exp-note">${esc(r.category||"Bills")}</span><span class="grow"></span><b>${bMoney(r.amount)}</b><button class="life-del" onclick="dpDelRecurring('${r.id}')" aria-label="Delete">✕</button></div>`).join("") : `<p class="small muted" style="margin:2px 0 0;">No fixed bills yet — add rent, subscriptions, phone, etc.</p>`;
+  const recurCard=`
+    <div class="card">
+      <div class="row" style="margin-bottom:10px;"><b>🔁 Fixed monthly bills</b><span class="grow"></span><span class="small muted">${bMoney(recurTotal)}/mo</span></div>
+      ${recurRows}
+      <div class="group-label" style="margin-top:14px;">Add a bill</div>
+      <div class="field"><input id="bRecName" placeholder="Name — e.g. Rent, Netflix"></div>
+      <div class="life-2up">
+        <div class="field"><input id="bRecAmt" type="number" inputmode="decimal" placeholder="Amount"></div>
+        <div class="field"><select id="bRecCat"><option>Housing</option><option>Bills</option><option>Subscriptions</option><option>Insurance</option><option>Transport</option><option>Other</option></select></div>
+      </div>
+      <button class="btn ghost block" onclick="dpAddRecurring()">Add fixed bill</button>
+      <p class="small muted" style="margin:10px 0 0;">These count automatically every month. Tell your guide 💬 to add or change them anytime.</p>
+    </div>`;
+
+  // Log a variable expense
+  const logCard=`
+    <div class="card">
+      <div class="row" style="margin-bottom:10px;"><b>➕ Log spending</b></div>
+      <div class="life-2up">
+        <div class="field"><input id="bExpAmt" type="number" inputmode="decimal" placeholder="Amount"></div>
+        <div class="field"><select id="bExpCat">${catOptions}</select></div>
+      </div>
+      <div class="field"><input id="bExpNote" placeholder="Note (optional) — e.g. lunch"></div>
+      <button class="btn block" onclick="dpAddExpense()">Add expense</button>
+      ${recent.length?`<div class="group-label" style="margin-top:16px;">Recent</div>`+recent.map(e=>`<div class="life-exp"><span class="life-exp-cat">${esc(e.category||"Other")}</span><span class="life-exp-note">${esc(e.note||"")}</span><span class="grow"></span><b>${bMoney(e.amount)}</b><button class="life-del" onclick="dpDelExpense('${e.id}')" aria-label="Delete">✕</button></div>`).join(""):""}
+      <p class="small muted" style="margin:12px 0 0;">Or tell your guide 💬 <i>"I spent $14 on lunch."</i></p>
+    </div>`;
+
+  el.innerHTML = planCard + saveCard + catCard + recurCard + logCard +
+    `<div class="card life-editrow"><button class="dp-tiny" onclick="dpPlanWithGuide()">💬 Adjust plan with guide</button> <button class="dp-tiny" onclick="dpBudgetEdit()">✎ Edit basics</button></div>`;
+}
+function dpPlanWithGuide(){ go("chat"); const inp=document.getElementById("chatInput"); if(inp){ inp.value="Help me build (or adjust) my monthly budget plan — ask me what you need."; setTimeout(()=>{inp.focus(); if(typeof chatAutoGrow==="function") chatAutoGrow();},60); } }
+function dpBudgetSetup(){
+  const b=state.budget, g=id=>document.getElementById(id);
+  b.income=parseFloat(g("bIncome").value)||0;
+  b.savings.label=(g("bSaveLabel").value||"Savings goal").trim();
+  b.savings.target=parseFloat(g("bSaveTarget").value)||0;
+  if(g("bSaveMonthly")) b.savings.monthly=parseFloat(g("bSaveMonthly").value)||0;
+  b.savings.saved=parseFloat(g("bSaveNow").value)||0;
+  b.setup=true; save(); renderBudget(); flash("Plan started ✓");
+}
+function dpBudgetEdit(){ state.budget.setup=false; renderBudget(); }
+function dpAddExpense(){
+  const amt=parseFloat(document.getElementById("bExpAmt").value);
+  if(!amt||amt<=0){ flash("Enter an amount first"); return; }
+  const cat=document.getElementById("bExpCat").value||"Other";
+  const note=(document.getElementById("bExpNote").value||"").trim();
+  state.budget.expenses.push({id:rid(), date:todayStr(), amount:amt, category:cat, note});
+  save(); renderBudget(); flash("Expense logged ✓");
+}
+function dpDelExpense(id){ state.budget.expenses=state.budget.expenses.filter(e=>e.id!==id); save(); renderBudget(); }
+function dpAddRecurring(){
+  const name=(document.getElementById("bRecName").value||"").trim();
+  const amt=parseFloat(document.getElementById("bRecAmt").value);
+  if(!name||!amt||amt<=0){ flash("Add a name and amount"); return; }
+  const cat=document.getElementById("bRecCat").value||"Bills";
+  state.budget.recurring.push({id:rid(), name, amount:amt, category:cat});
+  save(); renderBudget(); flash("Fixed bill added ✓");
+}
+function dpDelRecurring(id){ state.budget.recurring=state.budget.recurring.filter(r=>r.id!==id); save(); renderBudget(); }
+function dpAddSavings(){
+  const amt=parseFloat(document.getElementById("bSaveAdd").value);
+  if(!amt){ flash("Enter an amount"); return; }
+  state.budget.savings.saved=Math.max(0,(state.budget.savings.saved||0)+amt);
+  save(); renderBudget(); flash(amt>0?"Added to savings 🎉":"Savings updated");
+}
+
+/* ---------- Health ---------- */
+function hToday(){ return (state.health.meals[todayStr()]||[]); }
+function hTotals(){ const t={cal:0,protein:0,carbs:0,fat:0}; hToday().forEach(m=>{ t.cal+=(+m.cal||0); t.protein+=(+m.protein||0); t.carbs+=(+m.carbs||0); t.fat+=(+m.fat||0); }); return t; }
+function renderHealth(){
+  const el=document.getElementById("healthBody"); if(!el) return;
+  const h=state.health;
+  if(!h.setup){
+    el.innerHTML=`
+      <div class="card">
+        <div class="row" style="margin-bottom:6px;"><b>🍎 Set your daily targets</b></div>
+        <p class="small muted" style="margin:0 0 14px;">Rough targets are fine — your guide can suggest them if you're not sure. You can tweak anytime.</p>
+        <div class="field"><label class="fld">Daily calorie target</label><input id="hCal" type="number" inputmode="numeric" placeholder="e.g. 2000" value="${h.calorieTarget||""}"></div>
+        <div class="life-3up">
+          <div class="field"><label class="fld">Protein (g)</label><input id="hP" type="number" inputmode="numeric" placeholder="150" value="${h.macroTargets.protein||""}"></div>
+          <div class="field"><label class="fld">Carbs (g)</label><input id="hC" type="number" inputmode="numeric" placeholder="200" value="${h.macroTargets.carbs||""}"></div>
+          <div class="field"><label class="fld">Fat (g)</label><input id="hF" type="number" inputmode="numeric" placeholder="65" value="${h.macroTargets.fat||""}"></div>
+        </div>
+        <button class="btn block" onclick="dpHealthSetup()">Start tracking</button>
+        <p class="small muted" style="margin:12px 0 0;">Not sure? Ask your guide 💬 <i>"Suggest daily targets for me."</i></p>
+      </div>`;
+    return;
+  }
+  const t=hTotals(), mt=h.macroTargets;
+  const calPct=h.calorieTarget>0?Math.min(100,Math.round(t.cal/h.calorieTarget*100)):0;
+  const calLeft=(h.calorieTarget||0)-t.cal;
+  function macro(name,key,val,tgt,col){
+    const pct=tgt>0?Math.min(100,Math.round(val/tgt*100)):0;
+    return `<div class="life-macro"><div class="row"><span class="life-macro-n">${name}</span><span class="grow"></span><span class="small muted">${Math.round(val)}${tgt>0?" / "+tgt+"g":"g"}</span></div><div class="life-bar2"><i style="width:${pct}%; background:${col};"></i></div></div>`;
+  }
+  const meals=hToday();
+  el.innerHTML=`
+    <div class="card">
+      <div class="row"><b>🔥 Today</b><span class="grow"></span><span class="small muted">${new Date().toLocaleDateString(undefined,{month:"short",day:"numeric"})}</span></div>
+      <div class="life-calwrap">
+        <div class="life-calbig">${Math.round(t.cal)}<span>/ ${h.calorieTarget||"—"} cal</span></div>
+        <div class="life-calnote ${calLeft<0?'over':''}">${h.calorieTarget>0?(calLeft>=0?bRound(calLeft)+" left":bRound(-calLeft)+" over"):""}</div>
+      </div>
+      <div class="life-bigbar"><i style="width:${calPct}%; background:${calPct>=100?'var(--amber)':'var(--green)'};"></i></div>
+      <div style="margin-top:14px;">
+        ${macro("Protein","protein",t.protein,mt.protein,"var(--accent)")}
+        ${macro("Carbs","carbs",t.carbs,mt.carbs,"var(--amber)")}
+        ${macro("Fat","fat",t.fat,mt.fat,"var(--danger)")}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row" style="margin-bottom:10px;"><b>🍽️ Today's meals</b></div>
+      ${meals.length?meals.map(m=>`<div class="life-meal"><div class="life-meal-main"><b>${esc(m.name||"Meal")}</b><span class="small muted">${Math.round(m.cal||0)} cal · P${Math.round(m.protein||0)} C${Math.round(m.carbs||0)} F${Math.round(m.fat||0)}</span></div><button class="life-del" onclick="dpDelMeal('${m.id}')" aria-label="Delete">✕</button></div>`).join(""):`<p class="small muted" style="margin:2px 0 0;">Nothing logged yet today.</p>`}
+    </div>
+
+    <div class="card">
+      <div class="row" style="margin-bottom:10px;"><b>➕ Add a meal</b></div>
+      <div class="field"><input id="hMName" placeholder="What did you eat? e.g. Chicken & rice"></div>
+      <div class="life-4up">
+        <div class="field"><label class="fld">Cal</label><input id="hMCal" type="number" inputmode="numeric" placeholder="500"></div>
+        <div class="field"><label class="fld">P (g)</label><input id="hMP" type="number" inputmode="numeric" placeholder="40"></div>
+        <div class="field"><label class="fld">C (g)</label><input id="hMC" type="number" inputmode="numeric" placeholder="50"></div>
+        <div class="field"><label class="fld">F (g)</label><input id="hMF" type="number" inputmode="numeric" placeholder="12"></div>
+      </div>
+      <button class="btn block" onclick="dpAddMeal()">Log meal</button>
+      <p class="small muted" style="margin:12px 0 0;">Don't know the numbers? Tell your guide 💬 <i>"I had 2 eggs, toast and a coffee"</i> — it'll estimate them.</p>
+    </div>
+
+    <div class="card life-editrow"><button class="dp-tiny" onclick="dpHealthEdit()">✎ Edit targets</button></div>`;
+}
+function bRound(n){ return Math.round(n)+" cal"; }
+function dpHealthSetup(){
+  const h=state.health;
+  h.calorieTarget=parseInt(document.getElementById("hCal").value)||0;
+  h.macroTargets={ protein:parseInt(document.getElementById("hP").value)||0, carbs:parseInt(document.getElementById("hC").value)||0, fat:parseInt(document.getElementById("hF").value)||0 };
+  h.setup=true; save(); renderHealth(); flash("Targets set ✓");
+}
+function dpHealthEdit(){ state.health.setup=false; renderHealth(); }
+function dpAddMeal(){
+  const name=(document.getElementById("hMName").value||"").trim();
+  const cal=parseFloat(document.getElementById("hMCal").value)||0;
+  if(!name){ flash("Name the meal first"); return; }
+  const meal={ id:rid(), name, cal, protein:parseFloat(document.getElementById("hMP").value)||0, carbs:parseFloat(document.getElementById("hMC").value)||0, fat:parseFloat(document.getElementById("hMF").value)||0 };
+  const d=todayStr(); if(!state.health.meals[d]) state.health.meals[d]=[]; state.health.meals[d].push(meal);
+  save(); renderHealth(); flash("Meal logged ✓");
+}
+function dpDelMeal(id){ const d=todayStr(); state.health.meals[d]=(state.health.meals[d]||[]).filter(m=>m.id!==id); save(); renderHealth(); }
+
 /* ---- sub-page switcher inside the Goals tab ---- */
 function goSub(name){
   document.querySelectorAll("#subnav button").forEach(b=>b.classList.toggle("on",b.dataset.sub===name));
@@ -1852,7 +2429,7 @@ function goSub(name){
 }
 document.querySelectorAll("#subnav button").forEach(b=>b.onclick=()=>goSub(b.dataset.sub));
 
-renderGoals(); renderToday(); renderStats();
+renderGoals(); renderToday(); renderStats(); renderLife();
 /* Desktop re-opens on Today (with the Guide box); phone opens on the full Guide. */
 go(window.matchMedia("(min-width:920px)").matches ? "today" : "chat");
 
