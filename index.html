@@ -571,6 +571,10 @@
   .life-ge-lbl{font-size:12px; font-weight:700; opacity:.85; text-transform:uppercase; letter-spacing:.04em;}
   .life-ge-row input{width:72px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); color:#fff; border-radius:10px; padding:8px 10px; font-size:18px; text-align:center;}
   .life-ge-row .btn{background:#fff; color:#333; border:none;}
+  .life-emojis{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;}
+  .life-emoji{width:36px; height:36px; border-radius:10px; background:rgba(255,255,255,.14); font-size:19px; flex:0 0 auto; line-height:1; border:2px solid transparent;}
+  .life-emoji:hover{background:rgba(255,255,255,.26);}
+  .life-emoji.on{border-color:#fff; background:rgba(255,255,255,.3);}
   .life-swatches{display:flex; gap:9px; flex-wrap:wrap; margin-top:8px;}
   .life-swatch{width:32px; height:32px; border-radius:50%; border:2px solid transparent; flex:0 0 auto; box-shadow:0 1px 3px rgba(0,0,0,.3);}
   .life-swatch.on{border-color:#fff; box-shadow:0 0 0 2px rgba(255,255,255,.4);}
@@ -1394,7 +1398,14 @@ function renderToday(){
     : `${doneCount} of ${total} done today — ${doneCount===total?"all clear 🎉":"one step at a time."}`;
 }
 
-function chatScrollBottom(){ requestAnimationFrame(()=>window.scrollTo(0, document.body.scrollHeight)); }
+function chatScrollBottom(){
+  requestAnimationFrame(()=>{
+    // On desktop the guide is a docked box on other tabs — scroll INSIDE it, never the page.
+    const docked = window.matchMedia("(min-width:920px)").matches && document.body.dataset.tab!=="chat";
+    if(docked){ const sc=document.getElementById("chatScroll"); if(sc){ sc.scrollTop=sc.scrollHeight; return; } }
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+}
 function renderChat(){
   const log=document.getElementById("chatLog");
   if(!state.chat.length){
@@ -1486,7 +1497,7 @@ window.Assistant = (function(){
       return `Checked off <b>${esc(goal.task)}</b>${mins?` — logged ${mins} min`:""}.${extra} ${streak>1?`🔥 ${streak}-day streak!`:"Great start."}`;
     }
     if(mins && !goal) return "Got it. Which task was that for — reading or guitar? Try <b>\"I read "+mins+" minutes\"</b>.";
-    return "I didn't quite catch that. Model&nbsp;1 likes short, direct updates — try <b>\"I read for an hour\"</b> or <b>\"what's left today?\"</b> (see the <b>What's next</b> page for examples).";
+    return "I didn't quite catch that. Try short, direct updates — <b>\"I read for an hour\"</b> or <b>\"what's left today?\"</b>";
   }
 
   /* ---------- Real AI (Model 2) ---------- */
@@ -1527,6 +1538,16 @@ window.Assistant = (function(){
       "The user's current plan (JSON):",
       JSON.stringify(stateSnapshot()),
       "",
+      "HOW YOU TALK (very important — the user finds bundled questions and heavy math stressful):",
+      "- ONE QUESTION AT A TIME. Whenever you're gathering info for ANY setup or plan (budget, development plan, health targets,",
+      "  deciding what to do with money, etc.), ask exactly ONE short question, then STOP and wait for the answer. Never send a",
+      "  numbered list of questions or two questions in one message. Keep each turn to ~1-3 short sentences.",
+      "- DON'T SHOW YOUR MATH. Give only the bottom-line takeaway, not the arithmetic. Say 'about 3.3 years at this pace' —",
+      "  never 'that's $126.40 × 40 months = ...'. The app's own cards already display the exact numbers and ETA.",
+      "- ACTIONS ARE REAL — NEVER FAKE THEM. If you tell the user you did something (added money to savings, logged an expense,",
+      "  updated the budget, built a plan, logged a meal), you MUST include the matching action in that SAME response. Never say",
+      "  'I've added $500 to your Car fund' or 'done!' without the corresponding action in the JSON. No claiming you'll do it later.",
+      "",
       "COACHING STYLE (important):",
       "- When a goal is vague or big (e.g. 'get better at cooking', 'get fit'), do NOT immediately create a generic goal.",
       "  First ask ONE friendly clarifying question to make it concrete (which meal has the most time, current level,",
@@ -1553,11 +1574,11 @@ window.Assistant = (function(){
       "BUDGET — build a PLAN, not just a tracker (Life tab · a core feature):",
       "- The goal: turn income into a monthly PLAN where reaching the savings goal is inevitable if they follow it. The math is",
       "  income − fixed bills − monthly savings = money left for variable spending categories.",
-      "- SETUP INTERVIEW: when the user wants a budget (or budget.setup is false), run a short, friendly interview — ask a few",
-      "  questions across one or two turns, NOT all at once: (1) monthly take-home income; (2) their recurring/FIXED bills and",
-      "  amounts (rent, phone, subscriptions, insurance, transit); (3) what they're saving for, the total, and how much they",
-      "  want to save each month; (4) roughly how they want to spend the rest (which categories matter). Take no action until you",
-      "  have enough, then call set_budget with the FULL plan: income, savingsLabel, savingsTarget, savingsMonthly, recurring:[{name,amount,category}],",
+      "- SETUP INTERVIEW: when the user wants a budget (or budget.setup is false), run a short, friendly interview asking ONE",
+      "  question at a time (wait for each answer before the next — never bundle them): (1) monthly take-home income; (2) their",
+      "  recurring/FIXED bills and amounts (rent, phone, subscriptions, insurance, transit); (3) what they're saving for, the total,",
+      "  and how much they want to save each month; (4) roughly how they want to spend the rest (which categories matter). Take no",
+      "  action until you have enough, then call set_budget with the FULL plan: income, savingsLabel, savingsTarget, savingsMonthly, recurring:[{name,amount,category}],",
       "  and categories:[{name,planned}] — set each category's 'planned' MONTHLY TARGET so the targets fit within income minus bills minus savings.",
       "- If income minus bills minus savings doesn't cover their category wishes, say so and propose adjustments (trim a category, or",
       "  lower monthly savings a little) so the plan actually balances. Then confirm the ETA (e.g. 'you'll hit $5,000 by Mar 2027').",
@@ -2241,6 +2262,7 @@ const GOAL_COLORS=[
   {id:"rose",   css:"linear-gradient(135deg,#8f3560,#c86fa2)"},
   {id:"plum",   css:"linear-gradient(135deg,#523182,#7d6fd0)"},
 ];
+const GOAL_EMOJIS=["🚗","🏡","✈️","🏖️","💍","🎓","💻","📱","🚀","💰","🛟","🎯","🎸","📷","🚲","🏍️","🐶","🎮","🎁","⭐"];
 function bGoalColorCss(){ const c=(GOAL_COLORS.find(x=>x.id===state.budget.savings.color)||GOAL_COLORS[0]); return c.css; }
 function bGoalEmojiResolved(){ const e=state.budget.savings.emoji; return e && e.trim() ? e.trim() : bGoalEmoji(state.budget.savings.label); }
 let bGoalEditOpen=false;
@@ -2345,10 +2367,13 @@ function renderBudget(){
   else if(eta){ goalMsg=`${gemoji} You're on your way! Keep ${bMoney(sv.monthly)} flowing each month and this is <b>yours by ${eta}</b>.`; }
   else { goalMsg=`Pick a monthly amount and I'll show you the exact month this becomes real. 💬`; }
   const milestoneLine = (nm && nm.months) ? `<div class="life-nextms">🎯 Next milestone: <b>${nm.pct}%</b> (${bMoney(nm.amount)}) — about <b>${nm.months} month${nm.months===1?'':'s'}</b> away</div>` : "";
+  const curEmoji=bGoalEmojiResolved();
   const editPanel = bGoalEditOpen ? `
       <div class="life-goaledit">
-        <div class="life-ge-row"><span class="life-ge-lbl">Emoji</span><input id="bGoalEmojiInp" maxlength="4" value="${esc(sv.emoji||"")}" placeholder="${bGoalEmoji(sv.label)}"><button class="btn sm" onclick="dpSetGoalEmoji()">Set</button></div>
-        <div class="life-ge-lbl" style="margin-top:10px;">Colour</div>
+        <div class="life-ge-lbl">Emoji</div>
+        <div class="life-emojis">${GOAL_EMOJIS.map(e=>`<button class="life-emoji ${curEmoji===e?'on':''}" onclick="dpSetGoalEmojiPick('${e}')">${e}</button>`).join("")}</div>
+        <div class="life-ge-row" style="margin-top:9px;"><span class="life-ge-lbl">Or type</span><input id="bGoalEmojiInp" maxlength="6" value="${esc(sv.emoji||"")}" placeholder="🙂"><button class="btn sm" onclick="dpSetGoalEmoji()">Set</button></div>
+        <div class="life-ge-lbl" style="margin-top:12px;">Colour</div>
         <div class="life-swatches">${GOAL_COLORS.map(c=>`<button class="life-swatch ${((sv.color||'slate')===c.id)?'on':''}" style="background:${c.css}" onclick="dpSetGoalColor('${c.id}')" aria-label="${c.id}"></button>`).join("")}</div>
         <button class="btn sm ghost block" style="margin-top:12px;" onclick="dpToggleGoalEdit()">Done</button>
       </div>` : "";
@@ -2477,6 +2502,7 @@ function dpAddSavings(){
 }
 function dpToggleGoalEdit(){ bGoalEditOpen=!bGoalEditOpen; renderBudget(); }
 function dpSetGoalColor(id){ state.budget.savings.color=id; save(); renderBudget(); }
+function dpSetGoalEmojiPick(e){ state.budget.savings.emoji=e; save(); renderBudget(); flash("Emoji updated"); }
 function dpSetGoalEmoji(){ const v=(document.getElementById("bGoalEmojiInp").value||"").trim(); state.budget.savings.emoji=v; save(); renderBudget(); flash(v?"Emoji updated":"Using the default emoji"); }
 
 /* ---------- Health ---------- */
